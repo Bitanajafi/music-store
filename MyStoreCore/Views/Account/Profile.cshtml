@@ -1,0 +1,114 @@
+﻿@model MyStoreCore.ViewModels.ProfileViewModel
+<link href="~/css/layout.css" rel="stylesheet" />
+@{
+    ViewData["Title"] = "پروفایل کاربری";
+}
+
+<div class="container py-4 py-md-5 mt-2 mt-md-4" dir="rtl">
+    <div class="profile-wrapper">
+
+        <div class="profile-header-box text-center">
+            <div class="profile-avatar-wrapper">
+                <div class="profile-avatar-circle">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+                <div class="avatar-glow"></div>
+            </div>
+            <span class="profile-sub-title">LEGATO STUDIO ACCOUNT</span>
+            <h1 class="profile-main-title">پروفایل و تنظیمات حساب</h1>
+            <div class="brand-divider"></div>
+        </div>
+
+        <div asp-validation-summary="All" class="text-danger mb-4 text-center fs-7"></div>
+
+        <form asp-action="Profile" method="post">
+
+            <div class="profile-card-section mb-4">
+                <h5 class="section-title"><i class="bi bi-person-badge me-2"></i> اطلاعات شخصی</h5>
+
+                <div class="profile-info-grid">
+                    <div class="info-field-item">
+                        <div class="field-icon-box"><i class="bi bi-person"></i></div>
+                        <div class="field-content">
+                            <label>نام</label>
+                            <input asp-for="FirstName" class="form-control profile-input" placeholder="نام خود را وارد کنید..." />
+                        </div>
+                    </div>
+
+                    <div class="info-field-item">
+                        <div class="field-icon-box"><i class="bi bi-person-bounding-box"></i></div>
+                        <div class="field-content">
+                            <label>نام خانوادگی</label>
+                            <input asp-for="LastName" class="form-control profile-input" placeholder="نام خانوادگی..." />
+                        </div>
+                    </div>
+
+                    <div class="info-field-item">
+                        <div class="field-icon-box"><i class="bi bi-envelope"></i></div>
+                        <div class="field-content">
+                            <label>آدرس ایمیل</label>
+                            <input asp-for="Email" class="form-control profile-input text-ltr" readonly />
+                        </div>
+                    </div>
+
+                    <div class="info-field-item">
+                        <div class="field-icon-box"><i class="bi bi-calendar3"></i></div>
+                        <div class="field-content">
+                            <label>تاریخ عضویت</label>
+                            <input class="form-control profile-input text-ltr"
+                                   value="@(Model.CreatedAt == DateTime.MinValue ? "نامشخص" : Model.CreatedAt.ToString("yyyy/MM/dd"))"
+                                   readonly />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card-section mb-4 mb-md-5">
+                <h5 class="section-title"><i class="bi bi-shield-lock me-2"></i> تغییر رمز عبور</h5>
+
+                <div class="profile-info-grid">
+                    <div class="info-field-item">
+                        <div class="field-icon-box"><i class="bi bi-lock"></i></div>
+                        <div class="field-content">
+                            <label>رمز فعلی</label>
+                            <input asp-for="CurrentPassword" type="password" class="form-control profile-input" placeholder="••••••••" />
+                        </div>
+                    </div>
+
+                    <div class="info-field-item">
+                        <div class="field-icon-box"><i class="bi bi-key"></i></div>
+                        <div class="field-content">
+                            <label>رمز جدید</label>
+                            <input asp-for="NewPassword" type="password" class="form-control profile-input" placeholder="••••••••" />
+                        </div>
+                    </div>
+
+                    <div class="info-field-item full-width-field">
+                        <div class="field-icon-box"><i class="bi bi-check-circle"></i></div>
+                        <div class="field-content">
+                            <label>تکرار رمز جدید</label>
+                            <input asp-for="ConfirmPassword" type="password" class="form-control profile-input" placeholder="••••••••" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-actions-box text-center">
+                <button type="submit" class="btn btn-save-gold">
+                    <span>ذخیره تغییرات</span>
+                    <i class="bi bi-check2-circle"></i>
+                </button>
+
+                <a href="/" class="btn btn-back-dark">
+                    <span>بازگشت به فروشگاه</span>
+                    <i class="bi bi-arrow-left"></i>
+                </a>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,364 @@
+﻿@model List<MusicStore.Application.DTOs.ProductImage.ProductImageDto>
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/AdminCss/Product.css"
+          asp-append-version="true" />
+}
+
+
+<div class="category-panel-container">
+
+    <div class="panel-header-wrapper">
+
+        <div class="header-title-section">
+
+            <span class="panel-sub-title">
+                MANAGEMENT
+            </span>
+
+            <h2 class="panel-main-title">
+                Product Images
+            </h2>
+
+        </div>
+
+
+        <a asp-controller="Product"
+           asp-action="Index"
+           class="btn-create-category">
+
+            <i class="bi bi-arrow-left"></i>
+
+            Back To Products
+
+        </a>
+
+    </div>
+
+
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success category-alert">
+
+            <i class="bi bi-check-circle-fill"></i>
+
+            <span>
+                @TempData["Success"]
+            </span>
+
+        </div>
+    }
+
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger category-alert">
+
+            <i class="bi bi-exclamation-triangle-fill"></i>
+
+            <span>
+                @TempData["Error"]
+            </span>
+
+        </div>
+    }
+
+
+
+
+    <div class="premium-form-card mb-4">
+
+
+        <form asp-action="Add"
+              method="post"
+              enctype="multipart/form-data">
+
+
+            @Html.AntiForgeryToken()
+
+
+            <input type="hidden"
+                   name="ProductId"
+                   value="@ViewBag.ProductId" />
+
+
+
+            <div class="mb-4 input-block-custom">
+
+
+                <label class="form-label-premium">
+
+                    Upload Product Image
+
+                </label>
+
+
+
+                <div class="input-wrapper-icon">
+
+
+                    <i class="bi bi-image field-premium-icon"></i>
+
+
+                    <input type="file"
+                           name="Image"
+                           class="form-control-premium" />
+
+
+                </div>
+
+
+            </div>
+
+
+
+
+            <div class="mb-4 input-block-custom">
+
+
+                <label class="form-label-premium">
+
+                    Alt Text
+
+                </label>
+
+
+                <input type="text"
+                       name="AltText"
+                       class="form-control-premium"
+                       placeholder="Image description..." />
+
+
+            </div>
+
+
+
+
+            <button type="submit"
+                    class="btn-form-submit">
+
+
+                <span>
+                    Upload Image
+                </span>
+
+
+                <i class="bi bi-cloud-arrow-up"></i>
+
+
+            </button>
+
+
+        </form>
+
+
+    </div>
+
+
+
+    <div class="premium-table-card">
+
+
+        <div class="row g-4 p-4">
+
+
+
+            @if (!Model.Any())
+            {
+
+                <div class="text-center p-5">
+
+
+                    <i class="bi bi-images fs-1 text-muted"></i>
+
+
+                    <h5 class="mt-3">
+                        No Images Found
+                    </h5>
+
+
+                    <p class="text-muted">
+                        Upload images for this product.
+                    </p>
+
+
+                </div>
+
+            }
+
+
+
+            @foreach (var item in Model)
+            {
+
+
+                <div class="col-xl-4 col-md-6">
+
+
+
+                    <div class="card h-100 shadow-sm">
+
+
+
+                        <img src="@item.ImageUrl"
+                             class="card-img-top"
+                             style="height:250px; object-fit:cover;"
+                             alt="@item.AltText" />
+
+
+
+
+                        <div class="card-body text-center">
+
+
+
+                            @if (item.IsMain)
+                            {
+
+                                <span class="badge bg-success mb-3">
+
+                                    <i class="bi bi-star-fill"></i>
+
+                                    Main Image
+
+                                </span>
+
+                            }
+                            else
+                            {
+
+                                <span class="badge bg-secondary mb-3">
+
+                                    Normal Image
+
+                                </span>
+
+                            }
+
+
+
+
+                            <p class="text-muted">
+
+                                @item.AltText
+
+                            </p>
+
+
+
+
+
+                            <div class="d-flex justify-content-center gap-2">
+
+
+
+                                @if (!item.IsMain)
+                                {
+
+
+                                    <form asp-action="SetMainImage"
+                                          method="post">
+
+
+                                        @Html.AntiForgeryToken()
+
+
+                                        <input type="hidden"
+                                               name="id"
+                                               value="@item.Id" />
+
+
+                                        <input type="hidden"
+                                               name="productId"
+                                               value="@item.ProductId" />
+
+
+
+                                        <button class="btn btn-success btn-sm">
+
+
+                                            <i class="bi bi-star"></i>
+
+
+                                            Main
+
+
+                                        </button>
+
+
+
+                                    </form>
+
+
+                                }
+
+
+
+
+
+                                <form asp-action="Delete"
+                                      method="post">
+
+
+                                    @Html.AntiForgeryToken()
+
+
+
+                                    <input type="hidden"
+                                           name="id"
+                                           value="@item.Id" />
+
+
+                                    <input type="hidden"
+                                           name="productId"
+                                           value="@item.ProductId" />
+
+
+
+                                    <button type="submit"
+                                            class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Delete this image?')">
+
+
+                                        <i class="bi bi-trash"></i>
+
+
+                                    </button>
+
+
+
+                                </form>
+
+
+
+                            </div>
+
+
+
+                        </div>
+
+
+
+                    </div>
+
+
+
+                </div>
+
+
+
+            }
+
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+</div>

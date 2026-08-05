@@ -1,0 +1,330 @@
+﻿@model List<MusicStore.Application.DTOs.Category.CategoryDto>
+
+@section Styles {
+    <link rel="stylesheet" href="~/AdminCss/Category.css" asp-append-version="true" />
+}
+
+
+<div class="category-panel-container">
+
+
+    <div class="panel-header-wrapper">
+
+        <div class="header-title-section">
+            <span class="panel-sub-title">MANAGEMENT</span>
+            <h2 class="panel-main-title">Categories</h2>
+        </div>
+
+
+        <a asp-area="Admin"
+           asp-controller="Category"
+           asp-action="Create"
+           class="btn-create-category">
+
+            <i class="bi bi-plus-lg"></i>
+            <span>Add New Category</span>
+
+        </a>
+
+    </div>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger category-alert">
+
+            <i class="bi bi-exclamation-triangle-fill"></i>
+
+            @TempData["Error"]
+
+        </div>
+    }
+
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success category-alert">
+
+            <i class="bi bi-check-circle-fill"></i>
+
+            @TempData["Success"]
+
+        </div>
+    }
+
+    <div class="premium-table-card">
+
+
+        <div class="table-responsive">
+
+
+            <table class="table premium-custom-table">
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Category
+                        </th>
+
+
+                        <th class="text-center">
+                            Type
+                        </th>
+
+
+                        <th class="text-center">
+                            Products
+                        </th>
+
+
+                        <th class="text-center">
+                            Display Order
+                        </th>
+
+
+                        <th class="text-end">
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+
+                <tbody>
+
+
+                    @foreach (var item in Model.Where(x => x.ParentCategoryId == null))
+                    {
+
+                        <tr class="main-category-row">
+
+
+                            <td>
+
+                                <div class="category-info">
+
+                                    <div class="category-icon-avatar">
+
+                                        <i class="bi bi-folder-fill"></i>
+
+                                    </div>
+
+
+                                    <span class="category-name-text fw-bold">
+
+                                        @item.Name
+
+                                    </span>
+
+
+                                </div>
+
+
+                            </td>
+
+
+                            <td class="text-center">
+
+                                <span class="badge-main-category">
+
+                                    Main Category
+
+                                </span>
+
+                            </td>
+
+
+                            <td class="text-center">
+
+                                @item.ProductCount
+
+                            </td>
+
+
+                            <td class="text-center">
+
+                                #@item.DisplayOrder
+
+                            </td>
+
+
+                            <td class="text-end">
+
+
+                                <div class="table-actions-wrapper">
+
+
+                                    <a asp-action="Edit"
+                                       asp-route-id="@item.Id"
+                                       class="btn-table-action btn-edit">
+
+                                        <i class="bi bi-pencil-square"></i>
+
+                                    </a>
+
+
+
+                                    <form asp-action="Delete"
+                                          asp-route-id="@item.Id"
+                                          method="post"
+                                          style="display:inline;">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <button type="submit"
+                                                class="btn-table-action btn-delete"
+                                                onclick="return confirm('Are you sure you want to delete this category?')">
+
+                                            <i class="bi bi-trash3"></i>
+
+                                        </button>
+
+                                    </form>
+
+
+                                </div>
+
+
+                            </td>
+
+
+                        </tr>
+
+
+
+
+
+                        @foreach (var child in Model.Where(x => x.ParentCategoryId == item.Id))
+                        {
+
+
+                            <tr class="child-category-row">
+
+
+                                <td>
+
+
+                                    <div class="category-info child-indent">
+
+
+                                        <div class="category-icon-avatar">
+
+                                            <i class="bi bi-arrow-return-right"></i>
+
+                                        </div>
+
+
+                                        <span>
+
+                                            @child.Name
+
+                                        </span>
+
+
+                                    </div>
+
+
+                                </td>
+
+
+
+                                <td class="text-center">
+
+
+                                    <span class="badge-child-category">
+
+                                        Sub Category
+
+                                    </span>
+
+
+                                </td>
+
+
+
+                                <td class="text-center">
+
+                                    @child.ProductCount
+
+                                </td>
+
+
+
+                                <td class="text-center">
+
+                                    #@child.DisplayOrder
+
+                                </td>
+
+
+
+                                <td class="text-end">
+
+
+                                    <div class="table-actions-wrapper">
+
+
+                                        <a asp-action="Edit"
+                                           asp-route-id="@child.Id"
+                                           class="btn-table-action btn-edit">
+
+                                            <i class="bi bi-pencil-square"></i>
+
+                                        </a>
+
+
+
+                                        <form asp-action="Delete"
+                                              asp-route-id="@child.Id"
+                                              method="post"
+                                              style="display:inline;">
+
+
+                                            @Html.AntiForgeryToken()
+
+
+                                            <button type="submit"
+                                                    class="btn-table-action btn-delete"
+                                                    onclick="return confirm('Are you sure you want to delete this category?')">
+
+
+                                                <i class="bi bi-trash3"></i>
+
+
+                                            </button>
+
+
+                                        </form>
+
+
+                                    </div>
+
+
+                                </td>
+
+
+                            </tr>
+
+
+                        }
+
+                    }
+
+
+                </tbody>
+
+
+            </table>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>

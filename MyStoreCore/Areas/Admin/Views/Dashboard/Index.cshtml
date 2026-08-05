@@ -1,0 +1,494 @@
+﻿@model MusicStore.Application.DTOs.Dashboard.DashboardDto
+
+@section Styles {
+    <link rel="stylesheet" href="~/AdminCss/Dashboard.css" asp-append-version="true" />
+}
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "میز کار و داشبورد مدیریت";
+}
+
+<div class="dashboard-wrapper">
+
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+
+        <div>
+            <h2 class="fw-bold-custom"
+                style="color:var(--sidebar); font-size: 1.6rem; margin: 0;">
+                داشبورد مدیریت لگاتو
+            </h2>
+
+            <p class="text-muted small m-0 mt-1">
+                نمای کلی وضعیت تجاری، جریان نقدینگی و وضعیت انبار گالری ساز
+            </p>
+        </div>
+
+        <div class="badge-custom-info-shadow">
+            <i class="bi bi-calendar3 text-gold"></i>
+            <span>
+                آخرین بروزرسانی:
+                @Model.LastUpdated.ToString("yyyy/MM/dd - HH:mm")
+            </span>
+        </div>
+
+    </div>
+
+
+    <div class="row g-4">
+
+
+        <div class="col-md-6 col-xl-3">
+            <div class="premium-stat-card">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+                        <span class="stat-label">
+                            فروش امروز گالری
+                        </span>
+
+                        <h3 class="stat-value">
+                            0
+                            <small>تومان</small>
+                        </h3>
+                    </div>
+
+
+                    <div class="stat-icon-holder icon-gold">
+                        <i class="bi bi-wallet2"></i>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-footer-trend positive">
+                    <i class="bi bi-arrow-up-short"></i>
+                    <span>0٪ رشد نسبت به دیروز</span>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="col-md-6 col-xl-3">
+            <div class="premium-stat-card">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+                        <span class="stat-label">
+                            تعداد محصولات
+                        </span>
+
+                        <h3 class="stat-value">
+                            @Model.TotalProducts
+                            <small>محصول</small>
+                        </h3>
+
+                    </div>
+
+
+                    <div class="stat-icon-holder icon-blue">
+                        <i class="bi bi-box-seam"></i>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-footer-trend pending">
+                    <i class="bi bi-box"></i>
+                    <span>
+                        موجودی کل فروشگاه
+                    </span>
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-3">
+
+            <div class="premium-stat-card">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+
+                    <div>
+
+                        <span class="stat-label">
+                            دسته‌بندی‌ها
+                        </span>
+
+
+                        <h3 class="stat-value">
+                            @Model.TotalCategories
+                            <small>دسته</small>
+                        </h3>
+
+                    </div>
+
+
+                    <div class="stat-icon-holder icon-orange">
+                        <i class="bi bi-tags"></i>
+                    </div>
+
+
+                </div>
+
+
+                <div class="stat-footer-trend shipping">
+
+                    <i class="bi bi-list"></i>
+
+                    <span>
+                        دسته‌های فعال فروشگاه
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+        <div class="col-md-6 col-xl-3">
+
+
+            <div class="premium-stat-card">
+
+
+                <div class="d-flex justify-content-between align-items-center">
+
+
+                    <div>
+
+
+                        <span class="stat-label">
+                            کاربران ثبت شده
+                        </span>
+
+
+                        <h3 class="stat-value">
+
+                            @Model.TotalUsers
+
+                            <small>
+                                نفر
+                            </small>
+
+                        </h3>
+
+
+                    </div>
+
+
+                    <div class="stat-icon-holder icon-green">
+
+                        <i class="bi bi-people"></i>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="stat-footer-trend positive">
+
+                    <i class="bi bi-person-plus"></i>
+
+                    <span>
+                        کاربران سیستم
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+    <div class="row g-4 mt-2">
+
+        <div class="col-lg-6">
+
+
+            <div class="premium-panel h-100">
+
+
+                <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom-custom">
+
+
+                    <h5 class="fw-bold m-0" style="color: var(--sidebar)">
+
+                        <i class="bi bi-shop text-gold me-1"></i>
+
+                        وضعیت فروشگاه
+
+                    </h5>
+
+                </div>
+
+
+
+                <div class="inventory-list-wrapper">
+
+
+                    <div class="inventory-luxury-item">
+
+
+                        <div class="d-flex align-items-center gap-2">
+
+                            <span class="instrument-icon">
+
+                                <i class="bi bi-box"></i>
+
+                            </span>
+
+
+                            <span class="instrument-name">
+
+                                کل محصولات
+
+                            </span>
+
+
+                        </div>
+
+
+                        <span class="badge-status custom-success">
+
+                            @Model.TotalProducts عدد
+
+                        </span>
+
+
+                    </div>
+
+
+
+
+                    <div class="inventory-luxury-item">
+
+
+                        <div class="d-flex align-items-center gap-2">
+
+                            <span class="instrument-icon">
+
+                                <i class="bi bi-check-circle"></i>
+
+                            </span>
+
+
+                            <span class="instrument-name">
+
+                                محصولات فعال
+
+                            </span>
+
+
+                        </div>
+
+
+                        <span class="badge-status custom-success">
+
+                            @Model.ActiveProducts عدد
+
+                        </span>
+
+
+                    </div>
+
+
+
+
+                    <div class="inventory-luxury-item">
+
+
+                        <div class="d-flex align-items-center gap-2">
+
+                            <span class="instrument-icon">
+
+                                <i class="bi bi-award"></i>
+
+                            </span>
+
+
+                            <span class="instrument-name">
+
+                                برندها
+
+                            </span>
+
+
+                        </div>
+
+
+                        <span class="badge-status custom-warning">
+
+                            @Model.TotalBrands برند
+
+                        </span>
+
+
+                    </div>
+
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="col-lg-6">
+
+
+            <div class="premium-panel h-100">
+
+
+                <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom-custom">
+
+
+                    <h5 class="fw-bold m-0" style="color: var(--sidebar)">
+
+                        <i class="bi bi-graph-up-arrow text-gold me-1"></i>
+
+                        گزارش نقدینگی و فروش
+
+                    </h5>
+
+
+                    <a href="#" class="text-gold-link small">
+
+                        مشاهده دفتر کل
+
+                        <i class="bi bi-chevron-left"></i>
+
+                    </a>
+
+
+                </div>
+
+
+
+
+
+                <div class="sales-luxury-wrapper">
+
+
+                    <div class="sales-luxury-row">
+
+
+                        <span class="period-text">
+
+                            فروش امروز
+
+                        </span>
+
+
+                        <strong class="period-price">
+
+                            0
+
+                            <small>
+
+                                تومان
+
+                            </small>
+
+                        </strong>
+
+
+                    </div>
+
+
+
+
+
+                    <div class="sales-luxury-row">
+
+
+                        <span class="period-text">
+
+                            فروش این هفته
+
+                        </span>
+
+
+                        <strong class="period-price">
+
+                            0
+
+                            <small>
+
+                                تومان
+
+                            </small>
+
+                        </strong>
+
+
+                    </div>
+
+
+
+
+
+                    <div class="sales-luxury-row">
+
+
+                        <span class="period-text">
+
+                            فروش این ماه
+
+                        </span>
+
+
+                        <strong class="period-price target-color">
+
+                            0
+
+                            <small>
+
+                                تومان
+
+                            </small>
+
+                        </strong>
+
+
+                    </div>
+
+
+
+                </div>
+
+
+
+            </div>
+
+
+
+        </div>
+
+
+
+    </div>
+
+
+</div>

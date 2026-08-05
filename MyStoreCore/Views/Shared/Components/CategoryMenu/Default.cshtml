@@ -1,0 +1,86 @@
+﻿@model List<MusicStore.Application.ViewModels.CategoryMenuViewModel>
+
+<div class="categories-sidebar-card p-3">
+
+    <div class="categories-header d-flex align-items-center gap-3 mb-3 pb-3 border-bottom border-secondary border-opacity-25">
+        <div class="header-icon-box">
+            <i class="bi bi-grid-3x3-gap-fill text-gold"></i>
+        </div>
+        <div>
+            <h5 class="category-widget-title mb-0 fs-6 text-white fw-bold">دسته‌بندی محصولات </h5>
+            <small class="text-muted fs-8">آرشیو تخصصی ساز و تجهیزات</small>
+        </div>
+    </div>
+
+    <div class="categories-accordion" id="categoriesMenu">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                var collapseId = $"cat-collapse-{item.Id}";
+                var hasChildren = item.Children != null && item.Children.Any();
+
+                <div class="category-item-group mb-2">
+
+                    @if (hasChildren)
+                    {
+                        <button type="button"
+                                class="parent-category-link w-100 border-0 text-start d-flex align-items-center justify-content-between p-2 rounded-3 cursor-pointer"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#@collapseId"     
+                                aria-expanded="false"
+                                onclick="event.stopPropagation();">
+
+                            <div class="d-flex align-items-center gap-2 text-white fw-medium fs-7">
+                                <i class="bi bi-music-note text-gold"></i>
+                                <span>@item.Name</span>
+                            </div>
+                            <i class="bi bi-chevron-down arrow-icon text-muted fs-8"></i>
+                        </button>
+                    }
+                    else
+                    {
+                        <a asp-controller="Product"
+                           asp-action="Index"
+                           asp-route-categoryId="@item.Id"
+                           class="parent-category-link d-flex align-items-center justify-content-between p-2 rounded-3 text-decoration-none">
+                            <div class="d-flex align-items-center gap-2 text-white fw-medium fs-7">
+                                <i class="bi bi-music-note text-gold"></i>
+                                <span>@item.Name</span>
+                            </div>
+                        </a>
+                    }
+
+                    @if (hasChildren)
+                    {
+                        <div id="@collapseId" class="collapse sub-categories-wrapper mt-1" data-bs-parent="#categoriesMenu">
+                            <ul class="list-unstyled mb-0 py-2 pe-3 me-2 border-end border-gold-subtle">
+                                @foreach (var child in item.Children)
+                                {
+                                    <li class="py-1">
+                                        <a asp-controller="Product"
+                                           asp-action="Index"
+                                           asp-route-categoryId="@child.Id"
+                                           class="sub-category-link d-flex align-items-center justify-content-between text-decoration-none">
+                                            <span class="sub-title fs-8">@child.Name</span>
+                                            <i class="bi bi-arrow-left fs-8 opacity-0 arrow-hover"></i>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+
+                </div>
+            }
+        }
+        else
+        {
+            <div class="text-center py-4 text-muted fs-7">
+                <i class="bi bi-info-circle d-block mb-2 fs-5"></i>
+                دسته‌بندی یافت نشد.
+            </div>
+        }
+    </div>
+
+</div>

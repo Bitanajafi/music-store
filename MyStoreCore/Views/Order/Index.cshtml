@@ -1,0 +1,135 @@
+﻿<link href="~/css/order.css" rel="stylesheet" />
+<link href="~/css/layout.css" rel="stylesheet" />
+@model List<MusicStore.Application.DTOs.Order.OrderDto>
+@using MusicStore.Domain.Enum
+
+@{
+    ViewData["Title"] = "سفارش‌های من";
+}
+
+<div class="container py-4 py-md-5 mt-2 mt-md-4" dir="rtl">
+    <div class="orders-wrapper">
+
+        <div class="orders-header-box d-flex flex-column flex-sm-row justify-content-between align-items-center mb-4 gap-3">
+            <div class="text-center text-sm-start">
+                <span class="orders-sub-title">LEGATO STUDIO ORDERS</span>
+                <h1 class="orders-main-title mb-1">تاریخچه سفارش‌ها</h1>
+                <p class="text-gold small mb-0">مدیریت و پیگیری سفارش‌های خریداری شده</p>
+            </div>
+
+            <div class="total-orders-badge">
+                <span>تعداد کل سفارش‌ها:</span>
+                <strong class="ms-1">@Model.Count</strong>
+            </div>
+        </div>
+
+        <div class="brand-divider mb-4 mb-md-5"></div>
+
+        @if (!Model.Any())
+        {
+            <div class="empty-orders-card text-center py-5">
+                <div class="empty-icon-box mb-3">
+                    <i class="bi bi-bag-x"></i>
+                </div>
+                <h3 class="fw-bold mb-2 text-white">هنوز سفارشی ثبت نکرده‌اید</h3>
+                <p class="text-muted mb-4 small">لیست سفارش‌های شما خالی است. همین حالا خرید خود را آغاز کنید!</p>
+                <a asp-controller="Product" asp-action="Index" class="btn btn-save-gold px-4">
+                    <span>فروشگاه محصولات</span>
+                    <i class="bi bi-shop ms-1"></i>
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="row g-3 g-md-4">
+                @foreach (var order in Model)
+                {
+                    string badgeClass = order.Status switch
+                    {
+                        OrderStatus.Pending => "status-pending",
+                        OrderStatus.Processing => "status-processing",
+                        OrderStatus.Shipped => "status-shipped",
+                        OrderStatus.Delivered => "status-delivered",
+                        OrderStatus.Cancelled => "status-cancelled",
+                        _ => "status-default"
+                    };
+
+                    string statusText = order.Status switch
+                    {
+                        OrderStatus.Pending => "در انتظار پرداخت",
+                        OrderStatus.Processing => "در حال پردازش",
+                        OrderStatus.Shipped => "ارسال شده",
+                        OrderStatus.Delivered => "تحویل شده",
+                        OrderStatus.Cancelled => "لغو شده",
+                        _ => order.Status.ToString()
+                    };
+
+                    <div class="col-12 col-md-6 col-lg-6">
+                        <div class="order-item-card h-100 d-flex flex-column justify-content-between">
+
+                            <div>
+                                <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom-dark">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="order-icon"><i class="bi bi-receipt"></i></div>
+                                        <h5 class="fw-bold text-white mb-0 fs-6">سفارش #@order.Id</h5>
+                                    </div>
+                                    <span class="order-status-badge @badgeClass">
+                                        @statusText
+                                    </span>
+                                </div>
+
+                                <div class="order-details-grid mb-4">
+                                    <div class="detail-box">
+                                        <span class="detail-label"><i class="bi bi-calendar3 me-1"></i> تاریخ ثبت:</span>
+                                        <span class="detail-value text-ltr">@order.CreatedAt.ToString("yyyy/MM/dd")</span>
+                                    </div>
+
+                                    <div class="detail-box">
+                                        <span class="detail-label"><i class="bi bi-box-seam me-1"></i> اقلام:</span>
+                                        <span class="detail-value">@order.Items.Count عدد</span>
+                                    </div>
+
+                                    <div class="detail-box full-width">
+                                        <span class="detail-label"><i class="bi bi-credit-card me-1"></i> مبلغ کل:</span>
+                                        <span class="detail-value price-text">$@order.TotalPrice</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-2 mt-3">
+
+                                <a asp-action="Details"
+                                   asp-route-id="@order.Id"
+                                   class="btn btn-order-details flex-fill">
+                                    <span>مشاهده جزئیات سفارش</span>
+                                    <i class="bi bi-arrow-left"></i>
+                                </a>
+
+
+                                @if (order.Status == OrderStatus.Pending ||order.Status == OrderStatus.Processing)
+                                {
+                                    <form asp-action="Cancel"
+                                          method="post"
+                                          class="flex-fill">
+
+                                        <input type="hidden" name="id" value="@order.Id" />
+
+                                        <button type="submit"
+                                                class="btn btn-danger w-100"
+                                                onclick="return confirm('آیا از لغو سفارش مطمئن هستید؟')">
+                                            <span>لغو سفارش</span>
+                                            <i class="bi bi-x-circle"></i>
+                                        </button>
+
+                                    </form>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+    </div>
+</div>

@@ -1,0 +1,155 @@
+﻿@model MusicStore.Application.DTOs.Order.OrderDto
+<link href="~/css/order.css" rel="stylesheet" />
+<link href="~/css/layout.css" rel="stylesheet" />
+@using MusicStore.Domain.Enum
+
+@{
+    ViewData["Title"] = "جزئیات سفارش";
+
+    string badgeClass = Model.Status switch
+    {
+        OrderStatus.Pending => "status-pending",
+        OrderStatus.Processing => "status-processing",
+        OrderStatus.Shipped => "status-shipped",
+        OrderStatus.Delivered => "status-delivered",
+        OrderStatus.Cancelled => "status-cancelled",
+        _ => "status-default"
+    };
+
+    string statusText = Model.Status switch
+    {
+        OrderStatus.Pending => "در انتظار پرداخت",
+        OrderStatus.Processing => "در حال پردازش",
+        OrderStatus.Shipped => "ارسال شده",
+        OrderStatus.Delivered => "تحویل شده",
+        OrderStatus.Cancelled => "لغو شده",
+        _ => Model.Status.ToString()
+    };
+}
+
+<div class="container py-4 py-md-5 mt-2 mt-md-4" dir="rtl">
+    <div class="order-details-wrapper">
+
+        <div class="details-header-box d-flex flex-column flex-sm-row justify-content-between align-items-center mb-4 gap-3">
+            <div class="text-center text-sm-start">
+                <span class="details-sub-title">ORDER DETAILS #@Model.Id</span>
+                <h1 class="details-main-title mb-1">فاکتور و جزئیات سفارش</h1>
+                <p class="text-gold small mb-0">
+                    <i class="bi bi-clock-history me-1"></i>
+                    ثبت شده در: @Model.CreatedAt.ToString("yyyy/MM/dd - HH:mm")
+                </p>
+            </div>
+
+            <div class="order-status-badge @badgeClass">
+                @statusText
+            </div>
+        </div>
+
+        <div class="brand-divider mb-4 mb-md-5"></div>
+
+        <div class="row g-3 g-md-4 mb-4">
+            <div class="col-12 col-md-5 col-lg-4">
+                <div class="summary-info-card h-100">
+                    <div class="card-title-box mb-3">
+                        <i class="bi bi-info-circle-fill icon-gold"></i>
+                        <h5 class="mb-0 text-white fw-bold fs-6">مشخصات کلی</h5>
+                    </div>
+                    <ul class="info-list list-unstyled mb-0">
+                        <li>
+                            <span class="label">شماره پیگیری:</span>
+                            <span class="value text-gold">#@Model.Id</span>
+                        </li>
+                        <li>
+                            <span class="label">تعداد کل کالاها:</span>
+                            <span class="value">@Model.Items.Count عدد</span>
+                        </li>
+                        <li>
+                            <span class="label">وضعیت سفارش:</span>
+                            <span class="value">@statusText</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-7 col-lg-8">
+                <div class="summary-info-card h-100 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="card-title-box mb-3">
+                            <i class="bi bi-wallet2 icon-gold"></i>
+                            <h5 class="mb-0 text-white fw-bold fs-6">خلاصه مالی</h5>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="text-gold fs-6">مبلغ قابل پرداخت:</span>
+                            <span class="total-price-display">@Model.TotalPrice.ToString("N0")</span>
+                        </div>
+                    </div>
+                    <div class="custom-progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-container mb-4">
+            <div class="table-responsive">
+                <table class="table custom-dark-table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-center" style="width: 70px;">#</th>
+                            <th scope="col">نام محصول</th>
+                            <th scope="col" class="text-center">تعداد</th>
+                            <th scope="col" class="text-center">قیمت واحد</th>
+                            <th scope="col" class="text-end">جمع کل</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int row = 1;
+                        }
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td class="text-center text-gold ">@row</td>
+                                <td>
+                                    <div class="product-name-cell">
+                                        
+                                        <span class="fw-semibold text-white">@item.ProductName</span>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <span class="quantity-badge">@item.Quantity</span>
+                                </td>
+                                <td class="text-center text-gold ">
+                                    $@item.UnitPrice.ToString("N0")
+                                </td>
+                                <td class="text-end text-gold fw-bold">
+                                    @((item.Quantity * item.UnitPrice).ToString("N0"))
+                                </td>
+                            </tr>
+                            row++;
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" class="text-end text-white fw-bold fs-6">مبلغ نهایی فاکتور:</td>
+                            <td class="text-end text-gold fw-extrabold fs-5">@Model.TotalPrice.ToString("N0")</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3 mt-4">
+            <a asp-action="Index" class="btn btn-outline-gold w-100 w-sm-auto">
+                <i class="bi bi-arrow-right"></i>
+                <span>بازگشت به لیست سفارش‌ها</span>
+            </a>
+
+            <button onclick="window.print()" class="btn btn-save-gold w-100 w-sm-auto">
+                <span>چاپ فاکتور</span>
+                <i class="bi bi-printer-fill ms-1"></i>
+            </button>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,152 @@
+﻿@model List<MusicStore.Application.DTOs.Brand.BrandDto>
+
+@section Styles {
+    <link rel="stylesheet" href="~/AdminCss/Brand.css" asp-append-version="true" />
+}
+
+<div class="category-panel-container">
+
+    <div class="panel-header-wrapper">
+
+        <div class="header-title-section">
+            <span class="panel-sub-title">MANAGEMENT</span>
+            <h2 class="panel-main-title">Brands</h2>
+        </div>
+
+        <a asp-action="Create"
+           class="btn-create-category">
+
+            <i class="bi bi-plus-lg"></i>
+            <span>Add New Brand</span>
+
+        </a>
+
+    </div>
+
+    <div class="premium-table-card">
+
+        <div class="table-responsive">
+
+            <table class="table premium-custom-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Brand</th>
+
+                        <th class="text-center">
+                            Country
+                        </th>
+
+                        <th class="text-center">
+                            Products
+                        </th>
+
+                        <th class="text-end">
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>
+
+                                <div class="brand-info">
+                                    <div>
+
+                                        <div class="brand-name">
+                                            @item.Name
+                                        </div>
+
+                                        <small class="text-muted">
+                                            Brand
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+                            <td class="text-center">
+
+                                @if (!string.IsNullOrEmpty(item.Country))
+                                {
+                                    <span class="badge-country">
+                                        @item.Country
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">
+                                        -
+                                    </span>
+                                }
+
+                            </td>
+
+                            <td class="text-center">
+
+                                <span class="badge-products">
+
+                                    <i class="bi bi-box-seam me-1"></i>
+
+                                    @item.ProductCount
+
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <div class="table-actions-wrapper justify-content-end">
+
+                                    <a asp-action="Edit"
+                                       asp-route-id="@item.Id"
+                                       class="btn-table-action btn-edit">
+
+                                        <i class="bi bi-pencil-square"></i>
+
+                                    </a>
+
+                                    <form asp-action="Delete"
+                                          asp-route-id="@item.Id"
+                                          method="post"
+                                          style="display:inline;">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <button type="submit"
+                                                class="btn-table-action btn-delete"
+                                                onclick="return confirm('Delete this brand?')">
+
+                                            <i class="bi bi-trash3"></i>
+
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>

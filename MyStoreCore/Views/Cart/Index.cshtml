@@ -1,0 +1,195 @@
+﻿<link href="~/css/layout.css" rel="stylesheet" />
+<link href="~/css/cart.css" rel="stylesheet" />
+@model MusicStore.Application.DTOs.Cart.CartDto
+
+@{
+    ViewData["Title"] = "سبد خرید - لگاتو";
+}
+
+<div class="container py-5">
+
+    <div class="d-flex align-items-center justify-content-between mb-4 pb-2 border-bottom border-secondary border-opacity-25">
+        <h2 class="fw-bold m-0 d-flex align-items-center gap-2 text-gold">
+            <i class="bi bi-bag-check-fill fs-3"></i>
+            <span>سبد خرید شما</span>
+        </h2>
+        @if (Model?.Items != null && Model.Items.Any())
+        {
+            <span class="badge bg-gold text-dark fs-6 rounded-pill px-3 py-2">
+                @Model.Items.Count() کالا در سبد
+            </span>
+        }
+    </div>
+
+    @if (Model == null || Model.Items == null || !Model.Items.Any())
+    {
+        <div class="empty-cart-card text-center py-5 px-4 my-4 rounded-4 shadow-sm border border-secondary border-opacity-10">
+            <div class="empty-cart-icon mb-4">
+                <i class="bi bi-cart-x text-gold display-1 opacity-50"></i>
+            </div>
+            <h3 class="fw-bold mb-3">سبد خرید شما در حال حاضر خالی است!</h3>
+            <p class="text-gold mb-4 max-w-500 mx-auto">
+                به نظر می‌رسد هنوز هیچ ساز یا تجهیزات موسیقی به سبد خرید خود اضافه نکرده‌اید. همین حالا می‌توانید از میان محصولات لوکس لگاتو انتخاب کنید.
+            </p>
+            <a asp-controller="Product" asp-action="Index" class="btn btn-gold-lg px-5 py-3 rounded-3 fw-bold text-decoration-none">
+                <i class="bi bi-instrument me-2"></i>
+                مشاهده و بررسی محصولات
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+           
+            <div class="col-lg-8">
+                <div class="card bg-dark-glass border-0 shadow-lg rounded-4 overflow-hidden mb-4">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0 text-light border-secondary border-opacity-25">
+                                <thead class="table-dark-header text-uppercase text-gold">
+                                    <tr>
+                                        <th scope="col" class="py-3 px-4">محصول</th>
+                                        <th scope="col" class="py-3 text-center">قیمت واحد</th>
+                                        <th scope="col" class="py-3 text-center">تعداد</th>
+                                        <th scope="col" class="py-3 text-center">مجموع</th>
+                                        <th scope="col" class="py-3 text-end px-4">عملیات</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Items)
+                                    {
+                                        var itemTotal = item.UnitPrice * item.Quantity;
+                                        <tr class="cart-item-row">
+                                           
+                                            <td class="py-3 px-4">
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <div class="cart-img-wrapper rounded-3 overflow-hidden border border-secondary border-opacity-25">
+                                                        <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "/images/no-image.png" : item.ImageUrl)"
+                                                             alt="@item.ProductName"
+                                                             class="img-fluid" />
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="fw-bold mb-1 text-black">@item.ProductName</h6>
+                                                        <small class="text-muted d-block">کد محصول: #@item.Id</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            <td class="text-center font-monospace">
+                                                @item.UnitPrice.ToString("N0") <small class="text-muted">تومان</small>
+                                            </td>
+
+                                            <td class="text-center">
+                                                <form asp-action="UpdateQuantity" method="post" class="d-inline-flex align-items-center cart-qty-form">
+                                                    <input type="hidden" name="cartItemId" value="@item.Id" />
+                                                    <div class="input-group input-group-sm rounded-2 overflow-hidden border border-secondary border-opacity-50">
+                                                        <input type="number"
+                                                               name="quantity"
+                                                               value="@item.Quantity"
+                                                               min="1"
+                                                               class="form-control text-center bg-dark text-white border-0 qty-input"
+                                                               style="width: 55px;" />
+                                                       
+                                                    </div>
+                                                </form>
+                                            </td>
+
+                                            <td class="text-center fw-bold font-monospace text-gold">
+                                                @itemTotal.ToString("N0") <small class="text-muted fw-normal">تومان</small>
+                                            </td>
+
+                                            <td class="text-end px-4">
+                                                <form asp-action="Remove" method="post" class="d-inline">
+                                                    <input type="hidden" name="cartItemId" value="@item.Id" />
+                                                    <button type="submit" class="btn btn-link text-danger p-0 border-0 btn-remove-item" title="حذف از سبد">
+                                                        <i class="bi bi-trash3-fill fs-5"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <a asp-controller="Product" asp-action="Index" class="btn btn-outline-light rounded-3 px-4">
+                        <i class="bi bi-arrow-right me-2"></i>
+                        ادامه خرید
+                    </a>
+
+                    <form asp-action="Clear" method="post" onsubmit="return confirm('آیا از خالی کردن تمام سبد خرید اطمینان دارید؟');">
+                        <button type="submit" class="btn btn-outline-danger rounded-3 px-4">
+                            <i class="bi bi-x-circle me-1"></i>
+                            خالی کردن سبد
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card bg-dark-glass border-0 shadow-lg rounded-4 overflow-hidden position-sticky" style="top: 100px;">
+                    <div class="card-header bg-gold-gradient py-3 px-4 border-0">
+                        <h5 class="fw-bold mb-0 text-dark d-flex align-items-center gap-2">
+                            <i class="bi bi-receipt"></i>
+                            خلاصه سفارش
+                        </h5>
+                    </div>
+                    <div class="card-body p-4 text-light">
+                        @{
+                            var grandTotal = Model.Items.Sum(x => x.UnitPrice * x.Quantity);
+                        }
+
+                        <div class="d-flex justify-content-between mb-3  text-gold">
+                            <span>مجموع قیمت کالاها:</span>
+                            <span class="font-monospace text-white">@grandTotal.ToString("N0") تومان</span>
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-3 text-gold">
+                            <span>هزینه ارسال:</span>
+                            <span class="text-success fw-bold">رایگان (پرمیوم)</span>
+                        </div>
+
+                        <hr class="border-secondary border-opacity-25 my-3" />
+
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <span class="fw-bold fs-5">مبلغ قابل پرداخت:</span>
+                            <div class="text-end">
+                                <span class="fw-bold fs-4 text-gold font-monospace d-block">@grandTotal.ToString("N0")</span>
+                                <small class="text-muted">تومان</small>
+                            </div>
+                        </div>
+
+
+                        <div class="d-grid gap-2">
+
+                            <form asp-controller="Order"
+                                  asp-action="Create"
+                                  method="post">
+
+                                @Html.AntiForgeryToken()
+
+                                <button type="submit"
+                                        class="btn btn-gold-lg w-100 py-3 rounded-3 fw-bold shadow">
+
+                                    خرید و ثبت سفارش
+                                    <i class="bi bi-credit-card-2-back ms-2"></i>
+
+                                </button>
+
+                            </form>
+
+                        </div>
+                        <div class="mt-4 pt-3 border-top border-secondary border-opacity-10 text-center text-gold small">
+                            <i class="bi bi-shield-check text-gold me-1"></i>
+                            تضمین اصالت و ضمانت بازگشت کالا
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+

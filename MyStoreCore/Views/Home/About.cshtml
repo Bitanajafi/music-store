@@ -1,0 +1,103 @@
+﻿<link href="~/css/layout.css" rel="stylesheet" />
+<link href="~/css/product.css" rel="stylesheet" />
+<link href="~/css/about.css" rel="stylesheet" />
+
+@{
+    ViewData["Title"] = "درباره آوای لگاتو | داستان یک طنین اصیل";
+}
+
+<div class="about-page-wrapper py-5">
+    <div class="container">
+
+        <div class="about-header text-center mb-5">
+            <span class="hero-subtitle">OUR STORY & PASSION</span>
+            <h1 class="hero-title mt-2">طنین‌انداز رویای نوازندگان</h1>
+            <p class="hero-description mx-auto">
+                از شور و اشتیاق به دنیای نت‌ها تا خلق مرجعی تخصصی برای نوازندگان و عاشقان موسیقی
+            </p>
+            <div class="header-divider mx-auto"></div>
+        </div>
+
+        <div class="story-section mb-5">
+            <div class="row g-4 align-items-center">
+                <div class="col-12 col-lg-6">
+                    <div class="story-content p-4 p-md-5">
+                        <div class="badge-gold mb-3"><i class="bi bi-music-note-beamed me-2"></i>روایت لگاتو</div>
+                        <h2 class="story-title mb-4">لگاتو؛ وصل‌کننده نغمه‌ها به حقیقت</h2>
+                        <p class="story-text">
+                            در واژه‌شناسی موسیقی، <strong>لگاتو (Legato)</strong> به معنای اتصال پیوسته و روانِ نت‌ها به یکدیگر است. ما در مجموعه‌ی لگاتو با همین فلسفه متولد شدیم: ایجاد پیوندی بی‌نقص میان اشتیاقِ نوازنده و اصالتِ ساز.
+                        </p>
+                        <p class="story-text">
+                            فعالیت ما از یک کارگاه کوچکِ آرشه و آکوستیک آغاز شد و امروز به یکی از کامل‌ترین آرشیوهای تخصصی گیتار، پیانو و تجهیزات حرفه‌ای ضبط در کشور تبدیل شده است. هدف ما صرفاً فروش یک کالا نیست؛ بلکه همراهی در مسیر خلق هنر شماست.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-lg-6">
+                    <div class="about-visual-box">
+                        <div class="visual-card">
+                            <p class="quote-text">«موسیقی صدای احساس است؛ و ساز، زبان گفتار آن. ما معتقدیم هر نوازنده‌ای شایسته داشتن سازی با اصالتِ مطلق است.»</p>
+                            <span class="quote-author">— تیم توسعه و فنی لگاتو</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+
+        <div class="features-section mb-5">
+            <div class="text-center mb-5">
+                <h2 class="section-title">چرا نوازندگان لگاتو را انتخاب می‌کنند؟</h2>
+                <p class="text-muted">استانداردهایی که ما به آن متعهد هستیم</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <h3>اصالت سنجیده‌شده</h3>
+                        <p>تمامی سازها قبل از قرارگیری در آرشیو، توسط کارشناسان ارشد ساخت و رگلاژ ساز از نظر سلامت چوب، اکشن و آکوستیک ارزیابی می‌شوند.</p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-sliders"></i>
+                        </div>
+                        <h3>رگلاژ رایگان اختصاصی</h3>
+                        <p>هر ساز قبل از ارسال، متناسب با سبک نوازندگی شما (کلاسیک، فلامنکو، متال یا راک) به‌صورت کاملاً رایگان رگلاژ و کوک اولیه می‌شود.</p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-box-seam"></i>
+                        </div>
+                        <h3>بسته‌بندی ایمن ایزوله</h3>
+                        <p>ارسال سازها با بسته‌بندی‌های ضدضربه چندلایه و کپسول‌های هوا انجام می‌شود تا در برابر تغییرات دما و ضربه کاملاً ایمن باشند.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="about-cta-box text-center p-5">
+            <h2 class="text-white fw-bold mb-3">آماده‌اید صدای ساز بعدی خود را بشنوید؟</h2>
+            <p class="text-muted mb-4">از آرشیو تخصصی ما دیدن کنید یا برای مشاوره انتخابی هوشمندانه با ما در تماس باشید.</p>
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                <a asp-controller="Product" asp-action="Index" class="btn btn-gold-action">
+                    <i class="bi bi-disc me-2"></i>مشاهده آرشیو سازها
+                </a>
+                <a asp-controller="Home" asp-action="Contact" class="btn btn-outline-light-custom">
+                    <i class="bi bi-telephone me-2"></i>دریافت مشاوره رایگان
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>

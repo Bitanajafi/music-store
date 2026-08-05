@@ -1,0 +1,73 @@
+﻿
+<link href="~/css/layout.css" rel="stylesheet" />
+@model MusicStore.Web.ViewModels.Account.RegisterViewModel
+<div class="container py-5 mt-4" dir="ltr">
+    <div class="login-wrapper">
+        <div class="row g-0 align-items-stretch">
+            <div class="col-lg-6">
+                <div class="login-form-box">
+                    <span class="login-sub-title">JOIN THE CLUB</span>
+                    <h1 class="login-main-title">Creat Account</h1>
+                    <p class="login-desc">Become a part of LEGATO to explore and collect exceptional instruments.</p>
+
+                    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "mt-4" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger small mb-3" })
+                        <div class="mb-3">
+                            <label class="form-label-simple">First Name : </label>
+                            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control-simple", required = "required", placeholder = "Bita" })
+                            @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger small" })
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label-simple">Last Name : </label>
+                            @Html.TextBoxFor(m => m.LastName, new { @class = "form-control-simple", required = "required", placeholder = "Najafi" })
+                            @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger small" })
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label-simple">Email Address :</label>
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control-simple", required = "required", type = "email", placeholder = "name@example.com" })
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger small" })
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label class="form-label-simple">Password :</label>
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control-simple", required = "required" })
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger small" })
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label-simple">Confirm Password :</label>
+                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control-simple", required = "required" })
+                            @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger small" })
+                        </div>
+
+                        <button type="submit" class="btn btn-login-submit">
+                            CREATE ACCOUNT
+                        </button>
+                        <p class="register-redirect mt-4">
+                            Already have an account? <a href="@Url.Action("Login", "Account")">Sign In</a>
+                        </p>
+                    }
+                </div>
+            </div>
+            <div class="col-lg-6 d-none d-lg-block">
+                <div class="login-info-box h-100 d-flex flex-column justify-content-center text-center">
+                    <div class="px-5">
+                        <h2 class="info-brand-title">LEGATO</h2>
+                        <div class="brand-divider"></div>
+                        <p class="info-brand-text">
+                            "Every masterpiece begins with a single connection."
+                        </p>
+                        <p class="info-brand-subtext mt-3">
+                            Get exclusive updates, early access to new collections, and expert support.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

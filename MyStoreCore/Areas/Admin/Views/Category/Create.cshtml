@@ -1,0 +1,173 @@
+﻿@model MusicStore.Application.DTOs.Category.CreateCategoryDto
+
+@section Styles {
+    <link rel="stylesheet" href="~/AdminCss/Category.css" asp-append-version="true" />
+}
+
+
+<div class="category-form-container">
+
+    <div class="form-header-wrapper">
+        <span class="form-sub-title">MANAGEMENT</span>
+        <h2 class="form-main-title">Create New Category</h2>
+        <p class="form-desc-text">
+            Add a new category to organize your premium musical instruments gallery.
+        </p>
+    </div>
+
+
+    <div class="premium-form-card">
+
+        <form asp-action="Create" method="post">
+
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-4 custom-val-summary">
+            </div>
+
+
+
+            <div class="mb-4 input-block-custom">
+
+                <label asp-for="Name"
+                       class="form-label-premium">
+                    Category Name
+                </label>
+
+
+                <div class="input-wrapper-icon">
+
+                    <i class="bi bi-tags field-premium-icon"></i>
+
+                    <input asp-for="Name"
+                           class="form-control-premium"
+                           required />
+
+                </div>
+
+
+                <span asp-validation-for="Name"
+                      class="text-danger small mt-1 d-block">
+                </span>
+
+            </div>
+
+
+
+
+
+            <div class="mb-4 input-block-custom">
+
+                <label asp-for="ParentCategoryId"
+                       class="form-label-premium">
+                    Parent Category
+                </label>
+
+
+                <div class="input-wrapper-icon">
+
+                    <i class="bi bi-diagram-3 field-premium-icon"></i>
+
+
+                    <select asp-for="ParentCategoryId"
+                            class="form-control-premium">
+
+
+                        <option value="">
+                            Main Category
+                        </option>
+
+
+                        @if (ViewBag.ParentCategories != null)
+                        {
+                            foreach (var item in ViewBag.ParentCategories)
+                            {
+                                <option value="@item.Id">
+                                    @item.Name
+                                </option>
+                            }
+                        }
+
+
+                    </select>
+
+                </div>
+
+
+                <span asp-validation-for="ParentCategoryId"
+                      class="text-danger small mt-1 d-block">
+                </span>
+
+
+            </div>
+
+
+
+
+
+            <div class="mb-4 input-block-custom">
+
+                <label asp-for="DisplayOrder"
+                       class="form-label-premium">
+                    Display Order
+                </label>
+
+
+                <div class="input-wrapper-icon">
+
+                    <i class="bi bi-sort-numeric-down field-premium-icon"></i>
+
+
+                    <input asp-for="DisplayOrder"
+                           class="form-control-premium"
+                           placeholder="0"
+                           type="number"
+                           required />
+
+                </div>
+
+
+                <span asp-validation-for="DisplayOrder"
+                      class="text-danger small mt-1 d-block">
+                </span>
+
+
+            </div>
+
+
+
+
+
+            <div class="form-actions-wrapper">
+
+                <a href="@Url.Action("Index")"
+                   class="btn-form-cancel">
+
+                    <span>
+                        Back to List
+                    </span>
+
+                </a>
+
+
+
+                <button type="submit"
+                        class="btn-form-submit">
+
+                    <span>
+                        Save Category
+                    </span>
+
+                    <i class="bi bi-check-lg"></i>
+
+                </button>
+
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>

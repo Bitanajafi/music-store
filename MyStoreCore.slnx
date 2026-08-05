@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="MusicStore.Application/MusicStore.Application.csproj" />
+  <Project Path="MusicStore.Domain/MusicStore.Domain.csproj" />
+  <Project Path="MusicStore.Infrastructure/MusicStore.Infrastructure.csproj" />
+  <Project Path="MyStoreCore/MyStoreCore.csproj" />
+</Solution>

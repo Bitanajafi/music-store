@@ -1,0 +1,190 @@
+﻿@model List<MusicStore.Application.DTOs.Users.UserDto>
+@section Styles {
+    <link rel="stylesheet" href="~/AdminCss/user.css" asp-append-version="true" />
+}
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "مدیریت اعضای گالری لگاتو";
+}
+
+<div class="dashboard-wrapper">
+
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+        <div>
+            <h2 class="fw-bold-custom" style="color: var(--sidebar); font-size: 1.6rem; margin: 0;">مدیریت اعضا و مشتریان</h2>
+            <p class="text-muted small m-0 mt-1">مدیریت سطوح دسترسی، نظارت بر وضعیت حساب کاربری </p>
+        </div>
+        <div class="badge-custom-info gold">
+            <i class="bi bi-people-fill"></i>
+            <span>کل اعضا: @Model.Count نفر</span>
+        </div>
+    </div>
+
+
+
+    <form method="get" class="mb-4">
+
+        <div class="row g-3">
+
+            <div class="col-md-6">
+                <input type="text"
+                       name="Search"
+                       value="@Context.Request.Query["Search"]"
+                       class="form-control"
+                       placeholder="جستجوی نام، نام خانوادگی یا ایمیل..." />
+            </div>
+
+            <div class="col-md-3">
+
+                <select name="Sort" class="form-select">
+
+                    @if (Context.Request.Query["Sort"] == "Oldest")
+                    {
+                        <option value="Newest">جدیدترین</option>
+                        <option value="Oldest" selected>قدیمی‌ترین</option>
+                    }
+                    else
+                    {
+                        <option value="Newest" selected>جدیدترین</option>
+                        <option value="Oldest">قدیمی‌ترین</option>
+                    }
+
+                </select>
+
+            </div>
+
+            <div class="col-md-3">
+                <button class="btn-action-minimalist warning" type="submit">
+                    <i class="bi bi-search"></i>
+                    جستجو
+                </button>
+            </div>
+
+        </div>
+
+    </form>
+
+
+
+    <div class="premium-panel p-0 p-md-4">
+        <div class="table-responsive-custom">
+            <table class="table custom-premium-table align-middle m-0">
+                <thead>
+                    <tr>
+                        <th>کاربر / هنرمند</th>
+                        <th>آدرس ایمیل</th>
+                        <th>سطح دسترسی</th>
+                        <th>وضعیت حساب</th>
+                        <th>تاریخ عضویت</th>
+                        <th class="text-center">عملیات مدیریتی</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td data-label="کاربر / هنرمند">
+                                <div class="d-flex align-items-center gap-2 user-cell-wrapper">
+                                    <div class="mini-avatar">
+                                        <i class="bi bi-person"></i>
+                                    </div>
+                                    <span class="fw-bold user-name-text" 
+                                    style="color: var(--sidebar);">
+                                    @user.FirstName @user.LastName</span>
+                                </div>
+                            </td>
+
+                            <td data-label="آدرس ایمیل">
+                                <span class="text-ltr text-muted small">
+                                    @user.Email</span>
+                            </td>
+
+                            <td data-label="سطح دسترسی">
+                                <span class="custom-role-badge">
+
+                                    @if (user.Role == "SuperAdmin")
+                                    {
+                                        <i class="bi bi-shield-lock-fill text-danger"></i>
+                                        <span class="is-admin">Super Admin</span>
+                                    }
+                                    else if (user.Role == "Admin")
+                                    {
+                                        <i class="bi bi-shield-check"></i>
+                                        <span class="is-admin">Admin</span>
+                                    }
+                                    else
+                                    {
+                                        <i class="bi bi-person"></i>
+                                        <span class="is-member">Member</span>
+                                    }
+
+                                </span>
+                            </td>
+
+                            <td data-label="وضعیت حساب">
+                                @if (user.IsActive)
+                                {
+                                    <span class="status-dot success">فعال</span>
+                                }
+                                else
+                                {
+                                    <span class="status-dot danger">مسدود شده</span>
+                                }
+                            </td>
+
+                            <td data-label="تاریخ عضویت">
+                                <span class="text-muted small">
+                                    @user.CreatedAt.ToString("yyyy/MM/dd")</span>
+                            </td>
+
+                            <td data-label="عملیات مدیریتی" class="text-md-center">
+                                <div class="d-flex justify-content-start justify-content-md-center gap-2 action-buttons-wrapper">
+
+                                    @if (user.Role == "SuperAdmin")
+                                    {
+                                        <span class="badge bg-danger">
+                                            محافظت شده
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <a asp-area="Admin"
+                                           asp-controller="User"
+                                           asp-action="ChangeRole"
+                                           asp-route-id="@user.Id"
+                                           class="btn-action-minimalist warning"
+                                           title="تغییر سطح دسترسی">
+                                            <i class="bi bi-shield-shaded"></i>
+                                            <span>نقش</span>
+                                        </a>
+
+                                        <form asp-area="Admin"
+                                              asp-controller="User"
+                                              asp-action="Delete"
+                                              method="post"
+                                              class="d-inline"
+                                              onsubmit="return confirm('آیا از حذف این کاربر مطمئن هستید؟')">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="hidden" name="id" value="@user.Id" />
+
+                                            <button type="submit"
+                                                    class="btn-action-minimalist danger"
+                                                    title="حذف کاربر">
+                                                <i class="bi bi-trash3"></i>
+                                            </button>
+
+                                        </form>
+                                    }
+
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>

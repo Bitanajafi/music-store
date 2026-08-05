@@ -1,0 +1,185 @@
+﻿<link href="~/css/layout.css" rel="stylesheet" />
+<link href="~/css/product.css" rel="stylesheet" />
+<link href="~/css/contact.css" rel="stylesheet" />
+
+@{
+    ViewData["Title"] = "ارتباط با آوای لگاتو | مشاوره تخصصی ساز و تجهیزات";
+}
+
+<div class="contact-page-wrapper py-5">
+    <div class="container">
+
+       
+        <div class="contact-header text-center mb-5">
+            <span class="hero-subtitle">GET IN TOUCH</span>
+            <h1 class="hero-title mt-2">صدای شما را می‌شنویم</h1>
+            <p class="hero-description mx-auto">
+                برای مشاوره تخصصی خرید ساز، استعلام موجودی یا پشتیبانی فنی، کارشناسان موسیقی لگاتو همراه شما هستند.
+            </p>
+            <div class="header-divider mx-auto"></div>
+        </div>
+
+      
+        <div class="row g-4 mb-5">
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="contact-info-card">
+                    <div class="icon-box">
+                        <i class="bi bi-telephone"></i>
+                    </div>
+                    <h3>تماس تلفنی</h3>
+                    <p>پاسخگویی سریع کارشناسان</p>
+                    <a href="tel:02188888888" class="info-link" dir="ltr">۰۲۱ - ۸۸۸۸ ۸۸۸۸</a>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="contact-info-card">
+                    <div class="icon-box">
+                        <i class="bi bi-geo-alt"></i>
+                    </div>
+                    <h3>ادرس </h3>
+                    <p>امکان تست حضوری سازها</p>
+                    <span class="info-text">مازندران-امل-برج بهارستان</span>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="contact-info-card">
+                    <div class="icon-box">
+                        <i class="bi bi-clock"></i>
+                    </div>
+                    <h3>ساعات کاری</h3>
+                    <p>همه‌روزه به‌جز ایام تعطیل</p>
+                    <span class="info-text">شنبه تا پنجشنبه: ۱۰ الی ۲۱</span>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="contact-info-card">
+                    <div class="icon-box">
+                        <i class="bi bi-envelope"></i>
+                    </div>
+                    <h3>پست الکترونیک</h3>
+                    <p>مکاتبات رسمی و سازمانی</p>
+                    <a href="mailto:info@legatomusic.com" class="info-link" dir="ltr">info@legatomusic.com</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-5">
+        
+            <div>
+                <div class="contact-form-wrapper">
+                    <div class="form-header mb-4">
+                        <h2 class="form-title">ارسال پیام مستقیم</h2>
+                        <p class="form-subtitle">فرم زیر را پر کنید؛ در کمتر از ۲ ساعت کاری با شما تماس می‌گیریم.</p>
+                    </div>
+
+                    <form asp-controller="Contact" asp-action="SendMessage" method="post" id="contactForm">
+                        <div class="row g-3">
+                            <div class="col-12 col-sm-6">
+                                <div class="input-group-custom">
+                                    <label class="form-label-custom">نام و نام خانوادگی</label>
+                                    <input type="text" name="FullName" class="form-input-custom"  required />
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="input-group-custom">
+                                    <label class="form-label-custom">شماره همراه</label>
+                                    <input type="tel" name="PhoneNumber" class="form-input-custom" placeholder="۰۹۱۲..." required />
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="input-group-custom">
+                                    <label class="form-label-custom">موضوع درخواست</label>
+                                    <select name="Subject" class="form-input-custom form-select-custom" required>
+                                        <option value="" selected disabled>انتخاب کنید...</option>
+                                        <option value="buy-advice">مشاوره تخصصی خرید ساز</option>
+                                        <option value="support">پشتیبانی سفارشات و پیگیری</option>
+                                        <option value="after-sales">خدمات پس از فروش و گارانتی</option>
+                                        <option value="collaboration">همکاری تجاری و تأمین کالا</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="input-group-custom">
+                                    <label class="form-label-custom">متن پیام شما</label>
+                                    <textarea name="Message" rows="5" class="form-input-custom" placeholder="جزئیات درخواست یا سوال خود را بنویسید..." required></textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-12 mt-4">
+                                <button type="submit" class="btn-submit-contact w-100">
+                                    <span>ارسال پیام برای لگاتو</span>
+                                    <i class="bi bi-send-fill ms-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+                <div class="social-section pt-3 border-top border-secondary">
+                    <span class="social-label d-block mb-3">ما را در شبکه‌های اجتماعی دنبال کنید:</span>
+                    <div class="social-links-grid">
+                        <a href="#" class="social-btn"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="social-btn"><i class="bi bi-telegram"></i></a>
+                        <a href="#" class="social-btn"><i class="bi bi-youtube"></i></a>
+                        <a href="#" class="social-btn"><i class="bi bi-whatsapp"></i></a>
+                    </div>
+                </div>
+
+
+        <div class="faq-section mt-5 pt-4">
+            <div class="text-center mb-4">
+                <h2 class="faq-title">سوالات متداول کاربران</h2>
+                <p class="text-muted">شاید پاسخ سوال شما همین‌جا باشد</p>
+            </div>
+
+            <div class="accordion legato-accordion mx-auto" id="contactFaqAccordion" style="max-width: 850px;">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                            آیا امکان تست سازها قبل از خرید حضوری وجود دارد؟
+                        </button>
+                    </h2>
+                    <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#contactFaqAccordion">
+                        <div class="accordion-body">
+                            بله، در لگاتو اتاق‌های آکوستیک ویژه‌ای برای تست انواع گیتار، پیانو دیجیتال و آمپلی‌فایرها با حضور کارشناسان فراهم شده است.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                            شرایط ارسال ساز به شهرستان‌ها چگونه است؟
+                        </button>
+                    </h2>
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#contactFaqAccordion">
+                        <div class="accordion-body">
+                            تمام سازها در بسته‌بندی‌های ایزوله و ضدهضربه هاردکیس یا کارتن‌های چندلایه استاندارد به همراه بیمه کامل مرسوله توسط باربری‌های تخصصی ارسال می‌شوند.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                            سازهای لگاتو دارای چه گارانتی و ضمانتی هستند؟
+                        </button>
+                    </h2>
+                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#contactFaqAccordion">
+                        <div class="accordion-body">
+                            کلیه کالاهای ارائه شده در لگاتو دارای ۷ روز مهلت تست اصالت و سلامت فنی، و ۷ سال گارانتی رسمی شرکت برای سازهای الکترونیک و دیجیتال می‌باشند.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,299 @@
+﻿@model MusicStore.Application.DTOs.Product.CreateProductDto
+
+@section Styles{
+    <link rel="stylesheet"
+          href="~/AdminCss/Product.css"
+          asp-append-version="true" />
+}
+
+<div class="product-form-container">
+
+    <div class="form-header-wrapper">
+
+        <span class="form-sub-title">
+            MANAGEMENT
+        </span>
+
+        <h2 class="form-main-title">
+            Create New Product
+        </h2>
+
+        <p class="form-desc-text">
+            Add a new musical instrument to your store.
+        </p>
+
+    </div>
+
+
+    <div class="premium-form-card">
+
+        <form asp-action="Create"
+              method="post">
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-4">
+            </div>
+
+
+            <div class="mb-4 input-block-custom">
+
+                <label asp-for="Name"
+                       class="form-label-premium">
+
+                    Product Name
+
+                </label>
+
+                <div class="input-wrapper-icon">
+
+                    <i class="bi bi-box-seam field-premium-icon"></i>
+
+                    <input asp-for="Name"
+                           class="form-control-premium"
+                           placeholder="Product name" />
+
+                </div>
+
+                <span asp-validation-for="Name"
+                      class="text-danger small">
+                </span>
+
+            </div>
+
+            <div class="mb-4 input-block-custom">
+
+                <label asp-for="SKU"
+                       class="form-label-premium">
+
+                    SKU
+
+                </label>
+
+                <div class="input-wrapper-icon">
+
+                    <i class="bi bi-upc field-premium-icon"></i>
+
+                    <input asp-for="SKU"
+                           class="form-control-premium"
+                           placeholder="SKU" />
+
+                </div>
+
+                <span asp-validation-for="SKU"
+                      class="text-danger small">
+                </span>
+
+            </div>
+
+            <div class="mb-4 input-block-custom">
+
+                <label asp-for="Description"
+                       class="form-label-premium">
+
+                    Description
+
+                </label>
+
+                <textarea asp-for="Description"
+                          rows="5"
+                          class="form-control-premium">
+                </textarea>
+
+                <span asp-validation-for="Description"
+                      class="text-danger small">
+                </span>
+
+            </div>
+
+            <div class="mb-4 input-block-custom">
+
+                <label asp-for="Price"
+                       class="form-label-premium">
+
+                    Price
+
+                </label>
+
+                <div class="input-wrapper-icon">
+
+                    <i class="bi bi-currency-dollar field-premium-icon"></i>
+
+                    <input asp-for="Price"
+                           type="number"
+                           step="0.01"
+                           class="form-control-premium"
+                           placeholder="0.00" />
+
+                </div>
+
+                <span asp-validation-for="Price"
+                      class="text-danger small">
+                </span>
+
+            </div>
+
+
+            <div class="mb-4 input-block-custom">
+
+                <label asp-for="CostPrice"
+                       class="form-label-premium">
+
+                    Cost Price
+
+                </label>
+
+                <div class="input-wrapper-icon">
+
+                    <i class="bi bi-cash-stack field-premium-icon"></i>
+
+                    <input asp-for="CostPrice"
+                           type="number"
+                           step="0.01"
+                           class="form-control-premium"
+                           placeholder="0.00" />
+
+                </div>
+
+                <span asp-validation-for="CostPrice"
+                      class="text-danger small">
+                </span>
+
+            </div>
+
+            <div class="mb-4 input-block-custom">
+
+                <label asp-for="StockQuantity"
+                       class="form-label-premium">
+
+                    Stock Quantity
+
+                </label>
+
+                <div class="input-wrapper-icon">
+
+                    <i class="bi bi-boxes field-premium-icon"></i>
+
+                    <input asp-for="StockQuantity"
+                           type="number"
+                           class="form-control-premium"
+                           placeholder="0" />
+
+                </div>
+
+                <span asp-validation-for="StockQuantity"
+                      class="text-danger small">
+                </span>
+
+            </div>
+
+            <div class="mb-4 input-block-custom">
+
+                <label asp-for="CategoryId"
+                       class="form-label-premium">
+
+                    Category
+
+                </label>
+
+                <div class="input-wrapper-icon">
+
+                    <i class="bi bi-diagram-3 field-premium-icon"></i>
+
+                    <select asp-for="CategoryId"
+                            asp-items="@(new SelectList(ViewBag.Categories, "Id", "Name"))"
+                            class="form-control-premium">
+
+                        <option value="">
+                            Select Category
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <span asp-validation-for="CategoryId"
+                      class="text-danger small">
+                </span>
+
+            </div>
+
+
+            <div class="mb-4 input-block-custom">
+
+                <label asp-for="BrandId"
+                       class="form-label-premium">
+
+                    Brand
+
+                </label>
+
+                <div class="input-wrapper-icon">
+
+                    <i class="bi bi-award field-premium-icon"></i>
+
+                    <select asp-for="BrandId"
+                            asp-items="@(new SelectList(ViewBag.Brands, "Id", "Name"))"
+                            class="form-control-premium">
+
+                        <option value="">
+                            Select Brand
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <span asp-validation-for="BrandId"
+                      class="text-danger small">
+                </span>
+
+            </div>
+
+            <div class="mb-4">
+
+                <div class="form-check">
+
+                    <input asp-for="IsActive"
+                           class="form-check-input" />
+
+                    <label asp-for="IsActive"
+                           class="form-check-label">
+
+                        Active Product
+
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-actions-wrapper">
+
+                <a asp-action="Index"
+                   class="btn-form-cancel">
+
+                    Back to List
+
+                </a>
+
+                <button type="submit"
+                        class="btn-form-submit">
+
+                    <span>
+
+                        Save Product
+
+                    </span>
+
+                    <i class="bi bi-check-lg"></i>
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

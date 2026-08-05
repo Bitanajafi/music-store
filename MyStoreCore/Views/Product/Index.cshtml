@@ -1,0 +1,123 @@
+﻿<link href="~/css/product.css" rel="stylesheet" />
+<link href="~/css/layout.css" rel="stylesheet" />
+
+@model List<MusicStore.Application.DTOs.Product.ProductDto>
+
+@{
+    ViewData["Title"] = "محصولات فروشگاه Legato";
+    var groupedProducts = Model?.GroupBy(p => p.CategoryName ?? "سایر محصولات").ToList();
+}
+
+<div class="products-page-wrapper py-5">
+    <div class="container">
+
+
+        <div class="products-header text-center mb-5">
+            <span class="hero-subtitle">LEGATO COLLECTION</span>
+            <h1 class="hero-title mt-2">آرشیو تخصصی ساز و تجهیزات موسیقی</h1>
+            <p class="hero-description mx-auto" style="max-width: 600px;">
+                مجموعه‌ای کامل از برترین برندهای جهانی با ضمانت اصالت و کیفیت
+            </p>
+            <div class="header-divider mx-auto"></div>
+        </div>
+
+        @if (Model == null || !Model.Any())
+        {
+            <div class="empty-state text-center py-5">
+                <i class="bi bi-music-note-slash fs-1 text-gold mb-3 d-block"></i>
+                <h4 class="text-white fw-bold">هیچ محصولی یافت نشد!</h4>
+                <p class="text-muted">در حال حاضر محصولی در این بخش ثبت نشده است.</p>
+            </div>
+        }
+        else
+        {
+            @foreach (var categoryGroup in groupedProducts)
+            {
+                <div class="category-block mb-5">
+
+                    <div class="category-header d-flex justify-content-between align-items-center mb-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="category-icon-box">
+                                <i class="bi bi-music-note-beamed"></i>
+                            </div>
+                            <h2 class="category-title mb-0">@categoryGroup.Key</h2>
+                        </div>
+                        <span class="category-count">@categoryGroup.Count() محصول</span>
+                    </div>
+
+                    <div class="row g-4">
+                        @foreach (var product in categoryGroup)
+                        {
+                            <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+                                <div class="legato-product-card @(!product.IsActive || product.StockQuantity <= 0 ? "out-of-stock" : "")">
+
+                                    <div class="card-badges">
+                                        @if (!product.IsActive || product.StockQuantity <= 0)
+                                        {
+                                            <span class="badge-status badge-out">ناموجود</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge-status badge-in">موجود</span>
+                                        }
+                                    </div>
+
+                                    <div class="card-img-wrapper">
+                                        <img src="@(product.MainImageUrl ?? "/images/no-image.png")"
+                                             alt="@product.Name"
+                                             loading="lazy" />
+                                    </div>
+
+                                    <div class="card-content">
+                                        <div class="brand-tag">@product.BrandName</div>
+                                        <h3 class="product-title" title="@product.Name">@product.Name</h3>
+
+                                        <p class="product-desc">
+                                            @(product.Description?.Length > 70
+                                            ? product.Description.Substring(0, 70) + "..."
+                                            : product.Description)
+                                        </p>
+
+                                        <div class="price-box">
+                                            <span class="price-amount">@product.Price.ToString("N0")</span>
+                                            <span class="price-currency">تومان</span>
+                                        </div>
+
+                                        <div class="card-actions">
+                                            <a asp-controller="Product"
+                                               asp-action="Details"
+                                               asp-route-id="@product.Id"
+                                               class="btn-action btn-details">
+                                                <i class="bi bi-eye"></i>
+                                                <span>مشاهده</span>
+                                            </a>
+
+                                            @if (product.IsActive && product.StockQuantity > 0)
+                                            {
+                                                <form asp-controller="Cart"
+                                                      asp-action="AddToCart"
+                                                      method="post"
+                                                      class="flex-grow-1">
+                                                    <input type="hidden" name="ProductId" value="@product.Id" />
+                                                    <input type="hidden" name="Quantity" value="1" />
+                                                    <button type="submit" class="btn-action btn-cart w-100">
+                                                        <i class="bi bi-bag-plus"></i>
+                                                        <span>خرید</span>
+                                                    </button>
+                                                </form>
+                                            }
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            }
+        }
+
+    </div>
+</div>
+

@@ -1,0 +1,354 @@
+﻿@model MusicStore.Application.DTOs.Product.ProductDetailsDto
+
+<link href="~/css/product.css" rel="stylesheet" />
+<link href="~/css/layout.css" rel="stylesheet" />
+
+<section class="product-details-page py-5">
+
+    <div class="container">
+
+        <div class="product-main-card p-4 p-lg-5 mb-5">
+
+            <div class="row g-5 align-items-start">
+
+                <div class="col-lg-6">
+
+                    <div class="product-gallery-wrapper">
+
+                        <div class="product-image-card p-4">
+
+
+                            @if (Model.Images != null && Model.Images.Any())
+                            {
+
+                                <div class="row g-3">
+
+                                    @foreach (var image in Model.Images)
+                                    {
+                                        <div class="col-6">
+
+                                            <div class="product-gallery-item">
+
+                                                <img src="@image"
+                                                     alt="@Model.Name"
+                                                     class="img-fluid rounded-4 product-gallery-img" />
+
+                                            </div>
+
+                                        </div>
+                                    }
+
+                                </div>
+
+                            }
+                            else
+                            {
+
+                                <div class="no-image-box d-flex flex-column align-items-center justify-content-center">
+
+                                    <i class="bi bi-image text-muted fs-1 mb-2"></i>
+
+                                    <span class="text-muted">
+                                        تصویری ثبت نشده است
+                                    </span>
+
+                                </div>
+
+                            }
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+
+                <div class="col-lg-6">
+
+                    <div class="product-info-wrapper pe-lg-3">
+
+
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+
+
+                            <span class="product-brand-badge px-3 py-1 rounded-pill">
+
+                                <i class="bi bi-award me-1"></i>
+
+                               Brand:  @Model.BrandName
+
+                            </span>
+
+
+
+                            @if (Model.StockQuantity > 0)
+                            {
+
+                                <span class="badge badge-stock-in px-3 py-2 rounded-pill">
+
+                                    <i class="bi bi-check-circle-fill me-1"></i>
+
+                                    موجود در انبار
+
+                                </span>
+
+                            }
+                            else
+                            {
+
+                                <span class="badge badge-stock-out px-3 py-2 rounded-pill">
+
+                                    <i class="bi bi-x-circle-fill me-1"></i>
+
+                                    ناموجود
+
+                                </span>
+
+                            }
+
+
+                        </div>
+
+
+
+
+                        <h1 class="product-title text-white fw-bold my-3">
+
+                            @Model.Name
+
+                        </h1>
+
+
+
+
+                        <div class="product-meta-grid d-flex flex-wrap gap-4 py-3 my-3 border-top border-bottom border-secondary border-opacity-25">
+
+
+                            <div class="meta-item d-flex align-items-center gap-2">
+
+
+                                <div>
+
+                                    <span class="d-block text-gold fs-8">
+                                        دسته‌بندی
+                                    </span>
+
+                                    <span class="text-white fw-medium fs-7">
+
+                                        @Model.CategoryName
+
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+
+
+                            <div class="meta-item d-flex align-items-center gap-2">
+
+                                <div>
+
+                                    <span class="d-block text-gold fs-8">
+                                        کد کالا
+                                    </span>
+
+
+                                    <span class="text-white fw-medium fs-7" dir="ltr">
+
+                                        @Model.SKU
+
+                                    </span>
+
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+
+
+
+
+                        <div class="price-action-box p-4 rounded-4 my-4">
+
+
+                            <div class="d-flex align-items-baseline gap-2 mb-3">
+
+
+                                <span class="text-gold fs-7">
+                                    قیمت نهایی:
+                                </span>
+
+
+                                <span class="product-price-amount display-6 fw-bold text-gold">
+
+                                    @Model.Price.ToString("N0")
+
+                                </span>
+
+
+                                <span class="text-gold fs-7">
+                                    تومان
+                                </span>
+
+
+                            </div>
+
+
+
+
+
+                            @if (Model.StockQuantity > 0)
+                            {
+
+                                <form asp-controller="Cart"
+                                      asp-action="AddToCart"
+                                      method="post">
+
+
+                                    <input type="hidden"
+                                           name="productId"
+                                           value="@Model.Id" />
+
+
+
+                                    <button type="submit"
+                                            class="btn btn-buy-gold w-100 py-3 rounded-3 d-flex align-items-center justify-content-center gap-2 text-dark fw-bold">
+
+
+                                        <i class="bi bi-bag-plus-fill fs-5"></i>
+
+
+                                        افزودن به سبد خرید
+
+
+                                    </button>
+
+
+                                </form>
+
+                            }
+                            else
+                            {
+
+                                <button class="btn btn-secondary w-100 py-3 rounded-3"
+                                        disabled>
+
+                                    <i class="bi bi-slash-circle me-1"></i>
+
+                                    امکان سفارش وجود ندارد
+
+                                </button>
+
+                            }
+
+
+
+                        </div>
+
+
+
+
+
+                        <div class="product-trust-features d-flex justify-content-around text-center mt-4">
+
+
+                            <div class="trust-item text-gold">
+
+                                <i class="bi bi-shield-check text-gold d-block fs-4 mb-1"></i>
+
+                                <span class="fs-8">
+                                    ضمانت اصالت
+                                </span>
+
+                            </div>
+
+
+
+                            <div class="trust-item  text-gold">
+
+                                <i class="bi bi-truck text-gold d-block fs-4 mb-1"></i>
+
+                                <span class="fs-8">
+                                    ارسال ایمن
+                                </span>
+
+                            </div>
+
+
+
+                            <div class="trust-item text-gold">
+
+                                <i class="bi bi-headset text-gold d-block fs-4 mb-1"></i>
+
+                                <span class="fs-8">
+                                    مشاوره تخصصی
+                                </span>
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <div class="product-description-card p-4 p-lg-5">
+
+
+            <h4 class="description-title text-white fw-bold mb-4 pb-3 border-bottom border-gold-subtle">
+
+                <i class="bi bi-file-text text-gold"></i>
+
+                بررسی تخصصی و توضیحات محصول
+
+            </h4>
+
+
+
+            <div class="description-content text-light-subtle lh-lg">
+
+
+                @if (!string.IsNullOrWhiteSpace(Model.Description))
+                {
+
+                    <p>
+                        @Model.Description
+                    </p>
+
+                }
+                else
+                {
+
+                    <p class="text-muted">
+                        توضیحاتی برای این محصول ثبت نشده است.
+                    </p>
+
+                }
+
+
+            </div>
+
+
+        </div>
+
+
+
+    </div>
+
+</section>

@@ -1,0 +1,212 @@
+﻿<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - LEGATO Premium Store</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.rtl.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap-icons-1.13.1/fonts/bootstrap-icons.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/account.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/MyStoreCore.styles.css" asp-append-version="true" />
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+
+            <a class="navbar-brand brand-legato" href="/">
+                <span class="brand-en">LEGATO</span>
+            </a>
+
+            <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+                <span class="toggler-icon"></span>
+                <span class="toggler-icon"></span>
+                <span class="toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainNavbar">
+
+                <ul class="navbar-nav mx-auto gap-lg-4 gap-2 my-lg-0 my-3">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">خانه</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle"
+                           href="#"
+                           id="categoryDropdown"
+                           role="button"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            دسته‌بندی‌ها
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-dark dropdown-menu-end p-0 border-0 bg-transparent shadow-lg"
+                             aria-labelledby="categoryDropdown"
+                             style="min-width: 280px;">
+                            @await Component.InvokeAsync("CategoryMenu")
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Product/Index">همه محصولات</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Home/About">درباره ما</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Home/Contact">تماس با ما</a>
+                    </li>
+
+                </ul>
+
+                <div class="navbar-actions d-flex align-items-center gap-3">
+
+                    <form asp-controller="Product"
+                          asp-action="Index"
+                          method="get"
+                          class="search-box">
+                        <input type="text"
+                               name="Search"
+                               class="search-input"
+                               placeholder="جستجو در لگاتو..."
+                               value="@Context.Request.Query["Search"]" />
+                        <button class="search-btn" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </form>
+
+                    <a href="@Url.Action("Index", "Cart")"
+                       class="action-icon position-relative"
+                       title="سبد خرید">
+                        <i class="bi bi-bag"></i>
+                    </a>
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        <a asp-controller="Order"
+                           asp-action="Index"
+                           class="action-icon"
+                           title="سفارش‌های من">
+                            <i class="bi bi-box-seam"></i>
+                        </a>
+                    }
+
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                        {
+                            <a class="action-icon"
+                               asp-area="Admin"
+                               asp-controller="Dashboard"
+                               asp-action="Index"
+                               title="داشبورد مدیریت">
+                                <i class="bi bi-speedometer2"></i>
+                            </a>
+                        }
+
+                        <a class="action-icon"
+                           asp-controller="Account"
+                           asp-action="Profile"
+                           title="پروفایل کاربری">
+                            <i class="bi bi-person-circle"></i>
+                        </a>
+
+                        <a class="action-icon"
+                           asp-controller="Account"
+                           asp-action="Logout"
+                           title="خروج">
+                            <i class="bi bi-box-arrow-right"></i>
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="action-icon"
+                           asp-controller="Account"
+                           asp-action="Register"
+                           title="ثبت‌نام">
+                            <i class="bi bi-person-plus"></i>
+                        </a>
+
+                        <a class="action-icon"
+                           asp-controller="Account"
+                           asp-action="Login"
+                           title="ورود">
+                            <i class="bi bi-person-check"></i>
+                        </a>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+    </nav>
+
+    <main class="main-content container-fluid p-0">
+        @RenderBody()
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="row gy-5 justify-content-between">
+
+                <div class="col-xl-4 col-lg-5 col-md-6 footer-column-brand">
+                    <h5 class="footer-title">LEGATO</h5>
+                    <p class="footer-text">
+                        فروشگاه تخصصی سازهای موسیقی و تجهیزات حرفه‌ای؛ ارائه‌دهنده مجموعه‌ای از برترین برندهای جهان با تضمین اصالت کالا، کیفیت ممتاز و ارسال مطمئن. رسالت ما، فراهم کردن تجربه‌ای حرفه‌ای و الهام‌بخش برای هر هنرمند و عاشق موسیقی است.
+                    </p>
+                    <div class="footer-socials">
+                        <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                        <a href="#" aria-label="Telegram"><i class="bi bi-telegram"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-xl-2 col-lg-3 col-md-6 footer-column-links">
+                    <h5 class="footer-title">دسترسی سریع</h5>
+                    <ul class="list-unstyled footer-links">
+                        <li><a href="/">صفحه اصلی</a></li>
+                        <li><a href="/Product/Index">محصولات برتر</a></li>
+                        <li><a href="/Home/About">داستان لگاتو</a></li>
+                        <li><a href="/Home/Contact">ارتباط با ما</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-xl-4 col-lg-4 col-md-12 footer-column-contact">
+                    <h5 class="footer-title">اطلاعات تماس</h5>
+                    <ul class="list-unstyled footer-contact">
+                        <li>
+                            <i class="bi bi-geo-alt"></i>
+                            <span>برج بهارستان، آمل، مازندران</span>
+                        </li>
+                        <li>
+                            <i class="bi bi-telephone"></i>
+                            <span dir="ltr">۰۱۱ - ۱۲۳۴ ۵۶۷۸</span>
+                        </li>
+                        <li>
+                            <i class="bi bi-envelope"></i>
+                            <span>info@legatomusic.com</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <hr class="footer-divider" />
+
+            <div class="copyright-text">
+                &copy; 2026 LEGATO Music Store.
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

@@ -1,0 +1,164 @@
+﻿@model MusicStore.Application.DTOs.Brand.CreateBrandDto
+
+@section Styles {
+    <link rel="stylesheet" href="~/AdminCss/Brand.css" asp-append-version="true" />
+}
+
+
+<div class="brand-form-container">
+
+
+    <div class="form-header-wrapper">
+
+        <span class="form-sub-title">
+            MANAGEMENT
+        </span>
+
+
+        <h2 class="form-main-title">
+            Create New Brand
+        </h2>
+
+
+        <p class="form-desc-text">
+            Add a new musical instrument brand to your store.
+        </p>
+
+
+    </div>
+
+
+
+
+
+    <div class="premium-form-card">
+
+
+        <form asp-action="Create" method="post">
+
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-4">
+            </div>
+
+
+
+
+
+            <div class="mb-4 input-block-custom">
+
+
+                <label asp-for="Name"
+                       class="form-label-premium">
+
+                    Brand Name
+
+                </label>
+
+
+
+                <div class="input-wrapper-icon">
+
+
+                    <i class="bi bi-award-fill field-premium-icon"></i>
+
+
+                    <input asp-for="Name"
+                           class="form-control-premium"
+                           placeholder="Enter brand name" />
+
+
+                </div>
+
+
+
+                <span asp-validation-for="Name"
+                      class="text-danger small">
+                </span>
+
+
+            </div>
+
+
+
+
+
+
+
+
+            <div class="mb-4 input-block-custom">
+
+
+                <label asp-for="Country"
+                       class="form-label-premium">
+
+                    Country
+
+                </label>
+
+
+
+                <div class="input-wrapper-icon">
+
+
+                    <i class="bi bi-globe field-premium-icon"></i>
+
+
+                    <input asp-for="Country"
+                           class="form-control-premium"
+                           placeholder="Example: Japan" />
+
+
+                </div>
+
+
+
+                <span asp-validation-for="Country"
+                      class="text-danger small">
+                </span>
+
+
+            </div>
+
+
+            <div class="form-actions-wrapper">
+
+
+                <a asp-action="Index"
+                   class="btn-form-cancel">
+
+                    Back to List
+
+                </a>
+
+
+
+
+                <button type="submit"
+                        class="btn-form-submit">
+
+
+                    <span>
+                        Save Brand
+                    </span>
+
+
+                    <i class="bi bi-check-lg"></i>
+
+
+                </button>
+
+
+            </div>
+
+
+
+        </form>
+
+
+
+    </div>
+
+
+
+</div>

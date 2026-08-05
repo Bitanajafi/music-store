@@ -1,0 +1,559 @@
+﻿<link href="~/css/layout.css" rel="stylesheet" />
+<link href="~/css/home.css" rel="stylesheet" />
+
+<div id="heroCarousel"
+     class="carousel slide carousel-fade hero-slider"
+     data-bs-ride="carousel"
+     data-bs-interval="2500">
+    <div class="carousel-indicators hero-indicators">
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+
+    <div class="carousel-inner h-100">
+
+        <div class="carousel-item active h-100 hero-slide-1">
+            <div class="hero-overlay overlay-slide-1">
+                <div class="container">
+                    <div class="hero-content slide-content-1">
+                        <span class="hero-subtitle subtitle-1">انتخاب ویژه و حرفه‌ای</span>
+                        <h1 class="hero-title title-1">آغاز یک صدای بی‌نقص، از اینجا</h1>
+                        <p class="hero-description desc-1">
+                            شاهکارهای کلاسیک ماندگار تا مدرن‌ترین ابزارهای خلق هنر
+                        </p>
+                        <div class="hero-actions">
+                            <a href="/Product/Index" class="btn btn-premium-gold btn-1">
+                                <span>خرید آنلاین</span>
+                                <i class="bi bi-arrow-left"></i>
+                            </a>
+                            <a href="#categories" class="btn btn-premium-outline">مشاهده دسته‌ها</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="carousel-item h-100 hero-slide-2">
+            <div class="hero-overlay overlay-slide-2">
+                <div class="container">
+                    <div class="hero-content slide-content-2">
+                        <span class="hero-subtitle subtitle-2">LEGATO SPECIAL SELECTION</span>
+                        <h1 class="hero-title title-2">هنر نواختن، لذت شنیدن</h1>
+                        <p class="hero-description desc-2">
+                            مجموعه‌ای دست‌چین شده از برترین سازهای کلاسیک و مدرن برای هنرمندانی که به کیفیت اهمیت می‌دهند
+                        </p>
+                        <div class="hero-actions">
+                            <a href="/Product/Index" class="btn btn-premium-gold btn-2">
+                                <span>مشاهده سازها</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="carousel-item h-100 hero-slide-3">
+            <div class="hero-overlay overlay-slide-3">
+                <div class="container">
+                    <div class="hero-content slide-content-3">
+
+                        <h1 class="hero-title title-3">
+                            جادوی کلاویه‌های سیاه و سفید
+                        </h1>
+                        <p class="hero-description desc-3">
+                            از پیانوهای دیجیتال هوشمند تا مدل‌های آکوستیک اصیل؛<br> ابزاری بی‌نظیر برای تبدیل احساساتِ نگفته به زیباترین ملودی‌ها
+                        </p>
+                        <div class="hero-actions">
+                            <a href="/Product/Index?categoryId=5" class="btn btn-premium-gold btn-3">
+                                <span>مشاهده کلکسیون پیانو</span>
+                            </a>
+                            <a href="/Home/Contact" class="btn btn-premium-outline">مشاوره رایگان خرید</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">قبلی</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">بعدی</span>
+    </button>
+</div>
+
+
+
+
+
+
+<section class="products-section container-fluid px-0">
+    <div class="row g-3">
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="product-card">
+                <div class="product-details">
+                    <span class="product-font-tag">LEGATO COLLECTION</span>
+                    <h3 class="product-name">Pervil Z-500 </h3>
+                    <div class="product-price">28000000<span>تومان</span></div>
+                    <a asp-controller="Product"
+                       asp-action="Details"
+                       asp-route-id="32"
+                       class="btn-product-buy">
+                        مشاهده و خرید
+                    </a>
+                </div>
+                <div class="product-img-box">
+                    <img src="/images/imgui/Pervil z-500.jpg" alt="ویولن">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="product-card">
+                <div class="product-details">
+                    <span class="product-font-tag">LEGATO COLLECTION</span>
+                    <h3 class="product-name">کمانچه خیام 20 ترک ساده</h3>
+                    <div class="product-price">16000000 <span>تومان</span></div>
+                    <a asp-controller="Product"
+                       asp-action="Details"
+                       asp-route-id="33"
+                       class="btn-product-buy">
+                        مشاهده و خرید
+                    </a>
+                </div>
+                <div class="product-img-box">
+                    <img src="/images/imgui/kamanche khayam.jpg" alt="کمانچه">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="product-card">
+                <div class="product-details">
+                    <span class="product-font-tag">LEGATO COLLECTION</span>
+                    <h3 class="product-name">Samick 108 piano</h3>
+                    <div class="product-price">180000000<span>تومان</span></div>
+                    <a asp-controller="Product"
+                       asp-action="Details"
+                       asp-route-id="23"
+                       class="btn-product-buy">
+                        مشاهده و خرید
+                    </a>
+                </div>
+                <div class="product-img-box">
+                    <img src="/images/imgui/Samick108 (2).jpg" alt="پیانو">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="product-card">
+                <div class="product-details">
+                    <span class="product-font-tag">LEGATO COLLECTION</span>
+                    <h3 class="product-name">
+                        Vintage Historic Series Dreadnought Acoustic
+                    </h3>
+                    <div class="product-price">32500000 <span>تومان</span></div>
+                    <a asp-controller="Product"
+                       asp-action="Details"
+                       asp-route-id="11"
+                       class="btn-product-buy">
+                        مشاهده و خرید
+                    </a>
+                </div>
+                <div class="product-img-box">
+                    <img src="/images/imgui/Vintage Historic Series Dreadnought Acoustic.jpg" alt="گیتار">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="product-card">
+                <div class="product-details">
+                    <span class="product-font-tag">LEGATO COLLECTION</span>
+                    <h3 class="product-name">ساکسیفون تنور Yamaha YTS-26</h3>
+                    <div class="product-price">308000000 <span>تومان</span></div>
+                    <a asp-controller="Product"
+                       asp-action="Details"
+                       asp-route-id="36"
+                       class="btn-product-buy">
+                        مشاهده و خرید
+                    </a>
+                </div>
+                <div class="product-img-box">
+                    <img src="/images/imgui/ساکسیفون.jpg" alt="ساکسوفون">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="product-card">
+                <div class="product-details">
+                    <span class="product-font-tag">LEGATO COLLECTION</span>
+                    <h3 class="product-name">هنگ درام Samipan قهوه ای</h3>
+                    <div class="product-price">13000000 <span>تومان</span></div>
+                    <a asp-controller="Product"
+                       asp-action="Details"
+                       asp-route-id="38"
+                       class="btn-product-buy">
+                        مشاهده و خرید
+                    </a>
+                </div>
+                <div class="product-img-box">
+                    <img src="/images/imgui/هنگ درامم.webp" alt="هنگ درام">
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+
+
+
+
+
+
+<section id="categories" class="floating-categories-section">
+    <div class="container">
+
+        <div class="categories-wrapper">
+
+            <a asp-controller="Product"
+               asp-action="Index"
+               asp-route-categoryId="17"
+               class="category-item active">
+
+                <i class="bi bi-music-note-list"></i>
+                <span>کلاویه‌ای</span>
+
+            </a>
+
+            <a asp-controller="Product"
+               asp-action="Index"
+               asp-route-categoryId="5"
+               class="category-item">
+
+                <i class="bi bi-git"></i>
+                <span>گیتار</span>
+
+            </a>
+
+            <a asp-controller="Product"
+               asp-action="Index"
+               asp-route-categoryId="24"
+               class="category-item">
+
+                <i class="bi bi-music-note-beamed"></i>
+                <span>زهی</span>
+
+            </a>
+
+            <a asp-controller="Product"
+               asp-action="Index"
+               asp-route-categoryId="34"
+               class="category-item">
+
+                <i class="bi bi-circle"></i>
+                <span>کوبه‌ای</span>
+
+            </a>
+
+            <a asp-controller="Product"
+               asp-action="Index"
+               asp-route-categoryId="30"
+               class="category-item">
+
+                <i class="bi bi-wind"></i>
+                <span>بادی</span>
+
+            </a>
+
+            <a asp-controller="Product"
+               asp-action="Index"
+               asp-route-categoryId="38"
+               class="category-item">
+
+                <i class="bi bi-disc"></i>
+                <span>هندپن</span>
+
+            </a>
+
+        </div>
+
+    </div>
+</section>
+
+
+
+
+
+
+<section class="explore-section">
+    <div class="container">
+
+        <div class="explore-banner-wrapper">
+
+            <div class="explore-mobile-img-wrapper d-lg-none">
+
+                <img src="/images/imgui/explore-piano-banner.jpg.png"
+                     alt="Keyboards & Pianos">
+
+            </div>
+
+            <div class="row align-items-center">
+
+                <div class="col-lg-5 explore-text-col">
+
+                    <div class="explore-content-inner">
+
+                        <span class="explore-subtitle">
+                            EXPLORE
+                        </span>
+
+                        <h2 class="explore-title">
+                            Keyboards &amp; Pianos
+                        </h2>
+
+                        <p class="explore-description">
+                            بهترین مجموعه پیانوهای دیجیتال، سینتی‌سایزرها و کیبوردها را از برترین برندها تجربه کنید.
+                        </p>
+
+                        <a asp-controller="Product"
+                           asp-action="Index"
+                           asp-route-categoryId="17"
+                           class="btn btn-explore-gold">
+
+                            <span>مشاهده همه کیبوردها</span>
+
+                            <i class="bi bi-arrow-right"></i>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="explore-products-grid">
+
+            <a href="Product?categoryId=18" class="product-mini-card">
+
+                <div class="card-img-box">
+                    <img src="/images/imgui/digitalPiano.jpg"
+                         alt="Digital Pianos"
+                         class="img-fluid">
+                </div>
+
+                <h3>Digital Pianos</h3>
+
+            </a>
+
+            <a href="Product?categoryId=19" class="product-mini-card">
+
+                <div class="card-img-box">
+                    <img src="/images/imgui/Acoustic piano.jpg"
+                         alt="Stage Pianos"
+                         class="img-fluid">
+                </div>
+
+                <h3>Acoustic Pianos</h3>
+
+            </a>
+            <a href="Product?categoryId=21" class="product-mini-card">
+
+                <div class="card-img-box">
+                    <img src="/images/imgui/org.jpg"
+                         alt="org"
+                         class="img-fluid">
+                </div>
+
+                <h3>Organ</h3>
+
+            </a>
+            <a href="Product?categoryId=21" class="product-mini-card">
+
+                <div class="card-img-box">
+                    <img src="/images/imgui/keboard.jpg"
+                         alt="Keyboard"
+                         class="img-fluid">
+                </div>
+
+                <h3>Keyboard</h3>
+
+            </a>
+
+            <a href="Product?categoryId=22" class="product-mini-card">
+
+                <div class="card-img-box">
+                    <img src="/images/imgui/Accordion.jpg"
+                         alt="Accordion"
+                         class="img-fluid">
+                </div>
+
+                <h3>Accordion</h3>
+
+            </a>
+            <a href="Product?categoryId=23" class="product-mini-card">
+
+                <div class="card-img-box">
+                    <img src="/images/imgui/melodica black.jpg"
+                         alt="melodica"
+                         class="img-fluid">
+                </div>
+
+                <h3>melodica</h3>
+
+            </a>
+
+        </div>
+
+    </div>
+</section>
+
+
+
+
+
+
+
+
+
+<section class="promo-section my-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="promo-banner-card promo-bg-1">
+                    <div class="promo-overlay">
+                        <span class="promo-tag">کلکسیون کلاسیک</span>
+                        <h3>جهان شکوه گیتارهای اصیل و اسپانیایی</h3>
+                        <a asp-controller="Product" asp-action="Index" asp-route-categoryId="5" class="btn btn-explore-gold mt-3">کشف گیتارها</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="promo-banner-card promo-bg-2">
+                    <div class="promo-overlay">
+                        <span class="promo-tag">سازهای زهی سنتی</span>
+                        <h3>طنین اصالت سازهای ایرانی</h3>
+                        <a asp-controller="Product" asp-action="Index" asp-route-categoryId="24" class="btn btn-explore-gold mt-3">مشاهده سازهای زهی</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+
+<section class="brands-section py-5">
+    <div class="container">
+        <h5 class="text-center text-muted mb-4 font-weight-normal fs-6">نمایندگی و عرضه رسمی برترین برندهای ساز دنیا</h5>
+        <div class="brands-grid">
+            <div class="brand-item"><img src="/images/imgui/yamaha.jpg" alt="Yamaha" /></div>
+            <div class="brand-item"><img src="/images/imgui/martinn.png" alt="martin" /></div>
+            <div class="brand-item"><img src="/images/imgui/korg.png" alt="korg" /></div>
+            <div class="brand-item"><img src="/images/imgui/Hohner.png" alt="Hohner" /></div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+<section class="trust-badges-wrapper">
+    <div class="trust-badges-section">
+        <div class="container">
+            <div class="row text-center g-3">
+
+                <div class="col-6 col-md-3">
+                    <i class="bi bi-shield-check fs-2"></i>
+                    <h6 class="mt-2">ضمانت اصالت کالا</h6>
+                </div>
+
+                <div class="col-6 col-md-3">
+                    <i class="bi bi-headset fs-2"></i>
+                    <h6 class="mt-2">مشاوره تخصصی انتخاب ساز</h6>
+                </div>
+
+                <div class="col-6 col-md-3">
+                    <i class="bi bi-truck fs-2"></i>
+                    <h6 class="mt-2">ارسال ایمن به سراسر کشور</h6>
+                </div>
+
+                <div class="col-6 col-md-3">
+                    <i class="bi bi-arrow-counterclockwise fs-2"></i>
+                    <h6 class="mt-2">۷ روز مهلت تست</h6>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+<section class="blog-section py-5 my-4">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="section-gold-title text-white fw-bold fs-4 m-0">مجله تخصصی Legato</h2>
+            <a href="#" class="btn btn-explore-gold py-2 px-3 fs-6">مشاهده مقاله‌ها</a>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <article class="blog-card">
+                    <div class="blog-img-box">
+                        <img src="/images/imgui/blog-img-giutar.png" alt="Blog" />
+                    </div>
+                    <div class="blog-content">
+                       
+                        <h4>راهنمای جامع خرید اولین گیتار برای هنرجویان</h4>
+                        <p>چگونه بین گیتار کلاسیک، آکوستیک و الکتریک بهترین گزینه را برای شروع یادگیری انتخاب کنیم؟</p>
+                    </div>
+                </article>
+            </div>
+            <div class="col-md-4">
+                <article class="blog-card">
+                    <div class="blog-img-box">
+                        <img src="/images/imgui/digitalPiano.jpg" alt="Blog" />
+                    </div>
+                    <div class="blog-content">
+                      
+                        <h4>تفاوت پیانوی دیواری و پیانوی دیجیتال</h4>
+                        <p>بررسی ویژگی‌های مکانیکی و آکوستیک پیانوها جهت انتخابی دقیق برای فضاهای آپارتمانی.</p>
+                    </div>
+                </article>
+            </div>
+            <div class="col-md-4">
+                <article class="blog-card">
+                    <div class="blog-img-box">
+                        <img src="/images/imgui/blog-img-vilon.png" alt="Blog" />
+                    </div>
+                    <div class="blog-content">
+                       
+                        <h4>۵ نکته حیاتی برای نگهداری از سازهای زهی</h4>
+                        <p>کنترل رطوبت و دمای محیط چه تاثیری بر ساختار چوب سازهای گران‌قیمت شما دارد؟</p>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+
