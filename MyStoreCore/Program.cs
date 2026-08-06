@@ -3,12 +3,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MusicStore.Application.Interfaces;
 using MusicStore.Application.Interfaces.Generic;
+using MusicStore.Application.Interfaces.Services;
+using MusicStore.Application.Mapping;
 using MusicStore.Infrastructure.Data.Context;
 using MusicStore.Infrastructure.Identity;
 using MusicStore.Infrastructure.Repository;
 using MusicStore.Infrastructure.seed;
 using MusicStore.Infrastructure.Services;
-using MusicStore.Application.Interfaces.Services;
+using Microsoft.Extensions.DependencyInjection;
+using MusicStore.Application.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -58,6 +61,8 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.SlidingExpiration = true;
 });
 
+
+
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -69,6 +74,9 @@ builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+
+
+builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
 var app = builder.Build();
 
