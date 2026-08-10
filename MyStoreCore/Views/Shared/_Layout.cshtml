@@ -87,8 +87,8 @@
                     </a>
                     @if (User.Identity != null && User.Identity.IsAuthenticated)
                     {
-                        <a asp-controller="Order"
-                           asp-action="Index"
+                        <a asp-controller="Orders"
+                           asp-action="MyOrders"
                            class="action-icon"
                            title="سفارش‌های من">
                             <i class="bi bi-box-seam"></i>

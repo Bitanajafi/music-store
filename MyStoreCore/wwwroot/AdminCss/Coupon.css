@@ -1,0 +1,233 @@
+﻿.coupon-subtitle-tag {
+    display: block;
+    color: var(--gold);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.coupon-main-title {
+    color: var(--sidebar);
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin: 0;
+    line-height: 1;
+}
+
+.btn-add-coupon {
+    background-color: var(--sidebar);
+    color: #ffffff !important;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 12px 24px;
+    border-radius: 12px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(43, 37, 32, 0.15);
+}
+
+    .btn-add-coupon:hover {
+        background-color: #1a1613;
+        transform: translateY(-2px);
+    }
+
+.legato-card-table {
+    background-color: #ffffff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.03);
+    border: 1px solid var(--border);
+}
+
+.legato-table {
+    border-collapse: collapse;
+}
+
+    .legato-table thead {
+        background-color: #e6dfd5;
+    }
+
+    .legato-table th {
+        padding: 16px;
+        color: #685d54;
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 1px;
+        border: none;
+        text-transform: uppercase;
+    }
+
+    .legato-table td {
+        padding: 16px;
+        border-bottom: 1px solid #f3efe9;
+        font-size: 0.88rem;
+        color: var(--text);
+    }
+
+    .legato-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .legato-table tbody tr:hover {
+        background-color: #faf7f3;
+    }
+
+.legato-badge-dark {
+    background-color: var(--sidebar);
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+    display: inline-block;
+}
+
+.legato-badge-sub {
+    background-color: transparent;
+    color: var(--text);
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 4px 8px;
+    display: inline-block;
+}
+
+.btn-legato-action {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background-color: #f7f4f0;
+    color: #8c827a;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+    .btn-legato-action:hover {
+        background-color: var(--sidebar);
+        color: #ffffff;
+    }
+
+.btn-action-delete:hover {
+    background-color: #dc3545;
+    color: #ffffff;
+}
+
+.btn-action-edit:hover {
+    background-color: var(--gold);
+    color: #ffffff;
+}
+
+
+
+
+
+
+
+
+
+/*Edit*/
+.btn-back-legato {
+    background-color: #e6dfd5;
+    color: var(--sidebar) !important;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 10px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+    .btn-back-legato:hover {
+        background-color: #d8cebf;
+        color: var(--sidebar) !important;
+    }
+
+.legato-form-card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+}
+
+.legato-card-header {
+    background-color: #e6dfd5;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    color: var(--sidebar);
+}
+
+.legato-card-body {
+    padding: 28px 24px;
+}
+
+.legato-label {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--sidebar);
+    margin-bottom: 8px;
+}
+
+.legato-input {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    background-color: #FAF8F5;
+    color: var(--text);
+    transition: all 0.2s ease;
+}
+
+    .legato-input:focus {
+        background-color: #ffffff;
+        border-color: var(--gold);
+        box-shadow: 0 0 0 0.25rem rgba(196, 164, 130, 0.25);
+    }
+
+.legato-checkbox-wrapper {
+    background-color: #FAF8F5;
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.legato-checkbox {
+    width: 20px;
+    height: 20px;
+    border-color: var(--gold);
+    cursor: pointer;
+}
+
+    .legato-checkbox:checked {
+        background-color: var(--sidebar);
+        border-color: var(--sidebar);
+    }
+
+.btn-legato-submit {
+    background-color: var(--sidebar);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 11px 28px;
+    border-radius: 10px;
+    border: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+    .btn-legato-submit:hover {
+        background-color: #1a1613;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(43, 37, 32, 0.2);
+    }

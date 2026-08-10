@@ -8,6 +8,6 @@ namespace MusicStore.Application.DTOs.Order
 
         public string? CouponCode { get; set; }
 
-        public ShippingInfoDto ShippingInfo { get; set; } = null!;
+        public ShippingInfoDto ShippingInfo { get; set; } = new();
     }
 }

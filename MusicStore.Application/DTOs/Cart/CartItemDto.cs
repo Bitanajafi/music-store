@@ -7,6 +7,7 @@ namespace MusicStore.Application.DTOs.Cart
     public class CartItemDto
     {
         public int Id { get; set; }
+        public string SKU { get; set; }
 
         public int ProductId { get; set; }
 

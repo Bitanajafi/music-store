@@ -22,6 +22,13 @@ namespace MyStoreCore.Controllers
             return User.FindFirstValue(ClaimTypes.NameIdentifier)!;
         }
 
+
+
+
+
+
+
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {

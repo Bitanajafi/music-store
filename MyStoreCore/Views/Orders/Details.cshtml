@@ -1,0 +1,367 @@
+﻿@model MusicStore.Application.DTOs.Order.OrderDto
+
+@{
+    ViewData["Title"] = "جزئیات سفارش";
+}
+
+<link href="~/css/layout.css" rel="stylesheet" />
+<link href="~/css/order.css" rel="stylesheet" />
+
+<div class="checkout-luxury-page py-4 py-md-5">
+    <div class="container">
+
+        <div class="checkout-page-header mb-4 d-flex align-items-center justify-content-between flex-wrap gap-3">
+            <div>
+                <h2 class="page-title text-gold-gradient fw-bold mb-1 fs-4">
+                    <i class="bi bi-receipt text-gold me-2"></i>
+                    جزئیات سفارش
+                </h2>
+                <p class="page-subtitle text-white-50 fs-7 m-0">
+                    شناسه سفارش: <span class="text-gold fw-semibold">#@Model.Id</span>
+                </p>
+            </div>
+
+            <div class="d-inline-flex align-items-center">
+                @switch (Model.Status)
+                {
+                    case MusicStore.Domain.Enum.OrderStatus.Pending:
+                        <span class="badge bg-warning bg-opacity-20 text-warning border border-warning border-opacity-25 px-3 py-2 rounded-pill fs-7 d-inline-flex align-items-center">
+                            <i class="bi bi-hourglass-split me-1"></i> در انتظار پرداخت
+                        </span>
+                        break;
+
+                    case MusicStore.Domain.Enum.OrderStatus.Paid:
+                        <span class="badge bg-success bg-opacity-20 text-success border border-success border-opacity-25 px-3 py-2 rounded-pill fs-7 d-inline-flex align-items-center">
+                            <i class="bi bi-check-circle-fill me-1"></i> پرداخت شده
+                        </span>
+                        break;
+
+                    case MusicStore.Domain.Enum.OrderStatus.Shipped:
+                        <span class="badge bg-info bg-opacity-20 text-info border border-info border-opacity-25 px-3 py-2 rounded-pill fs-7 d-inline-flex align-items-center">
+                            <i class="bi bi-truck me-1"></i> ارسال شده
+                        </span>
+                        break;
+
+                    case MusicStore.Domain.Enum.OrderStatus.Delivered:
+                        <span class="badge bg-success bg-opacity-20 text-success border border-success border-opacity-25 px-3 py-2 rounded-pill fs-7 d-inline-flex align-items-center">
+                            <i class="bi bi-house-check-fill me-1"></i> تحویل داده شده
+                        </span>
+                        break;
+
+                    case MusicStore.Domain.Enum.OrderStatus.Cancelled:
+                        <span class="badge bg-danger bg-opacity-20 text-danger border border-danger border-opacity-25 px-3 py-2 rounded-pill fs-7 d-inline-flex align-items-center">
+                            <i class="bi bi-x-circle-fill me-1"></i> لغو شده
+                        </span>
+                        break;
+
+                    default:
+                        <span class="badge bg-secondary bg-opacity-20 text-white border border-secondary border-opacity-25 px-3 py-2 rounded-pill fs-7 d-inline-flex align-items-center">
+                            @Model.Status
+                        </span>
+                        break;
+                }
+            </div>
+        </div>
+
+        <div class="checkout-glass-card mb-4" style="background: rgba(18, 20, 26, 0.75) !important;">
+            <div class="card-glass-body">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="header-gold-icon">
+                                <i class="bi bi-hash"></i>
+                            </div>
+                            <div>
+                                <small class="text-white-50 fs-8 d-block mb-1">شماره سفارش</small>
+                                <span class="fw-bold text-white fs-7">#@Model.Id</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="header-gold-icon">
+                                <i class="bi bi-calendar3"></i>
+                            </div>
+                            <div>
+                                <small class="text-white-50 fs-8 d-block mb-1">تاریخ ثبت سفارش</small>
+                                <span class="fw-bold text-white fs-7">@Model.CreatedAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm")</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="header-gold-icon">
+                                <i class="bi bi-info-circle"></i>
+                            </div>
+                            <div>
+                                <small class="text-white-50 fs-8 d-block mb-1">وضعیت سفارش</small>
+                                <span class="fw-bold text-gold fs-7">@Model.Status</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="row g-4">
+            <div class="col-lg-7 col-xl-8">
+
+                <div class="checkout-glass-card mb-4">
+                    <div class="card-glass-header" style="background: rgba(255, 255, 255, 0.02) !important;">
+                        <div class="header-gold-icon">
+                            <i class="bi bi-bag-check-fill"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 text-white fw-bold fs-6">محصولات سفارش</h5>
+                            <small class="text-gold opacity-75 fs-8">اقلام ثبت شده در این سفارش</small>
+                        </div>
+                    </div>
+
+
+
+                    <div class="card-glass-body p-3">
+                        <div class="cart-items-wrapper d-flex flex-column gap-2">
+                            @if (Model.Items != null && Model.Items.Any())
+                            {
+                                foreach (var item in Model.Items)
+                                {
+                                    <div class="cart-item-row p-2 px-3 d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="cart-img-wrapper d-flex align-items-center justify-content-center">
+                                                <i class="bi bi-music-note-beamed text-gold fs-5"></i>
+                                            </div>
+
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <h6 class="fw-bold text-white mb-1 fs-7 cart-item-title">@item.ProductName</h6>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <span class="badge-quantity">تعداد: @item.Quantity</span>
+                                                    <small class="text-white-50 fs-8">@item.UnitPrice.ToString("N0") تومان</small>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="text-end ms-2">
+                                            <span class="fw-bold fs-7 text-gold d-block">@item.TotalPrice.ToString("N0")</span>
+                                            <small class="text-white-50 fs-8">تومان</small>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="text-center text-white-50 py-4 fs-7">
+                                    <i class="bi bi-exclamation-circle d-block fs-4 text-gold mb-2"></i>
+                                    محصولی برای این سفارش یافت نشد.
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checkout-glass-card mb-4">
+                    <div class="card-glass-header" style="background: rgba(255, 255, 255, 0.02) !important;">
+                        <div class="header-gold-icon">
+                            <i class="bi bi-truck"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 text-white fw-bold fs-6">اطلاعات ارسال</h5>
+                            <small class="text-gold opacity-75 fs-8">مشخصات تحویل‌گیرنده و آدرس</small>
+                        </div>
+                    </div>
+
+
+
+                    <div class="card-glass-body">
+                        @if (Model.ShippingInfo != null)
+                        {
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="checkout-label">
+                                        <i class="bi bi-person text-gold"></i>
+                                        گیرنده
+                                    </label>
+                                    <div class="info-glass-value">@Model.ShippingInfo.FullName</div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="checkout-label">
+                                        <i class="bi bi-telephone text-gold"></i>
+                                        شماره تماس
+                                    </label>
+                                    <div class="info-glass-value text-start" dir="ltr">@Model.ShippingInfo.PhoneNumber</div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="checkout-label">
+                                        <i class="bi bi-building text-gold"></i>
+                                        شهر
+                                    </label>
+                                    <div class="info-glass-value">@Model.ShippingInfo.City</div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="checkout-label">
+                                        <i class="bi bi-mailbox text-gold"></i>
+                                        کد پستی
+                                    </label>
+                                    <div class="info-glass-value text-start" dir="ltr">@Model.ShippingInfo.PostalCode</div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="checkout-label">
+                                        <i class="bi bi-map text-gold"></i>
+                                        آدرس
+                                    </label>
+                                    <div class="info-glass-value">@Model.ShippingInfo.Address</div>
+                                </div>
+
+
+
+                                @if (!string.IsNullOrWhiteSpace(Model.ShippingInfo.TrackingNumber))
+                                {
+                                    <div class="col-12">
+                                        <label class="checkout-label">
+                                            <i class="bi bi-postcard text-gold"></i>
+                                            کد رهگیری مرسوله
+                                        </label>
+                                        <div class="info-glass-value text-gold fw-bold text-start" dir="ltr">@Model.ShippingInfo.TrackingNumber</div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-white-50 text-center py-3 fs-7">
+                                اطلاعات ارسال ثبت نشده است.
+                            </div>
+                        }
+                    </div>
+                </div>
+
+
+
+
+                <div class="checkout-glass-card">
+                    <div class="card-glass-header" style="background: rgba(255, 255, 255, 0.02) !important;">
+                        <div class="header-gold-icon">
+                            <i class="bi bi-clock-history"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 text-white fw-bold fs-6">تاریخچه سفارش</h5>
+                            <small class="text-gold opacity-75 fs-8">روند تغییر وضعیت سفارش شما</small>
+                        </div>
+                    </div>
+
+
+
+                    <div class="card-glass-body">
+                        @if (Model.History != null && Model.History.Any())
+                        {
+                            <div class="timeline-wrapper d-flex flex-column gap-3">
+                                @foreach (var history in Model.History.OrderByDescending(x => x.CreatedAt))
+                                {
+                                    <div class="cart-item-row p-3">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <span class="fw-bold text-gold fs-7">@history.NewStatus</span>
+                                            <small class="text-white-50 fs-8" dir="ltr">
+                                                @history.CreatedAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm")
+                                            </small>
+                                        </div>
+                                        @if (!string.IsNullOrWhiteSpace(history.Description))
+                                        {
+                                            <p class="text-white-50 fs-8 m-0 mt-1">@history.Description</p>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-white-50 text-center py-3 fs-7">
+                                تاریخچه‌ای برای این سفارش ثبت نشده است.
+                            </div>
+                        }
+                    </div>
+                </div>
+
+            </div>
+
+
+
+
+
+
+            <div class="col-lg-5 col-xl-4">
+                <div class="sticky-checkout-summary">
+                    <div class="checkout-glass-card">
+                        <div class="card-glass-header" style="background: rgba(255, 255, 255, 0.02) !important;">
+                            <div class="header-gold-icon">
+                                <i class="bi bi-receipt-cutoff"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-0 text-white fw-bold fs-6">خلاصه سفارش</h5>
+                                <small class="text-gold opacity-75 fs-8">جزئیات مالی فاکتور</small>
+                            </div>
+                        </div>
+
+                        <div class="card-glass-body p-3 p-md-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3 fs-7">
+                                <span class="text-white-50">مجموع قیمت کالاها:</span>
+                                <span class="text-white fw-semibold">
+                                    @Model.SubTotal.ToString("N0")
+                                    <small class="text-white-50">تومان</small>
+                                </span>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center mb-3 fs-7">
+                                <span class="text-white-50">تخفیف:</span>
+                                <span class="text-danger fw-semibold">
+                                    - @Model.DiscountAmount.ToString("N0")
+                                    <small class="text-white-50">تومان</small>
+                                </span>
+                            </div>
+
+                            <hr class="border-secondary opacity-20 my-3" />
+
+                            <div class="p-3 highlight-total-box mb-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="fw-bold text-white fs-7">مبلغ قابل پرداخت:</span>
+                                    <div class="text-end">
+                                        <span class="fs-4 fw-bold text-gold glow-text">@Model.TotalPrice.ToString("N0")</span>
+                                        <span class="text-gold fw-bold ms-1 fs-8">تومان</span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            @if (Model.Payment != null)
+                            {
+                                <div class="cart-item-row p-3 mb-3 d-flex justify-content-between align-items-center">
+                                    <span class="text-white-50 fs-7">وضعیت پرداخت:</span>
+                                    <span class="fw-bold text-gold fs-7">@Model.Payment.Status</span>
+                                </div>
+                            }
+
+                            @if (Model.Status == MusicStore.Domain.Enum.OrderStatus.Pending)
+                            {
+                                <button type="button" class="btn btn-gold-lg w-100 py-2 fs-6 opacity-50" disabled>
+                                    <i class="bi bi-credit-card-2-back-fill fs-6"></i>
+                                    پرداخت سفارش
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

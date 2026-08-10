@@ -46,6 +46,8 @@ namespace MusicStore.Infrastructure.Services
 
                     ProductName = item.Product.Name,
 
+                    SKU = item.Product.SKU,
+
                     Quantity = item.Quantity,
 
                     UnitPrice = item.UnitPrice,

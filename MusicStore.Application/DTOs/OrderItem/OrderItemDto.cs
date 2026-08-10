@@ -7,6 +7,7 @@
 
         public string ProductName { get; set; } = null!;
 
+        public string? ProductImageUrl { get; set; }
 
         public int Quantity { get; set; }
 

@@ -16,4 +16,11 @@ public interface IOrderService
     Task<ServiceResult<OrderDto>> UpdateOrderStatusAsync(int orderId, UpdateOrderStatusDto dto);
 
     Task<ServiceResult<OrderDto>> CancelOrderAsync(int orderId, string userId);
+
+
+
+
+
+    //Task<ServiceResult<bool>> DeleteUserOrdersAsync(string userId);
+
 }
