@@ -505,26 +505,27 @@ namespace MusicStore.Infrastructure.Services
 
 
 
-    //    //تست
+        //    //تست
 
-    //    public async Task<ServiceResult<bool>> DeleteUserOrdersAsync(string userId)
-    //    {
-    //        var orders = await _unitOfWork
-    //            .Repository<Order>()
-    //            .GetAllAsync(x => x.UserId == userId);
+        //    public async Task<ServiceResult<bool>> DeleteUserOrdersAsync(string userId)
+        //    {
+        //        var orders = await _unitOfWork
+        //            .Repository<Order>()
+        //            .GetAllAsync(x => x.UserId == userId);
 
-    //        foreach (var order in orders)
-    //        {
-    //            await _unitOfWork.Repository<Order>().DeleteAsync(order);
-    //        }
+        //        foreach (var order in orders)
+        //        {
+        //            await _unitOfWork.Repository<Order>().DeleteAsync(order);
+        //        }
 
-    //        await _unitOfWork.SaveAsync();
+        //        await _unitOfWork.SaveAsync();
 
-    //        return ServiceResult<bool>.Ok(
-    //            true,
-    //            "سفارش‌های تستی کاربر با موفقیت حذف شدند.");
-    //    }
-    //}
+        //        return ServiceResult<bool>.Ok(
+        //            true,
+        //            "سفارش‌های تستی کاربر با موفقیت حذف شدند.");
+        //    }
+        //}
+    }
 }
 
 
