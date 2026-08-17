@@ -1,0 +1,374 @@
+﻿@model IEnumerable<MusicStore.Application.DTOs.Order.AdminOrderListDto>
+@using MusicStore.Domain.Enum
+
+@{
+    ViewData["Title"] = "مدیریت سفارش‌ها";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/AdminCss/Order.css"
+          asp-append-version="true" />
+}
+
+<div class="container-fluid orders-dashboard py-3">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="orders-page-title fw-bold-custom">مدیریت سفارش‌ها</h2>
+    </div>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger border-0 rounded-3 shadow-sm mb-4">
+            @TempData["Error"]
+        </div>
+    }
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success border-0 rounded-3 shadow-sm mb-4">
+            @TempData["Success"]
+        </div>
+    }
+
+
+    <div class="premium-panel mb-4">
+
+        <div class="premium-panel-header">
+            <h5 class="premium-panel-title mb-0">
+                جستجو و فیلتر سفارش‌ها
+            </h5>
+        </div>
+
+        <div class="p-4">
+
+            <form asp-area="Admin"
+                  asp-controller="Order"
+                  asp-action="Index"
+                  method="get">
+
+                <div class="row g-3">
+
+                    <div class="col-md-3">
+
+                        <label class="form-label custom-form-label">
+                            جستجو
+                        </label>
+
+                        <input type="text"
+                               name="Search"
+                               class="form-control custom-input"
+                               placeholder="شماره سفارش، نام یا موبایل..." />
+
+                    </div>
+
+
+                    <div class="col-md-3">
+
+                        <label class="form-label custom-form-label">
+                            وضعیت سفارش
+                        </label>
+
+                        <select name="Status"
+                                class="form-select custom-input">
+
+                            <option value="">
+                                همه وضعیت‌ها
+                            </option>
+
+                            @foreach (var status in Enum.GetValues<OrderStatus>())
+                            {
+                                <option value="@status">
+                                    @status
+                                </option>
+                            }
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="col-md-3">
+
+                        <label class="form-label custom-form-label">
+                            وضعیت پرداخت
+                        </label>
+
+                        <select name="PaymentStatus"
+                                class="form-select custom-input">
+
+                            <option value="">
+                                همه وضعیت‌ها
+                            </option>
+
+                            @foreach (var status in Enum.GetValues<PaymentStatus>())
+                            {
+                                <option value="@status">
+                                    @status
+                                </option>
+                            }
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <label class="form-label custom-form-label">
+                            روش پرداخت
+                        </label>
+
+                        <select name="PaymentMethod"
+                                class="form-select custom-input">
+
+                            <option value="">
+                                همه روش‌ها
+                            </option>
+
+                            @foreach (var method in Enum.GetValues<PaymentMethod>())
+                            {
+                                <option value="@method">
+                                    @method
+                                </option>
+                            }
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="col-12 mt-4 d-flex gap-2">
+
+                        <button type="submit"
+                                class="btn btn-submit-gold">
+                            جستجو
+                        </button>
+
+                        <a asp-area="Admin"
+                           asp-controller="Order"
+                           asp-action="Index"
+                           class="btn btn-cancel-style">
+                            حذف فیلترها
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <div class="premium-panel">
+
+        <div class="premium-panel-header">
+
+            <h5 class="premium-panel-title mb-0">
+                لیست سفارش‌ها
+            </h5>
+
+        </div>
+
+
+        <div class="p-0">
+
+            @if (!Model.Any())
+            {
+                <div class="p-4 text-center text-muted-custom">
+                    سفارشی مطابق فیلترهای انتخاب‌شده پیدا نشد.
+                </div>
+            }
+            else
+            {
+
+                <div class="table-responsive-custom">
+
+                    <table class="custom-premium-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th class="text-center">
+                                    شماره سفارش
+                                </th>
+
+                                <th>
+                                    مشتری
+                                </th>
+
+                                <th>
+                                    مبلغ نهایی
+                                </th>
+
+                                <th>
+                                    وضعیت سفارش
+                                </th>
+
+                                <th>
+                                    وضعیت پرداخت
+                                </th>
+
+                                <th>
+                                    روش پرداخت
+                                </th>
+
+                                <th>
+                                    تاریخ ثبت
+                                </th>
+
+                                <th class="text-center">
+                                    عملیات
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @foreach (var order in Model)
+                            {
+
+                                <tr>
+
+                                    <td data-label="شماره سفارش"
+                                        class="text-center">
+
+                                        <span class="orders-id-badge text-ltr">
+                                            #@order.Id
+                                        </span>
+
+                                    </td>
+
+                                    <td data-label="مشتری">
+
+                                        <div class="fw-bold-custom">
+                                            @order.CustomerName
+                                        </div>
+
+                                        @if (!string.IsNullOrWhiteSpace(order.CustomerPhone))
+                                        {
+                                            <div class="text-muted-custom small mt-1 text-ltr">
+                                                @order.CustomerPhone
+                                            </div>
+                                        }
+
+                                    </td>
+
+                                    <td data-label="مبلغ نهایی">
+
+                                        <span class="price-text">
+                                            @order.TotalPrice.ToString("N0")
+                                        </span>
+
+                                        <small class="text-muted-custom ms-1">
+                                            تومان
+                                        </small>
+
+                                    </td>
+
+                                    <td data-label="وضعیت سفارش">
+
+                                        <span class="custom-role-badge is-member">
+                                            @order.Status
+                                        </span>
+
+                                    </td>
+
+                                    <td data-label="وضعیت پرداخت">
+
+                                        @(order.PaymentStatus?.ToString() ?? "نامشخص")
+
+                                    </td>
+
+                                    <td data-label="روش پرداخت">
+
+                                        @(order.PaymentMethod?.ToString() ?? "نامشخص")
+
+                                    </td>
+
+                                    <td data-label="تاریخ ثبت"
+                                        class="text-ltr">
+
+                                        @order.CreatedAt
+
+                                    </td>
+
+
+                                    <td data-label="عملیات"
+                                        class="text-center">
+
+                                        <div class="d-flex flex-column gap-2">
+
+                                            <form asp-area="Admin"
+                                                  asp-controller="Order"
+                                                  asp-action="UpdateStatus"
+                                                  method="post">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <input type="hidden"
+                                                       name="id"
+                                                       value="@order.Id" />
+
+
+                                                <select name="Status"
+                                                        class="form-select form-select-sm custom-input mb-2">
+
+                                                    @foreach (var status in Enum.GetValues<OrderStatus>())
+                                                    {
+                                                        <option value="@status"
+                                                                selected="@(status == order.Status)">
+                                                            @status
+                                                        </option>
+                                                    }
+
+                                                </select>
+
+
+                                                <button type="submit"
+                                                        class="btn btn-sm btn-submit-gold w-100">
+
+                                                    تغییر وضعیت
+
+                                                </button>
+
+                                            </form>
+
+
+                                            <a asp-area="Admin"
+                                               asp-controller="Order"
+                                               asp-action="Details"
+                                               asp-route-id="@order.Id"
+                                               class="btn-action-minimalist">
+
+                                                جزئیات
+
+                                            </a>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            }
+
+        </div>
+
+    </div>
+
+</div>

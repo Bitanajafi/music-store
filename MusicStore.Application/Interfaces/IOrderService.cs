@@ -5,6 +5,7 @@ namespace MusicStore.Application.Interfaces.Services;
 
 public interface IOrderService
 {
+    // Customer
     Task<ServiceResult<OrderDto>> CreateOrderAsync(CreateOrderDto dto, string userId);
 
     Task<ServiceResult<OrderDto>> GetOrderByIdAsync(int orderId, string userId);
@@ -20,7 +21,7 @@ public interface IOrderService
 
 
 
-
-    //Task<ServiceResult<bool>> DeleteUserOrdersAsync(string userId);
-
+    // Admin
+    Task<ServiceResult<IEnumerable<AdminOrderListDto>>>GetAdminOrdersAsync(AdminOrderFilterDto filter);
+    Task<ServiceResult<OrderDto>> GetAdminOrderByIdAsync(int orderId);
 }

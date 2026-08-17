@@ -1,0 +1,338 @@
+﻿@model MusicStore.Application.DTOs.Order.OrderDto
+@using MusicStore.Domain.Enum
+
+@{
+    ViewData["Title"] = $"جزئیات سفارش #{Model.Id}";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/AdminCss/Order.css" asp-append-version="true" />
+}
+
+<div class="container-fluid orders-dashboard py-3">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="orders-page-title">
+                جزئیات سفارش #@Model.Id
+            </h2>
+            <div class="text-muted-custom small mt-1">
+                زمان ثبت سفارش: @Model.CreatedAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm")
+            </div>
+        </div>
+
+        <a asp-area="Admin"
+           asp-controller="Order"
+           asp-action="Index"
+           class="btn btn-cancel-style">
+            بازگشت به لیست سفارش‌ها
+        </a>
+    </div>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger border-0 rounded-3 shadow-sm mb-4">
+            @TempData["Error"]
+        </div>
+    }
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success border-0 rounded-3 shadow-sm mb-4">
+            @TempData["Success"]
+        </div>
+    }
+
+    <div class="premium-panel mb-4">
+        <div class="premium-panel-header">
+            <h5 class="premium-panel-title mb-0">اطلاعات کلی</h5>
+        </div>
+        <div class="p-4">
+            <div class="row g-3">
+                <div class="col-6 col-md-3">
+                    <div class="info-card-item">
+                        <div class="info-card-label">شماره سفارش</div>
+                        <div class="info-card-value">#@Model.Id</div>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-3">
+                    <div class="info-card-item">
+                        <div class="info-card-label">مبلغ کل محصولات</div>
+                        <div class="info-card-value">@Model.SubTotal.ToString("N0") <small class="text-muted-custom">تومان</small></div>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-3">
+                    <div class="info-card-item">
+                        <div class="info-card-label">تخفیف</div>
+                        <div class="info-card-value text-danger">@Model.DiscountAmount.ToString("N0") <small class="text-muted-custom">تومان</small></div>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-3">
+                    <div class="info-card-item">
+                        <div class="info-card-label">مبلغ نهایی پرداختی</div>
+                        <div class="info-card-value price-accent">@Model.TotalPrice.ToString("N0") <small class="text-muted-custom">تومان</small></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="premium-panel mb-4">
+        <div class="premium-panel-header">
+            <h5 class="premium-panel-title mb-0">وضعیت سفارش و پرداخت</h5>
+        </div>
+        <div class="p-4">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="info-card-item">
+                        <div class="info-card-label">وضعیت سفارش</div>
+                        <div class="info-card-value">
+                            <span class="badge bg-secondary">@Model.Status</span>
+                        </div>
+                    </div>
+                </div>
+
+                @if (Model.Payment != null)
+                {
+                    <div class="col-md-4">
+                        <div class="info-card-item">
+                            <div class="info-card-label">وضعیت پرداخت</div>
+                            <div class="info-card-value">@Model.Payment.Status</div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="info-card-item">
+                            <div class="info-card-label">روش پرداخت</div>
+                            <div class="info-card-value">@Model.Payment.Method</div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="premium-panel mb-4">
+        <div class="premium-panel-header">
+            <h5 class="premium-panel-title mb-0">اقلام سفارش</h5>
+        </div>
+        <div class="py-2">
+            @if (!Model.Items.Any())
+            {
+                <div class="p-4 text-center text-muted-custom">
+                    محصولی برای این سفارش ثبت نشده است.
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="custom-premium-table">
+                        <thead>
+                            <tr>
+                                <th>محصول</th>
+                                <th class="text-center">تعداد</th>
+                                <th>قیمت واحد</th>
+                                <th>مبلغ کل</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr>
+                                    <td data-label="محصول">
+                                        <div class="d-flex align-items-center gap-3">
+                                            @if (!string.IsNullOrWhiteSpace(item.ProductImageUrl))
+                                            {
+                                                <img src="@item.ProductImageUrl"
+                                                     alt="@item.ProductName"
+                                                     style="width:48px;height:48px;object-fit:cover;border-radius:10px;border:1px solid var(--border);" />
+                                            }
+                                            <span class="fw-bold">@item.ProductName</span>
+                                        </div>
+                                    </td>
+                                    <td data-label="تعداد" class="text-center">
+                                        <span class="badge bg-light text-dark border">@item.Quantity</span>
+                                    </td>
+                                    <td data-label="قیمت واحد">
+                                        @item.UnitPrice.ToString("N0") <small class="text-muted-custom">تومان</small>
+                                    </td>
+                                    <td data-label="مبلغ کل" class="fw-bold">
+                                        @item.TotalPrice.ToString("N0") <small class="text-muted-custom">تومان</small>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+
+    @if (Model.ShippingInfo != null)
+    {
+        <div class="premium-panel mb-4">
+            <div class="premium-panel-header">
+                <h5 class="premium-panel-title mb-0">اطلاعات تحویل و ارسال</h5>
+            </div>
+            <div class="p-4">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="info-card-item">
+                            <div class="info-card-label">نام گیرنده</div>
+                            <div class="info-card-value">@Model.ShippingInfo.FullName</div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="info-card-item">
+                            <div class="info-card-label">شماره تماس</div>
+                            <div class="info-card-value text-ltr text-end">@Model.ShippingInfo.PhoneNumber</div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="info-card-item">
+                            <div class="info-card-label">شهر</div>
+                            <div class="info-card-value">@Model.ShippingInfo.City</div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8">
+                        <div class="info-card-item">
+                            <div class="info-card-label">آدرس کامل</div>
+                            <div class="info-card-value">@Model.ShippingInfo.Address</div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="info-card-item">
+                            <div class="info-card-label">کد پستی</div>
+                            <div class="info-card-value text-ltr text-end">@Model.ShippingInfo.PostalCode</div>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrWhiteSpace(Model.ShippingInfo.TrackingNumber))
+                    {
+                        <div class="col-md-4">
+                            <div class="info-card-item">
+                                <div class="info-card-label">کد رهگیری پستی</div>
+                                <div class="info-card-value text-ltr text-end price-accent">@Model.ShippingInfo.TrackingNumber</div>
+                            </div>
+                        </div>
+                    }
+
+                    @if (Model.ShippingInfo.ShippedAt.HasValue)
+                    {
+                        <div class="col-md-4">
+                            <div class="info-card-item">
+                                <div class="info-card-label">تاریخ ارسال</div>
+                                <div class="info-card-value">@Model.ShippingInfo.ShippedAt.Value.ToLocalTime().ToString("yyyy/MM/dd HH:mm")</div>
+                            </div>
+                        </div>
+                    }
+
+                    @if (Model.ShippingInfo.DeliveredAt.HasValue)
+                    {
+                        <div class="col-md-4">
+                            <div class="info-card-item">
+                                <div class="info-card-label">تاریخ تحویل</div>
+                                <div class="info-card-value">@Model.ShippingInfo.DeliveredAt.Value.ToLocalTime().ToString("yyyy/MM/dd HH:mm")</div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.Payment != null)
+    {
+        <div class="premium-panel mb-4">
+            <div class="premium-panel-header">
+                <h5 class="premium-panel-title mb-0">جزئیات مالی تراکنش</h5>
+            </div>
+            <div class="p-4">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <div class="info-card-item">
+                            <div class="info-card-label">مبلغ تراکنش</div>
+                            <div class="info-card-value">@Model.Payment.Amount.ToString("N0") <small class="text-muted-custom">تومان</small></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="info-card-item">
+                            <div class="info-card-label">شناسه تراکنش (RefId)</div>
+                            <div class="info-card-value text-ltr text-end">@(Model.Payment.TransactionId ?? "—")</div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="info-card-item">
+                            <div class="info-card-label">وضعیت</div>
+                            <div class="info-card-value">@Model.Payment.Status</div>
+                        </div>
+                    </div>
+
+                    @if (Model.Payment.PaidAt.HasValue)
+                    {
+                        <div class="col-md-3">
+                            <div class="info-card-item">
+                                <div class="info-card-label">زمان پرداخت</div>
+                                <div class="info-card-value">@Model.Payment.PaidAt.Value.ToLocalTime().ToString("yyyy/MM/dd HH:mm")</div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="premium-panel mb-4">
+        <div class="premium-panel-header">
+            <h5 class="premium-panel-title mb-0">تاریخچه تغییرات سفارش</h5>
+        </div>
+        <div class="p-0">
+            @if (!Model.History.Any())
+            {
+                <div class="p-4 text-center text-muted-custom">
+                    تاریخچه‌ای ثبت نشده است.
+                </div>
+            }
+            else
+            {
+                <div class="order-history-list">
+                    @foreach (var history in Model.History.OrderByDescending(x => x.CreatedAt))
+                    {
+                        <div class="history-item">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <div class="fw-bold">
+                                    تغییر وضعیت از
+                                    <span class="text-muted-custom">@(history.OldStatus?.ToString())</span>
+                                    به
+                                    <span class="price-accent">@history.NewStatus</span>
+                                </div>
+                                <div class="small text-muted-custom text-ltr">
+                                    @history.CreatedAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm")
+                                </div>
+                            </div>
+                            <div class="small text-muted-custom">
+                                توسط: <strong>@(history.ChangedBy)</strong>
+                            </div>
+                            @if (!string.IsNullOrWhiteSpace(history.Description))
+                            {
+                                <div class="mt-2 small border-top pt-2">
+                                    @history.Description
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+
+</div>
