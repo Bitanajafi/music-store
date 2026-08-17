@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<MusicStore.Application.DTOs.Order.OrderDto>
-
+@using MusicStore.Domain.Enum
 @{
     ViewData["Title"] = "سفارش‌های من";
 }
@@ -152,7 +152,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-12 mt-3 pt-2 border-top border-white border-opacity-10 d-flex justify-content-end align-items-center">
+                                <div class="col-12 mt-3 pt-2 border-top border-white border-opacity-10 d-flex justify-content-end align-items-center gap-2">
                                     <a asp-controller="Orders"
                                        asp-action="Details"
                                        asp-route-id="@order.Id"
@@ -161,6 +161,25 @@
                                         مشاهده جزئیات سفارش
                                     </a>
 
+                                    @if (order.Status == OrderStatus.Pending && order.Payment?.Status != PaymentStatus.Paid)
+                                    {
+                                        <form asp-controller="Orders"
+                                              asp-action="Cancel"
+                                              asp-route-id="@order.Id"
+                                              method="post"
+                                              class="d-inline"
+                                              onsubmit="return confirm('آیا از لغو این سفارش مطمئن هستید؟');">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <button type="submit"
+                                                    class="btn btn-outline-danger btn-sm px-3 py-1.5 fs-7 rounded-3 d-inline-flex align-items-center gap-2">
+                                                <i class="bi bi-x-circle"></i>
+                                                لغو سفارش
+                                            </button>
+
+                                        </form>
+                                    }
                                 </div>
 
 

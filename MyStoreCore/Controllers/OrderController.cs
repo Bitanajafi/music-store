@@ -236,7 +236,31 @@ namespace MyStoreCore.Controllers
         }
 
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Cancel(int id)
+        {
+            var userId = GetUserId();
 
+            var result = await _orderService.CancelOrderAsync(
+                id,
+                userId);
+
+            if (!result.Success)
+            {
+                TempData["Error"] = result.Message;
+
+                return RedirectToAction(
+                    nameof(Details),
+                    new { id });
+            }
+
+            TempData["Success"] = "سفارش با موفقیت لغو شد.";
+
+            return RedirectToAction(
+                nameof(Details),
+                new { id });
+        }
 
 
 

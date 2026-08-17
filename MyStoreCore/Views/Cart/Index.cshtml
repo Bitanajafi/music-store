@@ -88,14 +88,24 @@
                                             </td>
 
                                             <td class="text-center">
-                                                <form asp-action="UpdateQuantity" method="post" class="d-inline-flex align-items-center cart-qty-form">
+                                                <form asp-action="UpdateQuantity" method="post" class="cart-qty-form d-inline-block">
                                                     <input type="hidden" name="cartItemId" value="@item.Id" />
-                                                    <input type="number"
-                                                           name="quantity"
-                                                           value="@item.Quantity"
-                                                           min="1"
-                                                           onchange="this.form.submit()"
-                                                           class="form-control qty-input p-1" />
+                                                    <div class="input-group input-group-sm qty-control-group">
+                                                        <button type="button" class="btn btn-outline-warning btn-sm" onclick="changeQuantity(this, -1)">
+                                                            <i class="bi bi-dash-lg"></i>
+                                                        </button>
+
+                                                        <input type="number"
+                                                               name="quantity"
+                                                               value="@item.Quantity"
+                                                               min="1"
+                                                               onchange="this.form.submit()"
+                                                               class="form-control text-center qty-input border-secondary bg-dark text-white fw-bold" />
+
+                                                        <button type="button" class="btn btn-outline-warning btn-sm" onclick="changeQuantity(this, 1)">
+                                                            <i class="bi bi-plus-lg"></i>
+                                                        </button>
+                                                    </div>
                                                 </form>
                                             </td>
 
@@ -203,3 +213,21 @@
         </div>
     }
 </div>
+
+
+
+
+@section Scripts {
+    <script>
+        function changeQuantity(btn, change) {
+            const input = btn.closest('.qty-control-group').querySelector('.qty-input');
+            let currentValue = parseInt(input.value) || 1;
+            let newValue = currentValue + change;
+
+            if (newValue >= 1) {
+                input.value = newValue;
+                btn.closest('form').submit();
+            }
+        }
+    </script>
+}
