@@ -1,5 +1,6 @@
 ﻿
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MusicStore.Application.Common.Results;
 using MusicStore.Application.DTOs.Order;
@@ -8,6 +9,7 @@ using MusicStore.Application.Interfaces.Services;
 using MusicStore.Application.Services;
 using MusicStore.Domain.Entities;
 using MusicStore.Domain.Enum;
+using MusicStore.Infrastructure.Identity;
 using MusicStore.Infrastructure.Repository;
 
 namespace MusicStore.Infrastructure.Services
@@ -18,17 +20,20 @@ namespace MusicStore.Infrastructure.Services
         private readonly IMapper _mapper;
         private readonly OrderStateService _orderStateService;
         private readonly ICouponService _couponService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public OrderService(
-            IUnitOfWork unitOfWork,
-            IMapper mapper,
-            OrderStateService orderStateService,
-            ICouponService couponService)
+        IUnitOfWork unitOfWork,
+        IMapper mapper,
+        OrderStateService orderStateService,
+        ICouponService couponService,
+        UserManager<ApplicationUser> userManager)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _orderStateService = orderStateService;
             _couponService = couponService;
+            _userManager = userManager;
         }
 
 
@@ -504,27 +509,117 @@ namespace MusicStore.Infrastructure.Services
 
 
 
+        public async Task<ServiceResult<IEnumerable<AdminOrderListDto>>>
+            GetAdminOrdersAsync(AdminOrderFilterDto filter)
+        {
+            var orders = await _unitOfWork
+                .Repository<Order>()
+                .GetAllAsync(
+                    null,
+                    query => query
+                        .Include(x => x.Payment)
+                );
 
-        //    //تست
+            var filteredOrders = orders.AsQueryable();
 
-        //    public async Task<ServiceResult<bool>> DeleteUserOrdersAsync(string userId)
-        //    {
-        //        var orders = await _unitOfWork
-        //            .Repository<Order>()
-        //            .GetAllAsync(x => x.UserId == userId);
+            if (!string.IsNullOrWhiteSpace(filter.Search))
+            {
+                var search = filter.Search.Trim();
 
-        //        foreach (var order in orders)
-        //        {
-        //            await _unitOfWork.Repository<Order>().DeleteAsync(order);
-        //        }
+                if (int.TryParse(search, out var orderId))
+                {
+                    filteredOrders = filteredOrders.Where(x =>
+                        x.Id == orderId);
+                }
+                else
+                {
+                    var users = await _userManager
+                        .Users
+                        .Where(x =>
+                            (x.FirstName + " " + x.LastName).Contains(search) ||
+                            (x.PhoneNumber != null && x.PhoneNumber.Contains(search)))
+                        .Select(x => x.Id)
+                        .ToListAsync();
 
-        //        await _unitOfWork.SaveAsync();
+                    filteredOrders = filteredOrders.Where(x =>
+                        users.Contains(x.UserId));
+                }
+            }
 
-        //        return ServiceResult<bool>.Ok(
-        //            true,
-        //            "سفارش‌های تستی کاربر با موفقیت حذف شدند.");
-        //    }
-        //}
+            if (filter.Status.HasValue)
+            {
+                filteredOrders = filteredOrders.Where(x =>
+                    x.Status == filter.Status.Value);
+            }
+
+            if (filter.PaymentStatus.HasValue)
+            {
+                filteredOrders = filteredOrders.Where(x =>
+                    x.Payment != null &&
+                    x.Payment.Status == filter.PaymentStatus.Value);
+            }
+
+            if (filter.PaymentMethod.HasValue)
+            {
+                filteredOrders = filteredOrders.Where(x =>
+                    x.Payment != null &&
+                    x.Payment.Method == filter.PaymentMethod.Value);
+            }
+
+            if (filter.FromDate.HasValue)
+            {
+                var fromDate = filter.FromDate.Value.Date;
+
+                filteredOrders = filteredOrders.Where(x =>
+                    x.CreatedAt >= fromDate);
+            }
+
+            if (filter.ToDate.HasValue)
+            {
+                var toDate = filter.ToDate.Value.Date.AddDays(1);
+
+                filteredOrders = filteredOrders.Where(x =>
+                    x.CreatedAt < toDate);
+            }
+
+            var result = new List<AdminOrderListDto>();
+
+            foreach (var order in filteredOrders
+                .OrderByDescending(x => x.CreatedAt))
+            {
+                var user = await _userManager
+                    .FindByIdAsync(order.UserId);
+
+                result.Add(new AdminOrderListDto
+                {
+                    Id = order.Id,
+
+                    UserId = order.UserId,
+
+                    CustomerName = user != null
+                        ? $"{user.FirstName} {user.LastName}"
+                        : "کاربر حذف شده",
+
+                    CustomerPhone = user?.PhoneNumber,
+
+                    TotalPrice = order.TotalPrice,
+
+                    Status = order.Status,
+
+                    PaymentStatus = order.Payment?.Status,
+
+                    PaymentMethod = order.Payment?.Method,
+
+                    CreatedAt = order.CreatedAt
+                });
+            }
+
+            return ServiceResult<IEnumerable<AdminOrderListDto>>
+                .Ok(result);
+        }
+
+
+
     }
 }
 
