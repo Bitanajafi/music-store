@@ -618,8 +618,30 @@ namespace MusicStore.Infrastructure.Services
                 .Ok(result);
         }
 
+        public async Task<ServiceResult<OrderDto>> GetAdminOrderByIdAsync(
+        int orderId)
+        {
+            var order = await _unitOfWork
+                .Repository<Order>()
+                .GetFirstOrDefaultAsync(
+                    x => x.Id == orderId,
+                    query => query
+                        .Include(x => x.OrderItems)
+                        .Include(x => x.Payment)
+                        .Include(x => x.ShippingInfo)
+                        .Include(x => x.OrderHistory));
 
+            if (order == null)
+            {
+                return ServiceResult<OrderDto>
+                    .Fail("سفارش موردنظر یافت نشد.");
+            }
 
+            var result = _mapper.Map<OrderDto>(order);
+
+            return ServiceResult<OrderDto>
+                .Ok(result);
+        }
     }
 }
 

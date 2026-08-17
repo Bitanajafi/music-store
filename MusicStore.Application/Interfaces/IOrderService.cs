@@ -23,6 +23,5 @@ public interface IOrderService
 
     // Admin
     Task<ServiceResult<IEnumerable<AdminOrderListDto>>>GetAdminOrdersAsync(AdminOrderFilterDto filter);
-
-    //Task<ServiceResult<OrderDto>> GetOrderDetailsForAdminAsync(int orderId);
+    Task<ServiceResult<OrderDto>> GetAdminOrderByIdAsync(int orderId);
 }

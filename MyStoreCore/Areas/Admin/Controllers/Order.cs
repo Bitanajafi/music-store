@@ -30,5 +30,48 @@ namespace MusicStore.Web.Areas.Admin.Controllers
 
             return View(result.Data);
         }
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateStatus(int id,UpdateOrderStatusDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "اطلاعات وضعیت سفارش نامعتبر است.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var result = await _orderService.UpdateOrderStatusAsync(id, dto);
+
+            if (!result.Success)
+            {
+                TempData["Error"] = result.Message;
+                return RedirectToAction(nameof(Index));
+            }
+
+            TempData["Success"] = result.Message;
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var result = await _orderService.GetAdminOrderByIdAsync(id);
+
+            if (!result.Success || result.Data == null)
+            {
+                TempData["Error"] = result.Message;
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(result.Data);
+        }
     }
 }
