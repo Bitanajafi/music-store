@@ -16,15 +16,19 @@ namespace MyStoreCore.Controllers
         private readonly IOrderService _orderService;
         private readonly ICartService _cartService;
         private readonly ICouponService _couponService;
+        private readonly IPaymentService _paymentService;
 
         public OrdersController(
             IOrderService orderService,
             ICartService cartService,
-            ICouponService couponService)
+            ICouponService couponService,
+            IPaymentService paymentService)
         {
             _orderService = orderService;
             _cartService = cartService;
             _couponService = couponService;
+            _paymentService = paymentService;
+
         }
 
         private string GetUserId()
@@ -204,7 +208,32 @@ namespace MyStoreCore.Controllers
         }
 
 
+        [HttpGet]
+        public async Task<IActionResult> Pay(int id)
+        {
+            var userId = GetUserId();
 
+            var result = await _paymentService.CreatePaymentAsync(
+                id,
+                userId);
+
+            if (!result.Success)
+            {
+                TempData["Error"] = result.Message;
+
+                return RedirectToAction(
+                    nameof(Details),
+                    new { id });
+            }
+
+            return RedirectToAction(
+                "Index",
+                "Payment",
+                new
+                {
+                    transactionId = result.Data.TransactionId
+                });
+        }
 
 
 

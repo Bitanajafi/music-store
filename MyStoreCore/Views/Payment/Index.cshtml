@@ -1,0 +1,89 @@
+﻿@{
+    ViewData["Title"] = "درگاه پرداخت آزمایشی";
+}
+
+<link href="~/css/layout.css" rel="stylesheet" />
+<link href="~/css/payment.css" rel="stylesheet" />
+
+<div class="checkout-luxury-page py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+
+                <div class="checkout-glass-card border-gold-glow shadow-lg overflow-hidden">
+
+                    <div class="card-glass-body p-4 p-md-5">
+
+                        <div class="text-center mb-4">
+                            <div class="mb-2">
+                                <i class="bi bi-credit-card-2-front text-gold display-4 glow-text"></i>
+                            </div>
+                            <h3 class="text-center text-gold-gradient fw-bold fs-4 mb-1">
+                                درگاه پرداخت آزمایشی
+                            </h3>
+                            <p class="text-white-50 fs-8 m-0">
+                                جهت تست فلو، وضعیت تراکنش را انتخاب کنید
+                            </p>
+                        </div>
+
+                        <div class="mb-4 p-3 rounded-3 bg-white bg-opacity-5 border border-white border-opacity-10">
+                            <small class="text-white-50 fs-8 d-block mb-1">شناسه تراکنش:</small>
+                            <div class="fw-bold text-gold font-monospace fs-6">
+                                @ViewBag.TransactionId
+                            </div>
+                        </div>
+
+                        <!-- پرداخت موفق -->
+                        <form asp-controller="Payment"
+                              asp-action="Verify"
+                              method="post">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden"
+                                   name="transactionId"
+                                   value="@ViewBag.TransactionId" />
+
+                            <input type="hidden"
+                                   name="success"
+                                   value="true" />
+
+                            <button type="submit"
+                                    class="btn btn-gold-lg w-100 py-2.5 mb-3 fs-7 d-flex align-items-center justify-content-center gap-2">
+                                <i class="bi bi-check-circle-fill text-dark"></i>
+                                پرداخت موفق
+                            </button>
+
+                        </form>
+
+                        <!-- پرداخت ناموفق -->
+                        <form asp-controller="Payment"
+                              asp-action="Verify"
+                              method="post">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden"
+                                   name="transactionId"
+                                   value="@ViewBag.TransactionId" />
+
+                            <input type="hidden"
+                                   name="success"
+                                   value="false" />
+
+                            <button type="submit"
+                                    class="btn btn-outline-danger w-100 py-2.5 fs-7 rounded-3 d-flex align-items-center justify-content-center gap-2">
+                                <i class="bi bi-x-circle-fill"></i>
+                                پرداخت ناموفق
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

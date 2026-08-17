@@ -4,6 +4,7 @@ namespace MusicStore.Application.DTOs.Order
 {
     public class PaymentDto
     {
+        public int OrderId { get; set; }
         public decimal Amount { get; set; }
 
 
@@ -17,5 +18,6 @@ namespace MusicStore.Application.DTOs.Order
 
 
         public DateTime? PaidAt { get; set; }
+        
     }
 }

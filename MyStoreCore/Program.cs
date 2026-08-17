@@ -78,6 +78,8 @@ builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<OrderStateService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
+builder.Services.AddScoped<IPaymentGateway, FakePaymentGateway>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 builder.Services.AddAutoMapper(cfg =>
 {
