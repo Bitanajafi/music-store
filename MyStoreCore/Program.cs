@@ -80,6 +80,7 @@ builder.Services.AddScoped<OrderStateService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<IPaymentGateway, FakePaymentGateway>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<IStockService, StockService>();
 
 builder.Services.AddAutoMapper(cfg =>
 {

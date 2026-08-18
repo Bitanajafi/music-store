@@ -1,8 +1,8 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using MusicStore.Application.DTOs.Coupon;
 using MusicStore.Application.DTOs.Order;
 using MusicStore.Application.DTOs.OrderItem;
+using MusicStore.Application.DTOs.Stock;
 using MusicStore.Domain.Entities;
 
 namespace MusicStore.Application.Mapping
@@ -46,7 +46,20 @@ namespace MusicStore.Application.Mapping
                 .ReverseMap();
 
             CreateMap<CreateCouponDto, Coupon>();
+
+            CreateMap<StockHistory, StockHistoryDto>()
+                .ForMember(
+                    dest => dest.ProductName,
+                    opt => opt.MapFrom(src => src.Product.Name)
+                )
+                .ForMember(
+                    dest => dest.SKU,
+                    opt => opt.MapFrom(src => src.Product.SKU)
+                )
+                .ForMember(
+                    dest => dest.CreatedByName,
+                    opt => opt.Ignore()
+                );
         }
     }
 }
-

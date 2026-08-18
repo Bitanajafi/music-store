@@ -1,5 +1,4 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MusicStore.Application.Common.Results;
@@ -21,22 +20,23 @@ namespace MusicStore.Infrastructure.Services
         private readonly OrderStateService _orderStateService;
         private readonly ICouponService _couponService;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IStockService _stockService;
 
         public OrderService(
-        IUnitOfWork unitOfWork,
-        IMapper mapper,
-        OrderStateService orderStateService,
-        ICouponService couponService,
-        UserManager<ApplicationUser> userManager)
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            OrderStateService orderStateService,
+            ICouponService couponService,
+            UserManager<ApplicationUser> userManager,
+            IStockService stockService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _orderStateService = orderStateService;
             _couponService = couponService;
             _userManager = userManager;
+            _stockService = stockService;
         }
-
-
 
 
 
@@ -84,7 +84,8 @@ namespace MusicStore.Infrastructure.Services
                         await _unitOfWork.RollbackTransactionAsync();
 
                         return ServiceResult<OrderDto>
-                            .Fail($"محصولی با شناسه {item.ProductId} یافت نشد");
+                            .Fail(
+                                $"محصولی با شناسه {item.ProductId} یافت نشد");
                     }
 
                     if (!product.IsActive)
@@ -92,7 +93,8 @@ namespace MusicStore.Infrastructure.Services
                         await _unitOfWork.RollbackTransactionAsync();
 
                         return ServiceResult<OrderDto>
-                            .Fail($"محصول {product.Name} قابل سفارش نیست");
+                            .Fail(
+                                $"محصول {product.Name} قابل سفارش نیست");
                     }
 
                     if (product.StockQuantity < item.Quantity)
@@ -100,7 +102,8 @@ namespace MusicStore.Infrastructure.Services
                         await _unitOfWork.RollbackTransactionAsync();
 
                         return ServiceResult<OrderDto>
-                            .Fail($"موجودی محصول {product.Name} کافی نیست");
+                            .Fail(
+                                $"موجودی محصول {product.Name} کافی نیست");
                     }
 
                     var orderItem = new OrderItem
@@ -115,11 +118,20 @@ namespace MusicStore.Infrastructure.Services
 
                     subTotal += orderItem.TotalPrice;
 
-                    product.StockQuantity -= item.Quantity;
+                    var stockResult = await _stockService.DecreaseStockAsync(
+                    product.SKU,
+                    item.Quantity,
+                    "فروش محصول",
+                    userId);
 
-                    await _unitOfWork
-                        .Repository<Product>()
-                        .UpdateAsync(product);
+
+                    if (!stockResult.Success)
+                    {
+                        await _unitOfWork.RollbackTransactionAsync();
+
+                        return ServiceResult<OrderDto>
+                            .Fail(stockResult.Message);
+                    }
                 }
 
                 decimal discountAmount = 0;
@@ -144,7 +156,8 @@ namespace MusicStore.Infrastructure.Services
 
                     coupon = await _unitOfWork
                         .Repository<Coupon>()
-                        .GetByIdAsync(couponResult.Data.CouponId);
+                        .GetByIdAsync(
+                            couponResult.Data.CouponId);
 
                     if (coupon == null)
                     {
@@ -194,7 +207,8 @@ namespace MusicStore.Infrastructure.Services
                 {
                     OldStatus = null,
                     NewStatus = OrderStatus.Pending,
-                    Description = "سفارش ایجاد شد و منتظر پرداخت است",
+                    Description =
+                        "سفارش ایجاد شد و منتظر پرداخت است",
                     ChangedBy = userId,
                     CreatedAt = DateTime.UtcNow
                 });
@@ -209,19 +223,22 @@ namespace MusicStore.Infrastructure.Services
 
                 var result = _mapper.Map<OrderDto>(order);
 
-                return ServiceResult<OrderDto>
-                    .Ok(
-                        result,
-                        "سفارش با موفقیت ایجاد شد و منتظر پرداخت است.");
+                return ServiceResult<OrderDto>.Ok(
+                    result,
+                    "سفارش با موفقیت ایجاد شد و منتظر پرداخت است.");
             }
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackTransactionAsync();
 
                 return ServiceResult<OrderDto>
-                    .Fail($"خطایی هنگام ثبت سفارش رخ داد: {ex.Message}");
+                    .Fail(
+                        $"خطایی هنگام ثبت سفارش رخ داد: {ex.Message}");
             }
         }
+
+
+
 
 
 
@@ -232,7 +249,8 @@ namespace MusicStore.Infrastructure.Services
             var order = await _unitOfWork
                 .Repository<Order>()
                 .GetFirstOrDefaultAsync(
-                    x => x.Id == orderId && x.UserId == userId,
+                    x => x.Id == orderId &&
+                         x.UserId == userId,
                     query => query
                         .Include(x => x.OrderItems)
                         .Include(x => x.ShippingInfo)
@@ -250,7 +268,13 @@ namespace MusicStore.Infrastructure.Services
             return ServiceResult<OrderDto>.Ok(orderDto);
         }
 
-        public async Task<ServiceResult<IEnumerable<OrderDto>>> GetAllOrdersAsync()
+
+
+
+
+
+        public async Task<ServiceResult<IEnumerable<OrderDto>>>
+            GetAllOrdersAsync()
         {
             var orders = await _unitOfWork
                 .Repository<Order>()
@@ -271,8 +295,12 @@ namespace MusicStore.Infrastructure.Services
                 .Ok(result);
         }
 
-        public async Task<ServiceResult<IEnumerable<OrderDto>>> GetUserOrdersAsync(
-            string userId)
+
+
+
+
+        public async Task<ServiceResult<IEnumerable<OrderDto>>>
+            GetUserOrdersAsync(string userId)
         {
             var orders = await _unitOfWork
                 .Repository<Order>()
@@ -295,9 +323,12 @@ namespace MusicStore.Infrastructure.Services
 
 
 
-        public async Task<ServiceResult<OrderDto>> UpdateOrderStatusAsync(
-            int orderId,
-            UpdateOrderStatusDto dto)
+
+public async Task<ServiceResult<OrderDto>>
+    UpdateOrderStatusAsync(
+        int orderId,
+        UpdateOrderStatusDto dto,
+        string userId)
         {
             await _unitOfWork.BeginTransactionAsync();
 
@@ -326,7 +357,8 @@ namespace MusicStore.Infrastructure.Services
                     await _unitOfWork.RollbackTransactionAsync();
 
                     return ServiceResult<OrderDto>
-                        .Fail("وضعیت سفارش از قبل روی همین مقدار قرار دارد.");
+                        .Fail(
+                            "وضعیت سفارش از قبل روی همین مقدار قرار دارد.");
                 }
 
                 var oldStatus = order.Status;
@@ -338,8 +370,75 @@ namespace MusicStore.Infrastructure.Services
                     await _unitOfWork.RollbackTransactionAsync();
 
                     return ServiceResult<OrderDto>
-                        .Fail("تغییر وضعیت سفارش از حالت فعلی امکان‌پذیر نیست.");
+                        .Fail(
+                            "تغییر وضعیت سفارش از حالت فعلی امکان‌پذیر نیست.");
                 }
+
+                // ==========================================
+                // اگر ادمین سفارش را لغو کرد
+                // موجودی محصولات برگردانده می‌شود
+                // ==========================================
+
+                if (dto.Status == OrderStatus.Cancelled)
+                {
+                    if (oldStatus != OrderStatus.Pending &&
+                        oldStatus != OrderStatus.Paid)
+                    {
+                        await _unitOfWork.RollbackTransactionAsync();
+
+                        return ServiceResult<OrderDto>
+                            .Fail("این سفارش قابل لغو نیست.");
+                    }
+
+                    if (order.Payment != null)
+                    {
+                        if (order.Payment.Status == PaymentStatus.Paid)
+                        {
+                            order.Payment.Status =
+                                PaymentStatus.Refunded;
+                        }
+                        else
+                        {
+                            order.Payment.Status =
+                                PaymentStatus.Cancelled;
+                        }
+                    }
+
+                    foreach (var item in order.OrderItems)
+                    {
+                        var product = await _unitOfWork
+                            .Repository<Product>()
+                            .GetByIdAsync(item.ProductId);
+
+                        if (product == null)
+                        {
+                            await _unitOfWork.RollbackTransactionAsync();
+
+                            return ServiceResult<OrderDto>
+                                .Fail(
+                                    $"محصول مربوط به سفارش با شناسه {item.ProductId} یافت نشد.");
+                        }
+
+                        var stockResult = await _stockService
+                            .IncreaseStockAsync(
+                                product.SKU,
+                                item.Quantity,
+                                $"لغو سفارش #{order.Id} توسط ادمین",
+                                userId);
+
+                        if (!stockResult.Success)
+                        {
+                            await _unitOfWork.RollbackTransactionAsync();
+
+                            return ServiceResult<OrderDto>
+                                .Fail(stockResult.Message);
+                        }
+                    }
+                }
+
+                // ==========================================
+                // منطق قبلی تغییر وضعیت سفارش
+                // ==========================================
 
                 order.Status = dto.Status;
                 order.UpdatedAt = DateTime.UtcNow;
@@ -368,7 +467,7 @@ namespace MusicStore.Infrastructure.Services
                     OldStatus = oldStatus,
                     NewStatus = dto.Status,
                     Description = dto.Description,
-                    ChangedBy = "Admin",
+                    ChangedBy = userId,
                     CreatedAt = DateTime.UtcNow
                 });
 
@@ -382,10 +481,11 @@ namespace MusicStore.Infrastructure.Services
 
                 var result = _mapper.Map<OrderDto>(order);
 
-                return ServiceResult<OrderDto>
-                    .Ok(
-                        result,
-                        "وضعیت سفارش با موفقیت بروزرسانی شد.");
+                return ServiceResult<OrderDto>.Ok(
+                    result,
+                    dto.Status == OrderStatus.Cancelled
+                        ? "سفارش با موفقیت لغو شد و موجودی محصولات برگشت داده شد."
+                        : "وضعیت سفارش با موفقیت بروزرسانی شد.");
             }
             catch (Exception)
             {
@@ -399,9 +499,13 @@ namespace MusicStore.Infrastructure.Services
 
 
 
-        public async Task<ServiceResult<OrderDto>> CancelOrderAsync(
-            int orderId,
-            string userId)
+
+
+
+        public async Task<ServiceResult<OrderDto>>
+        CancelOrderAsync(
+         int orderId,
+         string userId)
         {
             await _unitOfWork.BeginTransactionAsync();
 
@@ -410,10 +514,10 @@ namespace MusicStore.Infrastructure.Services
                 var order = await _unitOfWork
                     .Repository<Order>()
                     .GetFirstOrDefaultAsync(
-                        x => x.Id == orderId && x.UserId == userId,
+                        x => x.Id == orderId &&
+                             x.UserId == userId,
                         query => query
                             .Include(x => x.OrderItems)
-                            .ThenInclude(x => x.Product)
                             .Include(x => x.Payment)
                             .Include(x => x.ShippingInfo)
                             .Include(x => x.OrderHistory));
@@ -454,21 +558,45 @@ namespace MusicStore.Infrastructure.Services
                 {
                     if (order.Payment.Status == PaymentStatus.Paid)
                     {
-                        order.Payment.Status = PaymentStatus.Refunded;
+                        order.Payment.Status =
+                            PaymentStatus.Refunded;
                     }
                     else
                     {
-                        order.Payment.Status = PaymentStatus.Cancelled;
+                        order.Payment.Status =
+                            PaymentStatus.Cancelled;
                     }
                 }
 
                 foreach (var item in order.OrderItems)
                 {
-                    item.Product.StockQuantity += item.Quantity;
-
-                    await _unitOfWork
+                    var product = await _unitOfWork
                         .Repository<Product>()
-                        .UpdateAsync(item.Product);
+                        .GetByIdAsync(item.ProductId);
+
+                    if (product == null)
+                    {
+                        await _unitOfWork.RollbackTransactionAsync();
+
+                        return ServiceResult<OrderDto>
+                            .Fail(
+                                $"محصول مربوط به سفارش با شناسه {item.ProductId} یافت نشد.");
+                    }
+
+                    var stockResult = await _stockService
+                        .IncreaseStockAsync(
+                            product.SKU,
+                            item.Quantity,
+                            "لغو سفارش",
+                            userId);
+
+                    if (!stockResult.Success)
+                    {
+                        await _unitOfWork.RollbackTransactionAsync();
+
+                        return ServiceResult<OrderDto>
+                            .Fail(stockResult.Message);
+                    }
                 }
 
                 order.OrderHistory.Add(new OrderHistory
@@ -490,10 +618,9 @@ namespace MusicStore.Infrastructure.Services
 
                 var result = _mapper.Map<OrderDto>(order);
 
-                return ServiceResult<OrderDto>
-                    .Ok(
-                        result,
-                        "سفارش با موفقیت لغو شد.");
+                return ServiceResult<OrderDto>.Ok(
+                    result,
+                    "سفارش با موفقیت لغو شد.");
             }
             catch (Exception)
             {
@@ -508,7 +635,6 @@ namespace MusicStore.Infrastructure.Services
 
 
 
-
         public async Task<ServiceResult<IEnumerable<AdminOrderListDto>>>
             GetAdminOrdersAsync(AdminOrderFilterDto filter)
         {
@@ -517,8 +643,7 @@ namespace MusicStore.Infrastructure.Services
                 .GetAllAsync(
                     null,
                     query => query
-                        .Include(x => x.Payment)
-                );
+                        .Include(x => x.Payment));
 
             var filteredOrders = orders.AsQueryable();
 
@@ -528,58 +653,65 @@ namespace MusicStore.Infrastructure.Services
 
                 if (int.TryParse(search, out var orderId))
                 {
-                    filteredOrders = filteredOrders.Where(x =>
-                        x.Id == orderId);
+                    filteredOrders = filteredOrders
+                        .Where(x => x.Id == orderId);
                 }
                 else
                 {
                     var users = await _userManager
                         .Users
                         .Where(x =>
-                            (x.FirstName + " " + x.LastName).Contains(search) ||
-                            (x.PhoneNumber != null && x.PhoneNumber.Contains(search)))
+                            (x.FirstName + " " + x.LastName)
+                                .Contains(search) ||
+                            (x.PhoneNumber != null &&
+                             x.PhoneNumber.Contains(search)))
                         .Select(x => x.Id)
                         .ToListAsync();
 
-                    filteredOrders = filteredOrders.Where(x =>
-                        users.Contains(x.UserId));
+                    filteredOrders = filteredOrders
+                        .Where(x => users.Contains(x.UserId));
                 }
             }
 
             if (filter.Status.HasValue)
             {
-                filteredOrders = filteredOrders.Where(x =>
-                    x.Status == filter.Status.Value);
+                filteredOrders = filteredOrders
+                    .Where(x => x.Status == filter.Status.Value);
             }
 
             if (filter.PaymentStatus.HasValue)
             {
-                filteredOrders = filteredOrders.Where(x =>
-                    x.Payment != null &&
-                    x.Payment.Status == filter.PaymentStatus.Value);
+                filteredOrders = filteredOrders
+                    .Where(x =>
+                        x.Payment != null &&
+                        x.Payment.Status ==
+                        filter.PaymentStatus.Value);
             }
 
             if (filter.PaymentMethod.HasValue)
             {
-                filteredOrders = filteredOrders.Where(x =>
-                    x.Payment != null &&
-                    x.Payment.Method == filter.PaymentMethod.Value);
+                filteredOrders = filteredOrders
+                    .Where(x =>
+                        x.Payment != null &&
+                        x.Payment.Method ==
+                        filter.PaymentMethod.Value);
             }
 
             if (filter.FromDate.HasValue)
             {
                 var fromDate = filter.FromDate.Value.Date;
 
-                filteredOrders = filteredOrders.Where(x =>
-                    x.CreatedAt >= fromDate);
+                filteredOrders = filteredOrders
+                    .Where(x => x.CreatedAt >= fromDate);
             }
 
             if (filter.ToDate.HasValue)
             {
-                var toDate = filter.ToDate.Value.Date.AddDays(1);
+                var toDate =
+                    filter.ToDate.Value.Date.AddDays(1);
 
-                filteredOrders = filteredOrders.Where(x =>
-                    x.CreatedAt < toDate);
+                filteredOrders = filteredOrders
+                    .Where(x => x.CreatedAt < toDate);
             }
 
             var result = new List<AdminOrderListDto>();
@@ -618,8 +750,11 @@ namespace MusicStore.Infrastructure.Services
                 .Ok(result);
         }
 
-        public async Task<ServiceResult<OrderDto>> GetAdminOrderByIdAsync(
-        int orderId)
+
+
+
+        public async Task<ServiceResult<OrderDto>>
+            GetAdminOrderByIdAsync(int orderId)
         {
             var order = await _unitOfWork
                 .Repository<Order>()
@@ -639,22 +774,7 @@ namespace MusicStore.Infrastructure.Services
 
             var result = _mapper.Map<OrderDto>(order);
 
-            return ServiceResult<OrderDto>
-                .Ok(result);
+            return ServiceResult<OrderDto>.Ok(result);
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

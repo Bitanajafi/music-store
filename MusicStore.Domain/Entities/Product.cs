@@ -36,6 +36,7 @@ namespace MusicStore.Domain.Entities
         public ICollection<Wishlist> Wishlist { get; set; }= new List<Wishlist>();
         public ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+        public ICollection<StockHistory> StockHistories { get; set; }= new List<StockHistory>();
 
     }
 }

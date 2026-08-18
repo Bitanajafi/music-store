@@ -1,0 +1,142 @@
+﻿@model IEnumerable<MusicStore.Application.DTOs.Stock.StockHistoryDto>
+
+@{
+    ViewData["Title"] = "تاریخچه محصول";
+}
+@section Styles {
+    <link rel="stylesheet"
+          href="~/AdminCss/Stock.css"
+          asp-append-version="true" />
+}
+
+<div class="container-fluid px-0">
+
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div>
+            <h2 class="fw-bold-custom mb-1 text-dark fs-4">
+                تاریخچه موجودی محصول
+            </h2>
+            @if (Model != null && Model.Any())
+            {
+                <div class="d-flex align-items-center gap-2 mt-1">
+                    <span class="fw-bold-custom text-dark fs-7">
+                        @Model.First().ProductName
+                    </span>
+                    <span class="text-muted fs-7">•</span>
+                    <span class="badge-custom-info font-monospace fs-8">
+                        SKU: @Model.First().SKU
+                    </span>
+                </div>
+            }
+        </div>
+
+        <a asp-area="Admin"
+           asp-controller="Stock"
+           asp-action="Index"
+           class="btn-secondary-custom">
+            <i class="bi bi-arrow-right"></i>
+            <span>بازگشت</span>
+        </a>
+    </div>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger border-0 rounded-3 shadow-sm mb-4 d-flex align-items-center gap-2">
+            <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+            <div>@TempData["Error"]</div>
+        </div>
+    }
+
+    <div class="premium-panel">
+        @if (Model == null || !Model.Any())
+        {
+            <div class="text-center py-5">
+                <div class="mini-avatar mx-auto mb-3">
+                    <i class="bi bi-box-seam fs-4"></i>
+                </div>
+                <h6 class="fw-bold-custom">هیچ سوابقی یافت نشد!</h6>
+                <p class="text-muted fs-7 mb-0">برای این محصول هنوز هیچ سابقه تغییر موجودی ثبت نشده است.</p>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive-custom">
+                <table class="custom-premium-table align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-center" style="width: 90px;">شناسه</th>
+                            <th scope="col" class="text-center" style="width: 130px;">تغییر موجودی</th>
+                            <th scope="col">دلیل</th>
+                            <th scope="col">ثبت‌کننده</th>
+                            <th scope="col" class="text-center" style="width: 170px;">تاریخ</th>
+                            <th scope="col" class="text-end" style="width: 100px;">عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td data-label="شناسه" class="text-center fw-bold-custom text-muted">
+                                    #@item.Id
+                                </td>
+
+                                <td data-label="تغییر موجودی" class="text-center">
+                                    @if (item.Quantity > 0)
+                                    {
+                                        <span class="status-dot success" style="direction: ltr;">
+                                            +@item.Quantity
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="status-dot danger" style="direction: ltr;">
+                                            @item.Quantity
+                                        </span>
+                                    }
+                                </td>
+
+                                <td data-label="دلیل">
+                                    <span class="text-muted">
+                                        @(string.IsNullOrWhiteSpace(item.Reason) ? "---" : item.Reason)
+                                    </span>
+                                </td>
+
+                                <td data-label="ثبت‌کننده">
+                                    @if (!string.IsNullOrWhiteSpace(item.CreatedBy))
+                                    {
+                                        <span class="fw-semibold">
+                                            <i class="bi bi-person me-1 text-warning"></i>
+                                            @item.CreatedByName
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted fs-8">
+                                            <i class="bi bi-cpu me-1"></i>سیستم
+                                        </span>
+                                    }
+                                </td>
+
+                                <td data-label="تاریخ" class="text-center text-muted font-monospace fs-8">
+                                    @item.CreatedAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm")
+                                </td>
+
+                                <td data-label="عملیات" class="text-end">
+                                    <a asp-area="Admin"
+                                       asp-controller="Stock"
+                                       asp-action="Details"
+                                       asp-route-id="@item.Id"
+                                       class="btn-action-minimalist">
+                                        <i class="bi bi-eye"></i>
+                                        <span>جزئیات</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+
+</div>

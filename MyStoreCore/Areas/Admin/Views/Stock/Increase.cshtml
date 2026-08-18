@@ -1,0 +1,96 @@
+﻿@model MusicStore.Application.DTOs.Stock.ChangeStockDto
+
+@{
+    ViewData["Title"] = "افزایش موجودی";
+}
+@section Styles {
+    <link rel="stylesheet"
+          href="~/AdminCss/Stock.css"
+          asp-append-version="true" />
+}
+
+<div class="container-fluid px-0">
+
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div>
+            <h2 class="fw-bold-custom mb-1 text-dark fs-4">
+                افزایش موجودی
+            </h2>
+            <p class="text-muted mb-0 fs-7">
+                افزایش موجودی محصول با استفاده از کد SKU
+            </p>
+        </div>
+
+        <a asp-area="Admin"
+           asp-controller="Stock"
+           asp-action="Index"
+           class="btn-secondary-custom">
+            <i class="bi bi-arrow-right"></i>
+            <span>بازگشت</span>
+        </a>
+    </div>
+
+    <div class="form-panel">
+        <form asp-area="Admin"
+              asp-controller="Stock"
+              asp-action="Increase"
+              method="post">
+
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger border-0 rounded-3 shadow-sm mb-4 fs-7"></div>
+
+            <div class="custom-form-group">
+                <label asp-for="SKU" class="custom-form-label">
+                    کد SKU محصول
+                </label>
+                <input asp-for="SKU"
+                       class="custom-form-control font-monospace"
+                       placeholder="مثلاً SKU-10025" />
+                <span asp-validation-for="SKU" class="text-danger fs-8 mt-1 d-block"></span>
+            </div>
+
+            <div class="custom-form-group">
+                <label asp-for="Quantity" class="custom-form-label">
+                    تعداد
+                </label>
+                <input asp-for="Quantity"
+                       type="number"
+                       min="1"
+                       class="custom-form-control font-monospace" />
+                <span asp-validation-for="Quantity" class="text-danger fs-8 mt-1 d-block"></span>
+            </div>
+
+            <div class="custom-form-group">
+                <label asp-for="Reason" class="custom-form-label">
+                    دلیل افزایش موجودی
+                </label>
+                <textarea asp-for="Reason"
+                          class="custom-form-control"
+                          rows="3"
+                          placeholder="مثلاً خرید جدید، تأمین مجدد و ..."></textarea>
+                <span asp-validation-for="Reason" class="text-danger fs-8 mt-1 d-block"></span>
+            </div>
+
+            <div class="d-flex align-items-center gap-2 pt-2">
+                <button type="submit" class="btn-submit-gold py-2 px-4 d-inline-flex align-items-center gap-2">
+                    <i class="bi bi-plus-lg"></i>
+                    <span>ثبت افزایش موجودی</span>
+                </button>
+
+                <a asp-area="Admin"
+                   asp-controller="Stock"
+                   asp-action="Index"
+                   class="btn-secondary-custom py-2 px-3">
+                    انصراف
+                </a>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

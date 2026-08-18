@@ -14,7 +14,10 @@ public interface IOrderService
 
     Task<ServiceResult<IEnumerable<OrderDto>>> GetAllOrdersAsync();
 
-    Task<ServiceResult<OrderDto>> UpdateOrderStatusAsync(int orderId, UpdateOrderStatusDto dto);
+  
+    Task<ServiceResult<OrderDto>> UpdateOrderStatusAsync(int orderId,UpdateOrderStatusDto dto, string userId);
+
+
 
     Task<ServiceResult<OrderDto>> CancelOrderAsync(int orderId, string userId);
 

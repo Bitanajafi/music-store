@@ -5,9 +5,11 @@ using MusicStore.Infrastructure.Identity;
 
 namespace MusicStore.Infrastructure.Data.Context;
 
-public class MusicStoreDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
+public class MusicStoreDbContext
+    : IdentityDbContext<ApplicationUser, ApplicationRole, string>
 {
-    public MusicStoreDbContext(DbContextOptions<MusicStoreDbContext> options)
+    public MusicStoreDbContext(
+        DbContextOptions<MusicStoreDbContext> options)
         : base(options)
     {
     }
@@ -26,11 +28,13 @@ public class MusicStoreDbContext : IdentityDbContext<ApplicationUser, Applicatio
     public DbSet<Coupon> Coupons => Set<Coupon>();
     public DbSet<Review> Reviews => Set<Review>();
     public DbSet<Wishlist> Wishlists => Set<Wishlist>();
+    public DbSet<StockHistory> StockHistories => Set<StockHistory>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(MusicStoreDbContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(
+            typeof(MusicStoreDbContext).Assembly);
     }
 }
