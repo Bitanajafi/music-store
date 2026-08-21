@@ -107,11 +107,22 @@
     border-radius: 8px;
     font-weight: 600;
     font-size: 0.875rem;
-    transition: background-color 0.2s ease;
+    min-width: 120px;
+    height: 40px;
+    padding: 0 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
     .btn-submit-gold:hover {
         background-color: var(--stock-gold-hover);
+    }
+
+    .btn-submit-gold:active {
+        transform: translateY(1px);
     }
 
 .btn-action-minimalist {

@@ -1,494 +1,645 @@
 ﻿@model MusicStore.Application.DTOs.Dashboard.DashboardDto
 
+@{
+    ViewData["Title"] = "داشبورد مدیریت | LEGATO";
+}
+
 @section Styles {
     <link rel="stylesheet" href="~/AdminCss/Dashboard.css" asp-append-version="true" />
 }
 
-@{
-    Layout = "_AdminLayout";
-    ViewData["Title"] = "میز کار و داشبورد مدیریت";
-}
+<div class="container-fluid dashboard-container">
 
-<div class="dashboard-wrapper">
 
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
 
-        <div>
-            <h2 class="fw-bold-custom"
-                style="color:var(--sidebar); font-size: 1.6rem; margin: 0;">
-                داشبورد مدیریت لگاتو
-            </h2>
-
-            <p class="text-muted small m-0 mt-1">
-                نمای کلی وضعیت تجاری، جریان نقدینگی و وضعیت انبار گالری ساز
-            </p>
+    <div class="dashboard-header">
+        <div class="header-main">
+            <div class="header-badge">
+                <i class="bi bi-speedometer2"></i>
+                <span>پلتفرم مدیریت LEGATO</span>
+            </div>
+            <h1>داشبورد تحلیل و آمار فروشگاه</h1>
+            <p>نگاهی جامع به وضعیت فروش، چرخه سفارشات، موجودی انبار و سودآوری مالی</p>
         </div>
 
-        <div class="badge-custom-info-shadow">
-            <i class="bi bi-calendar3 text-gold"></i>
-            <span>
-                آخرین بروزرسانی:
-                @Model.LastUpdated.ToString("yyyy/MM/dd - HH:mm")
-            </span>
+        <div class="header-status">
+            <div class="status-clock-icon">
+                <i class="bi bi-clock-history"></i>
+            </div>
+            <div class="status-info">
+                <span>آخرین همگام‌سازی داده‌ها</span>
+                <strong>@Model.LastUpdated.ToLocalTime().ToString("yyyy/MM/dd - HH:mm")</strong>
+            </div>
         </div>
-
     </div>
 
 
-    <div class="row g-4">
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="dashboard-alert">
+            <i class="bi bi-exclamation-octagon-fill"></i>
+            <span>@TempData["Error"]</span>
+        </div>
+    }
+
+  
+
+    <div class="metrics-grid mb-4">
 
 
-        <div class="col-md-6 col-xl-3">
-            <div class="premium-stat-card">
+        <div class="metric-card metric-primary">
+            <div class="metric-top">
+                <div class="metric-icon"><i class="bi bi-lightning-charge-fill"></i></div>
+                <span class="metric-label">فروش امروز</span>
+            </div>
+            <div class="metric-body">
+                <span class="metric-value">@Model.TodaySales.ToString("N0")</span>
+                <span class="metric-unit">تومان</span>
+            </div>
+            <div class="metric-footer">
+                <i class="bi bi-calendar2-check"></i>
+                <span>ثبت‌شده در ۲۴ ساعت گذشته</span>
+            </div>
+        </div>
 
-                <div class="d-flex justify-content-between align-items-center">
+        <div class="metric-card metric-info">
+            <div class="metric-top">
+                <div class="metric-icon"><i class="bi bi-graph-up-arrow"></i></div>
+                <span class="metric-label">فروش این ماه</span>
+            </div>
+            <div class="metric-body">
+                <span class="metric-value">@Model.ThisMonthSales.ToString("N0")</span>
+                <span class="metric-unit">تومان</span>
+            </div>
+            <div class="metric-footer">
+                <i class="bi bi-arrow-up-right"></i>
+                <span>جمع کل درآمد ماه جاری</span>
+            </div>
+        </div>
 
-                    <div>
-                        <span class="stat-label">
-                            فروش امروز گالری
-                        </span>
+        <div class="metric-card metric-success">
+            <div class="metric-top">
+                <div class="metric-icon"><i class="bi bi-cash-coin"></i></div>
+                <span class="metric-label">سود خالص این ماه</span>
+            </div>
+            <div class="metric-body">
+                <span class="metric-value text-success-val">@Model.ThisMonthProfit.ToString("N0")</span>
+                <span class="metric-unit">تومان</span>
+            </div>
+            <div class="metric-footer">
+                <i class="bi bi-shield-check"></i>
+                <span>محاسبه‌شده پس از کسر تخفیف‌ها</span>
+            </div>
+        </div>
 
-                        <h3 class="stat-value">
-                            0
-                            <small>تومان</small>
-                        </h3>
-                    </div>
+        <div class="metric-card metric-purple">
+            <div class="metric-top">
+                <div class="metric-icon"><i class="bi bi-receipt"></i></div>
+                <span class="metric-label">میانگین هر سفارش</span>
+            </div>
+            <div class="metric-body">
+                <span class="metric-value">@Model.AverageOrderValue.ToString("N0")</span>
+                <span class="metric-unit">تومان</span>
+            </div>
+            <div class="metric-footer">
+                <i class="bi bi-cart3"></i>
+                <span>میانگین سبد خرید مشتریان</span>
+            </div>
+        </div>
+    </div>
+
+   
 
 
-                    <div class="stat-icon-holder icon-gold">
-                        <i class="bi bi-wallet2"></i>
-                    </div>
 
+
+
+    <div class="charts-row mb-4">
+        <div class="chart-panel sales-chart-box">
+            <div class="panel-head">
+                <div>
+                    <span class="panel-subtitle">نمودار تحلیلی</span>
+                    <h2 class="panel-title">روند مقایسه‌ای فروش (امروز / هفته / ماه)</h2>
                 </div>
-
-
-                <div class="stat-footer-trend positive">
-                    <i class="bi bi-arrow-up-short"></i>
-                    <span>0٪ رشد نسبت به دیروز</span>
-                </div>
-
+                <div class="panel-badge-icon"><i class="bi bi-bar-chart-fill"></i></div>
+            </div>
+            <div class="chart-container">
+                <canvas id="salesChart"></canvas>
             </div>
         </div>
 
 
-        <div class="col-md-6 col-xl-3">
-            <div class="premium-stat-card">
-
-                <div class="d-flex justify-content-between align-items-center">
-
-                    <div>
-                        <span class="stat-label">
-                            تعداد محصولات
-                        </span>
-
-                        <h3 class="stat-value">
-                            @Model.TotalProducts
-                            <small>محصول</small>
-                        </h3>
-
-                    </div>
-
-
-                    <div class="stat-icon-holder icon-blue">
-                        <i class="bi bi-box-seam"></i>
-                    </div>
-
+        <div class="chart-panel orders-chart-box">
+            <div class="panel-head">
+                <div>
+                    <span class="panel-subtitle">توزیع آماری</span>
+                    <h2 class="panel-title">وضعیت تفکیکی سفارشات</h2>
                 </div>
-
-
-                <div class="stat-footer-trend pending">
-                    <i class="bi bi-box"></i>
-                    <span>
-                        موجودی کل فروشگاه
-                    </span>
-                </div>
-
-
+                <div class="panel-badge-icon"><i class="bi bi-pie-chart-fill"></i></div>
+            </div>
+            <div class="chart-container doughnut-container">
+                <canvas id="ordersChart"></canvas>
             </div>
         </div>
-
-        <div class="col-md-6 col-xl-3">
-
-            <div class="premium-stat-card">
-
-                <div class="d-flex justify-content-between align-items-center">
+    </div>
 
 
-                    <div>
-
-                        <span class="stat-label">
-                            دسته‌بندی‌ها
-                        </span>
-
-
-                        <h3 class="stat-value">
-                            @Model.TotalCategories
-                            <small>دسته</small>
-                        </h3>
-
-                    </div>
-
-
-                    <div class="stat-icon-holder icon-orange">
-                        <i class="bi bi-tags"></i>
-                    </div>
-
-
-                </div>
-
-
-                <div class="stat-footer-trend shipping">
-
-                    <i class="bi bi-list"></i>
-
-                    <span>
-                        دسته‌های فعال فروشگاه
-                    </span>
-
-                </div>
-
-
+    <div class="chart-panel mb-4">
+        <div class="panel-head">
+            <div>
+                <span class="panel-subtitle">تحلیل سودآوری</span>
+                <h2 class="panel-title">مقایسه فروش کل، مجموع تخفیفات و سود خالص ماهانه</h2>
             </div>
-
+            <div class="panel-badge-icon"><i class="bi bi-activity"></i></div>
         </div>
-
-
-
-        <div class="col-md-6 col-xl-3">
-
-
-            <div class="premium-stat-card">
-
-
-                <div class="d-flex justify-content-between align-items-center">
-
-
-                    <div>
-
-
-                        <span class="stat-label">
-                            کاربران ثبت شده
-                        </span>
-
-
-                        <h3 class="stat-value">
-
-                            @Model.TotalUsers
-
-                            <small>
-                                نفر
-                            </small>
-
-                        </h3>
-
-
-                    </div>
-
-
-                    <div class="stat-icon-holder icon-green">
-
-                        <i class="bi bi-people"></i>
-
-                    </div>
-
-
-                </div>
-
-
-                <div class="stat-footer-trend positive">
-
-                    <i class="bi bi-person-plus"></i>
-
-                    <span>
-                        کاربران سیستم
-                    </span>
-
-                </div>
-
-
-            </div>
-
-
+        <div class="chart-container financial-container">
+            <canvas id="financialChart"></canvas>
         </div>
-
-
     </div>
 
 
 
 
 
-    <div class="row g-4 mt-2">
-
-        <div class="col-lg-6">
 
 
-            <div class="premium-panel h-100">
 
 
-                <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom-custom">
+    <div class="dashboard-grid mb-4">
 
 
-                    <h5 class="fw-bold m-0" style="color: var(--sidebar)">
+        <div class="dashboard-card">
 
-                        <i class="bi bi-shop text-gold me-1"></i>
-
-                        وضعیت فروشگاه
-
-                    </h5>
-
+            <div class="panel-head">
+                <div>
+                    <span class="panel-subtitle">مدیریت سفارشات</span>
+                    <h2 class="panel-title">چرخه پردازش خریدهای اخیر</h2>
                 </div>
-
-
-
-                <div class="inventory-list-wrapper">
-
-
-                    <div class="inventory-luxury-item">
-
-
-                        <div class="d-flex align-items-center gap-2">
-
-                            <span class="instrument-icon">
-
-                                <i class="bi bi-box"></i>
-
-                            </span>
-
-
-                            <span class="instrument-name">
-
-                                کل محصولات
-
-                            </span>
-
-
-                        </div>
-
-
-                        <span class="badge-status custom-success">
-
-                            @Model.TotalProducts عدد
-
-                        </span>
-
-
-                    </div>
-
-
-
-
-                    <div class="inventory-luxury-item">
-
-
-                        <div class="d-flex align-items-center gap-2">
-
-                            <span class="instrument-icon">
-
-                                <i class="bi bi-check-circle"></i>
-
-                            </span>
-
-
-                            <span class="instrument-name">
-
-                                محصولات فعال
-
-                            </span>
-
-
-                        </div>
-
-
-                        <span class="badge-status custom-success">
-
-                            @Model.ActiveProducts عدد
-
-                        </span>
-
-
-                    </div>
-
-
-
-
-                    <div class="inventory-luxury-item">
-
-
-                        <div class="d-flex align-items-center gap-2">
-
-                            <span class="instrument-icon">
-
-                                <i class="bi bi-award"></i>
-
-                            </span>
-
-
-                            <span class="instrument-name">
-
-                                برندها
-
-                            </span>
-
-
-                        </div>
-
-
-                        <span class="badge-status custom-warning">
-
-                            @Model.TotalBrands برند
-
-                        </span>
-
-
-                    </div>
-
-
-
-                </div>
-
-
+                <div class="panel-badge-icon"><i class="bi bi-bag-check-fill"></i></div>
             </div>
 
 
+            <div class="order-status-grid">
+
+                <div class="status-box box-amber">
+                    <i class="bi bi-hourglass-split"></i>
+                    <div>
+                        <strong>@Model.PendingOrders</strong>
+                        <span>در انتظار پرداخت</span>
+                    </div>
+                </div>
+
+
+                <div class="status-box box-blue">
+                    <i class="bi bi-credit-card-fill"></i>
+                    <div>
+                        <strong>@Model.PaidOrders</strong>
+                        <span>پرداخت شده</span>
+                    </div>
+                </div>
+
+                <div class="status-box box-purple">
+                    <i class="bi bi-box-seam-fill"></i>
+                    <div>
+                        <strong>@Model.ProcessingOrders</strong>
+                        <span>در حال پردازش</span>
+                    </div>
+                </div>
+
+                <div class="status-box box-cyan">
+                    <i class="bi bi-truck"></i>
+                    <div>
+                        <strong>@Model.ShippedOrders</strong>
+                        <span>ارسال شده</span>
+                    </div>
+                </div>
+
+                <div class="status-box box-emerald">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <div>
+                        <strong>@Model.DeliveredOrders</strong>
+                        <span>تحویل داده شده</span>
+                    </div>
+                </div>
+
+                <div class="status-box box-rose">
+                    <i class="bi bi-x-circle-fill"></i>
+                    <div>
+                        <strong>@Model.CancelledOrders</strong>
+                        <span>لغو شده</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="total-banner mt-3">
+                <div class="banner-text">
+                    <span>تعداد کل سفارشات ثبت‌شده در سیستم</span>
+                    <strong>@Model.TotalOrders سفارش ثبت شده</strong>
+                </div>
+                <i class="bi bi-receipt-cutoff"></i>
+            </div>
         </div>
 
 
 
-        <div class="col-lg-6">
 
 
-            <div class="premium-panel h-100">
 
+        <div class="dashboard-card">
 
-                <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom-custom">
-
-
-                    <h5 class="fw-bold m-0" style="color: var(--sidebar)">
-
-                        <i class="bi bi-graph-up-arrow text-gold me-1"></i>
-
-                        گزارش نقدینگی و فروش
-
-                    </h5>
-
-
-                    <a href="#" class="text-gold-link small">
-
-                        مشاهده دفتر کل
-
-                        <i class="bi bi-chevron-left"></i>
-
-                    </a>
-
-
+            <div class="panel-head">
+                <div>
+                    <span class="panel-subtitle">انبارداری و موجودی</span>
+                    <h2 class="panel-title">ارزشیابی کل محصولات انبار</h2>
                 </div>
-
-
-
-
-
-                <div class="sales-luxury-wrapper">
-
-
-                    <div class="sales-luxury-row">
-
-
-                        <span class="period-text">
-
-                            فروش امروز
-
-                        </span>
-
-
-                        <strong class="period-price">
-
-                            0
-
-                            <small>
-
-                                تومان
-
-                            </small>
-
-                        </strong>
-
-
-                    </div>
-
-
-
-
-
-                    <div class="sales-luxury-row">
-
-
-                        <span class="period-text">
-
-                            فروش این هفته
-
-                        </span>
-
-
-                        <strong class="period-price">
-
-                            0
-
-                            <small>
-
-                                تومان
-
-                            </small>
-
-                        </strong>
-
-
-                    </div>
-
-
-
-
-
-                    <div class="sales-luxury-row">
-
-
-                        <span class="period-text">
-
-                            فروش این ماه
-
-                        </span>
-
-
-                        <strong class="period-price target-color">
-
-                            0
-
-                            <small>
-
-                                تومان
-
-                            </small>
-
-                        </strong>
-
-
-                    </div>
-
-
-
-                </div>
-
-
-
+                <div class="panel-badge-icon"><i class="bi bi-boxes"></i></div>
             </div>
 
 
+            <div class="inventory-summary-box mb-3">
+                <div class="summary-icon"><i class="bi bi-safe2-fill"></i></div>
+                <div>
+                    <span>ارزش کل ریالی انبار LEGATO</span>
+                    <strong>@Model.InventoryValue.ToString("N0") <small> تومان </small></strong>
+                </div>
+            </div>
 
+
+            <div class="custom-list">
+
+                <div class="list-item">
+                    <span><i class="bi bi-dot list-dot text-primary"></i> کل تنوع محصولات</span>
+                    <strong>@Model.TotalProducts عدد</strong>
+                </div>
+
+                <div class="list-item">
+                    <span><i class="bi bi-dot list-dot text-success"></i> محصولات فعال در سایت</span>
+                    <strong>@Model.ActiveProducts عدد</strong>
+                </div>
+
+                <div class="list-item text-warning-row">
+                    <span><i class="bi bi-dot list-dot text-warning"></i> محصولات با موجودی رو به اتمام</span>
+                    <strong>@Model.LowStockProducts عدد</strong>
+                </div>
+
+                <div class="list-item text-danger-row">
+                    <span><i class="bi bi-dot list-dot text-danger"></i> محصولات ناموجود</span>
+                    <strong>@Model.OutOfStockProducts عدد</strong>
+                </div>
+
+            </div>
         </div>
-
-
-
     </div>
 
+
+
+
+
+
+
+    <div class="dashboard-grid mb-4">
+
+        <div class="dashboard-card">
+            <div class="panel-head">
+                <div>
+                    <span class="panel-subtitle">نیازمند تامین فوری</span>
+                    <h2 class="panel-title">لیست محصولات کاملاً ناموجود</h2>
+                </div>
+                <div class="panel-badge-icon badge-danger-icon"><i class="bi bi-exclamation-octagon-fill"></i></div>
+            </div>
+
+            @if (Model.OutOfStockProductList != null && Model.OutOfStockProductList.Any())
+            {
+                <div class="product-mini-list">
+                    @foreach (var item in Model.OutOfStockProductList)
+                    {
+                        <div class="product-item-row">
+                            <div class="prod-img-placeholder"><i class="bi bi-music-note-beamed"></i></div>
+                            <div class="prod-details">
+                                <strong>@item.Name</strong>
+                                <small>کد شناسه (SKU): @item.SKU</small>
+                            </div>
+                            <span class="status-pill pill-danger">ناموجود</span>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="empty-state">
+                    <i class="bi bi-shield-check"></i>
+                    <strong>انبار در وضعیت عالی قرار دارد</strong>
+                    <p>هیچ محصولی بدون موجودی در سیستم وجود ندارد.</p>
+                </div>
+            }
+        </div>
+
+
+
+
+
+        <div class="dashboard-card">
+            <div class="panel-head">
+                <div>
+                    <span class="panel-subtitle">هشدار شارژ مجدد</span>
+                    <h2 class="panel-title">محصولات در آستانه اتمام موجودی</h2>
+                </div>
+                <div class="panel-badge-icon badge-warning-icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
+            </div>
+
+            @if (Model.LowStockProductList != null && Model.LowStockProductList.Any())
+            {
+                <div class="product-mini-list">
+                    @foreach (var item in Model.LowStockProductList)
+                    {
+                        <div class="product-item-row">
+                            <div class="prod-img-placeholder"><i class="bi bi-music-note-beamed"></i></div>
+                            <div class="prod-details">
+                                <strong>@item.Name</strong>
+                                <small>کد شناسه (SKU): @item.SKU</small>
+                            </div>
+                            <span class="status-pill pill-warning">تنها @item.StockQuantity عدد</span>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="empty-state">
+                    <i class="bi bi-check-circle"></i>
+                    <strong>موجودی محصولات کافی است</strong>
+                    <p>هیچ کالا یا ساز موسیقی در حد بحرانی نیست.</p>
+                </div>
+            }
+        </div>
+    </div>
+
+
+
+
+
+
+    <div class="dashboard-grid">
+
+
+        <div class="dashboard-card">
+
+            <div class="panel-head">
+                <div>
+                    <span class="panel-subtitle">ساختار فروشگاه</span>
+                    <h2 class="panel-title">اطلاعات پایه سیستم LEGATO</h2>
+                </div>
+                <div class="panel-badge-icon"><i class="bi bi-building"></i></div>
+            </div>
+
+            <div class="info-blocks-grid">
+                <div class="info-mini-block">
+                    <i class="bi bi-box-seam"></i>
+                    <div>
+                        <strong>@Model.TotalProducts</strong>
+                        <span>کل محصولات</span>
+                    </div>
+                </div>
+
+                <div class="info-mini-block">
+                    <i class="bi bi-diagram-3-fill"></i>
+                    <div>
+                        <strong>@Model.TotalCategories</strong>
+                        <span>دسته‌بندی‌ها</span>
+                    </div>
+                </div>
+
+                <div class="info-mini-block">
+                    <i class="bi bi-patch-check-fill"></i>
+                    <div>
+                        <strong>@Model.TotalBrands</strong>
+                        <span>برندهای فعال</span>
+                    </div>
+                </div>
+
+                <div class="info-mini-block">
+                    <i class="bi bi-people-fill"></i>
+                    <div>
+                        <strong>@Model.TotalUsers</strong>
+                        <span>کاربران سایت</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="dashboard-card">
+
+            <div class="panel-head">
+                <div>
+                    <span class="panel-subtitle">حسابداری کل</span>
+                    <h2 class="panel-title">خلاصه گزارشات مالی</h2>
+                </div>
+                <div class="panel-badge-icon"><i class="bi bi-wallet2"></i></div>
+            </div>
+
+            <div class="custom-list">
+                <div class="list-item">
+                    <span>فروش ۷ روز گذشته</span>
+                    <strong>@Model.ThisWeekSales.ToString("N0") <small>تومان</small></strong>
+                </div>
+
+                <div class="list-item">
+                    <span>مجموع تخفیفات امروز</span>
+                    <strong>@Model.TodayDiscount.ToString("N0") <small>تومان</small></strong>
+                </div>
+
+                <div class="list-item">
+                    <span>مجموع تخفیفات این ماه</span>
+                    <strong>@Model.ThisMonthDiscount.ToString("N0") <small>تومان</small></strong>
+                </div>
+
+                <div class="list-item">
+                    <span>سود خالص امروز</span>
+                    <strong class="text-success-val">@Model.TodayProfit.ToString("N0") <small>تومان</small></strong>
+                </div>
+
+                <div class="list-item highlight-item">
+                    <span>سود خالص این ماه</span>
+                    <strong class="text-success-val">@Model.ThisMonthProfit.ToString("N0") <small>تومان</small></strong>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
+
+
+
+
+
+
+
+
+
+
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const faNum = new Intl.NumberFormat("en-US");
+
+            const cBlue = '#2563eb';
+            const cCyan = '#06b6d4';
+            const cEmerald = '#10b981';
+            const cIndigo = '#6366f1';
+            const cAmber = '#f59e0b';
+            const cRose = '#f43f5e';
+            const cLegatoGold = '#cbb38a';
+
+            Chart.defaults.font.family = "inherit";
+            Chart.defaults.color = '#64748b';
+
+
+
+            const salesCanvas = document.getElementById("salesChart");
+            if (salesCanvas) {
+                new Chart(salesCanvas, {
+                    type: "bar",
+                    data: {
+                        labels: ["امروز", "این هفته", "این ماه"],
+                        datasets: [{
+                            label: "فروش (تومان)",
+                            data: [
+                                @Model.TodaySales,
+                                @Model.ThisWeekSales,
+                                @Model.ThisMonthSales
+                            ],
+                            backgroundColor: [cCyan, cBlue, cIndigo],
+                            borderRadius: 10,
+                            borderWidth: 0,
+                            barThickness: 50
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                rtl: true,
+                                backgroundColor: '#1e293b',
+                                titleColor: '#f8fafc',
+                                bodyColor: '#f8fafc',
+                                padding: 12,
+                                cornerRadius: 10,
+                                callbacks: {
+                                    label: (ctx) => " " + faNum.format(ctx.raw) + " تومان"
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: { color: '#f1f5f9' },
+                               
+                            },
+                            x: { grid: { display: false } }
+                        }
+                    }
+                });
+            }
+
+
+
+
+            const ordersCanvas = document.getElementById("ordersChart");
+            if (ordersCanvas) {
+                new Chart(ordersCanvas, {
+                    type: "doughnut",
+                    data: {
+                        labels: ["در انتظار", "پرداخت شده", "در حال پردازش", "ارسال شده", "تحویل شده", "لغو شده"],
+                        datasets: [{
+                            data: [
+                                @Model.PendingOrders,
+                                @Model.PaidOrders,
+                                @Model.ProcessingOrders,
+                                @Model.ShippedOrders,
+                                @Model.DeliveredOrders,
+                                @Model.CancelledOrders
+                            ],
+                            backgroundColor: [cAmber, cBlue, cIndigo, cCyan, cEmerald, cRose],
+                            borderWidth: 5,
+                            borderColor: '#ffffff',
+                            hoverOffset: 5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: "50%",
+                        plugins: {
+                            legend: {
+                                position: "bottom",
+                                rtl: true,
+                                labels: { padding: 14, usePointStyle: true, boxWidth: 10, font: { size: 12 } }
+                            },
+                            tooltip: {
+                                rtl: true,
+                                backgroundColor: '#1e293b',
+                                padding: 10,
+                                cornerRadius: 8
+                            }
+                        }
+                    }
+                });
+            }
+
+            const financialCanvas = document.getElementById("financialChart");
+            if (financialCanvas) {
+                new Chart(financialCanvas, {
+                    type: "bar",
+                    data: {
+                        labels: ["فروش کل ماه", "تخفیفات داده‌شده", "سود خالص ماه"],
+                        datasets: [{
+                            data: [
+                                @Model.ThisMonthSales,
+                                @Model.ThisMonthDiscount,
+                                @Model.ThisMonthProfit
+                            ],
+                            backgroundColor: [cBlue, cRose, cEmerald],
+                            borderRadius: 10,
+                            barThickness: 45
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                rtl: true,
+                                backgroundColor: '#1e293b',
+                                padding: 12,
+                                cornerRadius: 10,
+                                callbacks: {
+                                    label: (ctx) => " " + faNum.format(ctx.raw) + " تومان"
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: { color: '#f1f5f9' },
+                                ticks: { callback: (val) => faNum.format(val) }
+                            },
+                            x: { grid: { display: false } }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+}

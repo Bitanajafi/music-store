@@ -1,68 +1,243 @@
-﻿using MusicStore.Application.DTOs.Dashboard;
+﻿
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using MusicStore.Application.Common.Results;
+using MusicStore.Application.DTOs.Dashboard;
 using MusicStore.Application.Interfaces;
 using MusicStore.Application.Interfaces.Generic;
 using MusicStore.Domain.Entities;
+using MusicStore.Domain.Enum;
 using MusicStore.Infrastructure.Identity;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MusicStore.Infrastructure.Services
 {
-    public class DashboardService:IDashboardService
+    public class DashboardService : IDashboardService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public DashboardService(IUnitOfWork unitOfWork)
+        public DashboardService(
+            IUnitOfWork unitOfWork,
+            UserManager<ApplicationUser> userManager)
         {
             _unitOfWork = unitOfWork;
+            _userManager = userManager;
         }
 
 
 
-        public async Task<DashboardDto> GetDashboardAsync()
+        private static decimal CalculateProfit(IEnumerable<Order> orders)
         {
-            var totalProducts = await _unitOfWork
-                .Repository<Product>()
-                .CountAsync();
+            decimal profit = 0;
 
-            var activeProducts = await _unitOfWork
-                .Repository<Product>()
-                .CountAsync(x => x.IsActive);
-
-            var totalCategories = await _unitOfWork
-                .Repository<Category>()
-                .CountAsync();
-
-            var totalBrands = await _unitOfWork
-                .Repository<Brand>()
-                .CountAsync();
-
-            var totalUsers = await _unitOfWork
-                .Repository<ApplicationUser>()
-                .CountAsync();
-
-            var totalOrders = await _unitOfWork
-                .Repository<Order>()
-                .CountAsync();
-
-
-            return new DashboardDto
+            foreach (var order in orders)
             {
-                TotalProducts = totalProducts,
+                foreach (var item in order.OrderItems)
+                {
+                    if (item.Product == null)
+                    {
+                        continue;
+                    }
 
-                ActiveProducts = activeProducts,
+                    var revenue =
+                        item.UnitPrice * item.Quantity;
 
-                TotalCategories = totalCategories,
+                    var cost =
+                        item.Product.CostPrice * item.Quantity;
 
-                TotalBrands = totalBrands,
+                    profit += revenue - cost;
+                }
+            }
 
-                TotalUsers = totalUsers,
+            return profit;
+        }
 
-                LastUpdated = DateTime.Now
+        public async Task<ServiceResult<DashboardDto>>GetDashboardAsync()
+        {
+            try
+            {
+                var now = DateTime.UtcNow;
 
-            };
+                var today = now.Date;
+
+                var daysFromSaturday =((int)today.DayOfWeek + 1) % 7;
+
+                var startOfWeek =today.AddDays(-daysFromSaturday);
+
+                var startOfMonth = new DateTime(
+                    today.Year,
+                    today.Month,
+                    1);
+
+                var products = await _unitOfWork
+                    .Repository<Product>()
+                    .GetAllAsync();
+
+                var categories = await _unitOfWork
+                    .Repository<Category>()
+                    .GetAllAsync();
+
+                var brands = await _unitOfWork
+                    .Repository<Brand>()
+                    .GetAllAsync();
+
+                var orders = await _unitOfWork
+                    .Repository<Order>()
+                    .GetAllAsync(
+                        null,
+                        query => query
+                            .Include(x => x.Payment)
+                            .Include(x => x.OrderItems)
+                            .ThenInclude(x => x.Product));
+
+                var totalUsers = await _userManager
+                    .Users
+                    .CountAsync();
+
+                var paidOrders = orders
+                    .Where(x =>
+                        x.Payment != null &&
+                        x.Payment.Status ==
+                        PaymentStatus.Paid)
+                    .ToList();
+
+                var todayPaidOrders = paidOrders
+                    .Where(x =>
+                        x.Payment!.PaidAt.HasValue &&
+                        x.Payment.PaidAt.Value >= today)
+                    .ToList();
+
+                var weekPaidOrders = paidOrders
+                    .Where(x =>
+                        x.Payment!.PaidAt.HasValue &&
+                        x.Payment.PaidAt.Value >= startOfWeek)
+                    .ToList();
+
+                var monthPaidOrders = paidOrders
+                    .Where(x =>
+                        x.Payment!.PaidAt.HasValue &&
+                        x.Payment.PaidAt.Value >= startOfMonth)
+                    .ToList();
+
+                var todaySales =
+                    todayPaidOrders.Sum(x => x.TotalPrice);
+
+                var weekSales =
+                    weekPaidOrders.Sum(x => x.TotalPrice);
+
+                var monthSales =
+                    monthPaidOrders.Sum(x => x.TotalPrice);
+
+                var todayDiscount =
+                    todayPaidOrders.Sum(x => x.DiscountAmount);
+
+                var monthDiscount =
+                    monthPaidOrders.Sum(x => x.DiscountAmount);
+
+                var todayProfit =
+                    CalculateProfit(todayPaidOrders);
+
+                var monthProfit =
+                    CalculateProfit(monthPaidOrders);
+
+                var averageOrderValue =
+                    paidOrders.Any()? paidOrders.Average(x => x.TotalPrice): 0;
+
+                var inventoryValue =
+                    products.Sum(
+                        x => x.StockQuantity *
+                             x.CostPrice);
+
+                var outOfStockProductList = products.Where(x => x.StockQuantity <= 0)
+                .Select(x => new DashboardProductDto
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    SKU = x.SKU,
+                    StockQuantity = x.StockQuantity
+                })
+                .Take(10)
+                .ToList();
+
+                var lowStockProductList = products.Where(x =>
+                        x.StockQuantity > 0 &&
+                        x.StockQuantity <= 5)
+                    .OrderBy(x => x.StockQuantity)
+                    .Select(x => new DashboardProductDto
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        SKU = x.SKU,
+                        StockQuantity = x.StockQuantity
+                    })
+                    .Take(10)
+                    .ToList();
+
+
+
+                var dashboard = new DashboardDto
+                {
+                    TotalProducts = products.Count(),
+
+                    ActiveProducts =products.Count(x => x.IsActive),
+
+                    TotalCategories =categories.Count(),
+
+                    TotalBrands =brands.Count(),
+
+                    TotalUsers =totalUsers,
+
+                    OutOfStockProducts =products.Count(x => x.StockQuantity <= 0),
+
+                    LowStockProducts =products.Count(x =>x.StockQuantity > 0 &&x.StockQuantity <= 5),
+
+                    OutOfStockProductList = outOfStockProductList,
+
+                    LowStockProductList = lowStockProductList,
+
+                    InventoryValue =inventoryValue,
+
+                    TotalOrders =orders.Count(),
+
+                    PendingOrders =orders.Count(x =>x.Status ==OrderStatus.Pending),
+
+                    PaidOrders =orders.Count(x =>x.Status ==OrderStatus.Paid),
+
+                    ProcessingOrders =orders.Count(x =>x.Status ==OrderStatus.Processing),
+
+                    ShippedOrders =orders.Count(x =>x.Status ==OrderStatus.Shipped),
+
+                    DeliveredOrders =orders.Count(x => x.Status == OrderStatus.Delivered),
+
+                    CancelledOrders =orders.Count(x =>x.Status ==OrderStatus.Cancelled),
+
+                    TodaySales =todaySales,
+
+                    ThisWeekSales =weekSales,
+
+                    ThisMonthSales =monthSales,
+
+                    TodayDiscount =todayDiscount,
+
+                    ThisMonthDiscount = monthDiscount,
+
+                    TodayProfit =todayProfit,
+
+                    ThisMonthProfit =monthProfit,
+
+                    AverageOrderValue =averageOrderValue,
+
+                    LastUpdated =DateTime.UtcNow
+                };
+
+                return ServiceResult<DashboardDto>.Ok(dashboard);
+            }
+            catch (Exception ex)
+            {
+                return ServiceResult<DashboardDto>
+                    .Fail($"خطا در دریافت اطلاعات داشبورد: {ex.Message}");
+            }
         }
     }
-    
 }
+

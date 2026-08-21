@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MusicStore.Application.DTOs.Dashboard;
 using MusicStore.Application.Interfaces;
 
 namespace MyStoreCore.Areas.Admin.Controllers
@@ -13,11 +14,22 @@ namespace MyStoreCore.Areas.Admin.Controllers
         {
             _dashboardService = dashboardService;
         }
+
+
+
+
+
+
         public async Task<IActionResult> Index()
         {
-            var model = await _dashboardService.GetDashboardAsync();
+            var result = await _dashboardService.GetDashboardAsync(); 
+            if (!result.Success || result.Data == null) 
+            { 
+                TempData["Error"] = result.Message; 
+                return View(new DashboardDto()); 
+            }
 
-            return View(model);
+            return View(result.Data);
         }
     }
 }
