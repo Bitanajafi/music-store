@@ -106,5 +106,26 @@ namespace MusicStore.Infrastructure.Services
 
         }
 
+        public async Task<List<BrandDto>> SearchAsync(string? search)
+        {
+            var brands = await _unitOfWork.Repository<Brand>().GetAllAsync();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.Trim();
+
+                brands = brands
+                    .Where(x => x.Name.Contains(search))
+                    .ToList();
+            }
+
+            return brands.Select(x => new BrandDto
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Country = x.Country,
+                ProductCount = x.Products.Count
+            }).ToList();
+        }
     }
 }

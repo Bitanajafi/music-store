@@ -47,6 +47,60 @@
         }
         else
         {
+
+
+            <br />
+
+            <div class="Coupon-search-wrapper">
+
+                <form asp-area="Admin"
+                      asp-controller="Coupon"
+                      asp-action="Index"
+                      method="get"
+                      class="Coupon-search-form">
+
+                    <div class="Coupon-search-input-wrapper">
+
+                        <i class="bi bi-search"></i>
+
+                        <input type="text"
+                               name="search"
+                               value="@ViewBag.Search"
+                               class="Coupon-search-input"
+                               placeholder="Search Coupon..." />
+
+                    </div>
+
+
+                    <button type="submit"
+                            class="btn-Coupon-search">
+
+                        Search
+
+                    </button>
+
+
+                    @if (!string.IsNullOrWhiteSpace(ViewBag.Search as string))
+                    {
+                        <a asp-area="Admin"
+                           asp-controller="Coupon"
+                           asp-action="Index"
+                           class="btn-Coupon-clear">
+
+                            Clear
+
+                        </a>
+                    }
+
+                </form>
+
+            </div>
+
+            <br />
+
+
+
+
             <div class="table-responsive">
                 <table class="table legato-table align-middle text-center mb-0">
                     <thead>

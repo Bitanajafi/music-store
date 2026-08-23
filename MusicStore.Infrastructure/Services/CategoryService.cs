@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using MusicStore.Application.ViewModels;
+using Microsoft.CodeAnalysis.FlowAnalysis;
 namespace MusicStore.Infrastructure.Services
 {
     public class CategoryService : ICategoryService
@@ -14,7 +15,7 @@ namespace MusicStore.Infrastructure.Services
         private readonly IUnitOfWork _unitOfWork;
         public CategoryService(IUnitOfWork unitOfWork)
         {
-          _unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork;
         }
 
 
@@ -83,7 +84,7 @@ namespace MusicStore.Infrastructure.Services
 
         public async Task<CategoryDto?> GetByIdAsync(int id)
         {
-            var category=await _unitOfWork.Repository<Category>().GetByIdAsync(id);
+            var category = await _unitOfWork.Repository<Category>().GetByIdAsync(id);
             if (category == null)
                 return null;
 
@@ -106,7 +107,7 @@ namespace MusicStore.Infrastructure.Services
         public async Task<bool> CreateAsync(CreateCategoryDto dto)
         {
             var exists = await _unitOfWork.Repository<Category>().AnyAsync(x => x.Name == dto.Name);
-            if (exists) 
+            if (exists)
             {
                 return false;
             }
@@ -130,8 +131,8 @@ namespace MusicStore.Infrastructure.Services
         public async Task<UpdateCategoryDto?> GetForUpdateAsync(int id)
         {
             var category = await _unitOfWork.Repository<Category>().GetByIdAsync(id);
-                if (category == null)
-                    return null;
+            if (category == null)
+                return null;
 
             return new UpdateCategoryDto
             {
@@ -220,6 +221,30 @@ namespace MusicStore.Infrastructure.Services
             await _unitOfWork.SaveAsync();
 
             return true;
+        }
+
+        public async Task<List<CategoryDto>> SearchAsync(string? search)
+        {
+            var categories = await _unitOfWork.Repository<Category>().GetAllAsync();
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.Trim();
+                categories = categories.Where(x =>
+                x.Name.Contains(search) ||
+                x.Products.Any(p => p.Brand.Name.Contains(search)))
+            .ToList();
+            }
+            return categories.Select(x => new CategoryDto
+            {
+                Id = x.Id,
+                Name = x.Name,
+                DisplayOrder = x.DisplayOrder,
+                ParentCategoryId = x.ParentCategoryId,
+                ParentCategoryName = x.ParentCategory?.Name,
+                ProductCount = x.Products.Count,
+                SubCategoryCount = x.SubCategories.Count
+            }).ToList();
+
         }
     }
 }

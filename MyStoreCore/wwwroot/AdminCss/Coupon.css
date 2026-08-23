@@ -231,3 +231,133 @@
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(43, 37, 32, 0.2);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+.Coupon-search-wrapper {
+    padding: 18px 20px;
+    border-bottom: 1px solid rgba(66, 56, 41, 0.08);
+    background: #ffffff;
+}
+
+.Coupon-search-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.Coupon-search-input-wrapper {
+    position: relative;
+    flex: 1;
+}
+
+    .Coupon-search-input-wrapper i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #8c8275;
+        font-size: 1rem;
+        pointer-events: none;
+    }
+
+.Coupon-search-input {
+    width: 100%;
+    height: 44px;
+    background: #fbfaf8;
+    border: 1px solid rgba(66, 56, 41, 0.12);
+    border-radius: 10px;
+    padding: 0 16px 0 42px;
+    color: #2b2319;
+    font-size: 0.88rem;
+    font-weight: 600;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+    .Coupon-search-input::placeholder {
+        color: #9a9186;
+        font-weight: 500;
+    }
+
+    .Coupon-search-input:focus {
+        background: #ffffff;
+        border-color: #a07855;
+        box-shadow: 0 0 0 4px rgba(160, 120, 85, 0.1);
+    }
+
+.Coupon-search-input-wrapper:focus-within i {
+    color: #a07855;
+}
+
+.btn-Coupon-search {
+    height: 44px;
+    padding: 0 22px;
+    background: #423829;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    white-space: nowrap;
+}
+
+    .btn-Coupon-search:hover {
+        background: #a07855;
+        color: #ffffff;
+        transform: translateY(-1px);
+        box-shadow: 0 5px 15px rgba(160, 120, 85, 0.2);
+    }
+
+.btn-Coupon-clear {
+    height: 44px;
+    padding: 0 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #fbfaf8;
+    color: #70665a;
+    border: 1px solid rgba(66, 56, 41, 0.1);
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+    .btn-Coupon-clear:hover {
+        background: #f4f1eb;
+        color: #423829;
+        border-color: rgba(66, 56, 41, 0.15);
+    }
+
+@media (max-width: 767.98px) {
+
+    .Coupon-search-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .Coupon-search-input-wrapper {
+        width: 100%;
+    }
+
+    .btn-Coupon-search,
+    .btn-Coupon-clear {
+        width: 100%;
+    }
+}

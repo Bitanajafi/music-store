@@ -1,4 +1,5 @@
 ﻿
+using MusicStore.Application.DTOs.Brand;
 using MusicStore.Domain.Enum;
 
 namespace MusicStore.Application.DTOs.Coupon
@@ -24,6 +25,7 @@ namespace MusicStore.Application.DTOs.Coupon
         public bool IsActive { get; set; }
 
         public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 }
 

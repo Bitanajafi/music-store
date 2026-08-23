@@ -18,9 +18,11 @@ namespace MyStoreCore.Areas.Admin.Controllers
         }
 
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? search)
         {
-            var categories = await _categoryService.GetAllAsync();
+            var categories = await _categoryService.SearchAsync(search);
+
+            ViewBag.Search = search;
 
             return View(categories);
         }

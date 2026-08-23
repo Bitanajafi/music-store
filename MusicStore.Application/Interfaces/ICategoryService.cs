@@ -18,5 +18,6 @@ namespace MusicStore.Application.Interfaces
         Task<UpdateCategoryDto?> GetForUpdateAsync(int id);
 
         Task<bool> DeleteAsync(int id);
+        Task<List<CategoryDto>> SearchAsync(string? search);
     }
 }

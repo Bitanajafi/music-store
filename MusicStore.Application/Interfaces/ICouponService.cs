@@ -1,5 +1,6 @@
 ﻿  
 using MusicStore.Application.Common.Results;
+using MusicStore.Application.DTOs.Category;
 using MusicStore.Application.DTOs.Coupon;
 using MusicStore.Application.DTOs.Order;
 
@@ -19,6 +20,7 @@ namespace MusicStore.Application.Interfaces.Services
 
         Task<ServiceResult<bool>> ToggleActiveAsync(int id);
         Task<ServiceResult<CouponResultDto>> ValidateCouponAsync(string couponCode,decimal subTotal);
+        Task<List<CouponDto>> SearchAsync(string? search);
     }
 }
 

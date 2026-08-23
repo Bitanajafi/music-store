@@ -1,4 +1,5 @@
 ﻿using MusicStore.Application.DTOs.Brand;
+using MusicStore.Application.DTOs.Category;
 
 namespace MusicStore.Application.Interfaces
 {
@@ -20,5 +21,6 @@ namespace MusicStore.Application.Interfaces
 
 
         Task<bool> DeleteAsync(int id);
+        Task<List<BrandDto>> SearchAsync(string? search);
     }
 }

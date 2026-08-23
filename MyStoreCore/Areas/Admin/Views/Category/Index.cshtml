@@ -11,8 +11,15 @@
     <div class="panel-header-wrapper">
 
         <div class="header-title-section">
-            <span class="panel-sub-title">MANAGEMENT</span>
-            <h2 class="panel-main-title">Categories</h2>
+
+            <span class="panel-sub-title">
+                MANAGEMENT
+            </span>
+
+            <h2 class="panel-main-title">
+                Categories
+            </h2>
+
         </div>
 
 
@@ -22,11 +29,15 @@
            class="btn-create-category">
 
             <i class="bi bi-plus-lg"></i>
-            <span>Add New Category</span>
+
+            <span>
+                Add New Category
+            </span>
 
         </a>
 
     </div>
+
 
     @if (TempData["Error"] != null)
     {
@@ -51,8 +62,60 @@
         </div>
     }
 
-    <div class="premium-table-card">
 
+
+
+   <br />
+
+    <div class="category-search-wrapper">
+
+        <form asp-area="Admin"
+              asp-controller="Category"
+              asp-action="Index"
+              method="get"
+              class="category-search-form">
+
+            <div class="category-search-input-wrapper">
+
+                <i class="bi bi-search"></i>
+
+                <input type="text"
+                       name="search"
+                       value="@ViewBag.Search"
+                       class="category-search-input"
+                       placeholder="Search category..." />
+
+            </div>
+
+
+            <button type="submit"
+                    class="btn-category-search">
+
+                Search
+
+            </button>
+
+
+            @if (!string.IsNullOrWhiteSpace(ViewBag.Search as string))
+            {
+                <a asp-area="Admin"
+                   asp-controller="Category"
+                   asp-action="Index"
+                   class="btn-category-clear">
+
+                    Clear
+
+                </a>
+            }
+
+        </form>
+
+    </div>
+
+    <br />
+
+
+    <div class="premium-table-card">
 
         <div class="table-responsive">
 
@@ -93,12 +156,13 @@
                 </thead>
 
 
-
                 <tbody>
 
 
                     @foreach (var item in Model.Where(x => x.ParentCategoryId == null))
                     {
+
+                       
 
                         <tr class="main-category-row">
 
@@ -120,9 +184,7 @@
 
                                     </span>
 
-
                                 </div>
-
 
                             </td>
 
@@ -154,7 +216,6 @@
 
                             <td class="text-end">
 
-
                                 <div class="table-actions-wrapper">
 
 
@@ -165,7 +226,6 @@
                                         <i class="bi bi-pencil-square"></i>
 
                                     </a>
-
 
 
                                     <form asp-action="Delete"
@@ -188,28 +248,20 @@
 
                                 </div>
 
-
                             </td>
-
 
                         </tr>
 
 
-
-
-
                         @foreach (var child in Model.Where(x => x.ParentCategoryId == item.Id))
                         {
-
 
                             <tr class="child-category-row">
 
 
                                 <td>
 
-
                                     <div class="category-info child-indent">
-
 
                                         <div class="category-icon-avatar">
 
@@ -224,16 +276,12 @@
 
                                         </span>
 
-
                                     </div>
-
 
                                 </td>
 
 
-
                                 <td class="text-center">
-
 
                                     <span class="badge-child-category">
 
@@ -241,9 +289,7 @@
 
                                     </span>
 
-
                                 </td>
-
 
 
                                 <td class="text-center">
@@ -253,7 +299,6 @@
                                 </td>
 
 
-
                                 <td class="text-center">
 
                                     #@child.DisplayOrder
@@ -261,9 +306,7 @@
                                 </td>
 
 
-
                                 <td class="text-end">
-
 
                                     <div class="table-actions-wrapper">
 
@@ -277,38 +320,30 @@
                                         </a>
 
 
-
                                         <form asp-action="Delete"
                                               asp-route-id="@child.Id"
                                               method="post"
                                               style="display:inline;">
 
-
                                             @Html.AntiForgeryToken()
-
 
                                             <button type="submit"
                                                     class="btn-table-action btn-delete"
                                                     onclick="return confirm('Are you sure you want to delete this category?')">
 
-
                                                 <i class="bi bi-trash3"></i>
 
-
                                             </button>
-
 
                                         </form>
 
 
                                     </div>
 
-
                                 </td>
 
 
                             </tr>
-
 
                         }
 
@@ -317,14 +352,11 @@
 
                 </tbody>
 
-
             </table>
 
 
         </div>
 
-
     </div>
-
 
 </div>

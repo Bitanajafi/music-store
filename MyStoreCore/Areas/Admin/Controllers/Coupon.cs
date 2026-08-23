@@ -23,18 +23,32 @@ namespace MusicStore.Web.Areas.Admin.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? search)
         {
-            var result = await _couponService.GetAllAsync();
-
-            if (!result.Success)
+            if (string.IsNullOrWhiteSpace(search))
             {
-                TempData["Error"] = result.Message;
-                return View(Enumerable.Empty<CouponDto>());
+                var result = await _couponService.GetAllAsync();
+
+                if (!result.Success)
+                {
+                    TempData["Error"] = result.Message;
+                    return View(Enumerable.Empty<CouponDto>());
+                }
+
+                ViewBag.Search = search;
+
+                return View(result.Data);
             }
 
-            return View(result.Data);
+            var coupons = await _couponService.SearchAsync(search);
+
+            ViewBag.Search = search;
+
+            return View(coupons);
         }
+
+
+
 
 
 

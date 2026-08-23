@@ -23,6 +23,59 @@
 
     </div>
 
+
+
+
+    <div class="category-search-wrapper">
+
+        <form asp-area="Admin"
+              asp-controller="Brand"
+              asp-action="Index"
+              method="get"
+              class="Brand-search-form">
+
+            <div class="Brand-search-input-wrapper">
+
+                <i class="bi bi-search"></i>
+
+                <input type="text"
+                       name="search"
+                       value="@ViewBag.Search"
+                       class="Brand-search-input"
+                       placeholder="Search Brand..." />
+
+            </div>
+
+
+            <button type="submit"
+                    class="btn-Brand-search">
+
+                Search
+
+            </button>
+
+
+            @if (!string.IsNullOrWhiteSpace(ViewBag.Search as string))
+            {
+                <a asp-area="Admin"
+                   asp-controller="Brand"
+                   asp-action="Index"
+                   class="btn-Brand-clear">
+
+                    Clear
+
+                </a>
+            }
+
+        </form>
+
+    </div>
+
+
+
+    <br />
+
+
     <div class="premium-table-card">
 
         <div class="table-responsive">

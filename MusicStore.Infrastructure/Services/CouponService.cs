@@ -372,7 +372,38 @@ namespace MusicStore.Application.Services
             return ServiceResult<bool>.Ok(coupon.IsActive, message);
         }
 
-       
+
+
+        public async Task<List<CouponDto>> SearchAsync(string? search)
+        {
+            var coupons = await _unitOfWork
+                .Repository<Coupon>()
+                .GetAllAsync();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.Trim();
+
+                coupons = coupons
+                    .Where(x => x.Code.Contains(search))
+                    .ToList();
+            }
+
+            return coupons.Select(x => new CouponDto
+            {
+                Id = x.Id,
+                Code = x.Code,
+                DiscountType = x.DiscountType,
+                Value = x.Value,
+                MinimumOrderAmount = x.MinimumOrderAmount,
+                UsageLimit = x.UsageLimit,
+                UsedCount = x.UsedCount,
+                ExpireDate = x.ExpireDate,
+                IsActive = x.IsActive,
+                CreatedAt = x.CreatedAt,
+                UpdatedAt = x.UpdatedAt
+            }).ToList();
+        }
     }
 }
 
