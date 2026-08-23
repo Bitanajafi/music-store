@@ -26,9 +26,12 @@ public class MusicStoreDbContext
     public DbSet<ShippingInfo> ShippingInfos => Set<ShippingInfo>();
     public DbSet<OrderHistory> OrderHistories => Set<OrderHistory>();
     public DbSet<Coupon> Coupons => Set<Coupon>();
-    public DbSet<Review> Reviews => Set<Review>();
-    public DbSet<Wishlist> Wishlists => Set<Wishlist>();
     public DbSet<StockHistory> StockHistories => Set<StockHistory>();
+
+    public DbSet<Review> Reviews => Set<Review>();
+    public DbSet<ReviewReply> ReviewReplies => Set<ReviewReply>();
+    public DbSet<ReviewLike> ReviewLikes => Set<ReviewLike>();
+    public DbSet<Wishlist> Wishlists => Set<Wishlist>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

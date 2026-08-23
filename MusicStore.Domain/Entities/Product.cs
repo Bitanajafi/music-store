@@ -33,7 +33,7 @@ namespace MusicStore.Domain.Entities
         public ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
 
         public ICollection<Review> Reviews { get; set; } = new List<Review>();
-        public ICollection<Wishlist> Wishlist { get; set; }= new List<Wishlist>();
+        public ICollection<Wishlist> Wishlists { get; set; }= new List<Wishlist>();
         public ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
         public ICollection<StockHistory> StockHistories { get; set; }= new List<StockHistory>();

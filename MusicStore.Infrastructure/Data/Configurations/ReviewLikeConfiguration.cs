@@ -5,20 +5,20 @@ using MusicStore.Infrastructure.Identity;
 
 namespace MusicStore.Infrastructure.Data.Configurations
 {
-    public class WishlistConfiguration : IEntityTypeConfiguration<Wishlist>
+    public class ReviewLikeConfiguration : IEntityTypeConfiguration<ReviewLike>
     {
-        public void Configure(EntityTypeBuilder<Wishlist> builder)
+        public void Configure(EntityTypeBuilder<ReviewLike> builder)
         {
-            builder.ToTable("Wishlists");
+            builder.ToTable("ReviewLikes");
 
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.UserId)
                 .IsRequired();
 
-            builder.HasOne(x => x.Product)
-                .WithMany(x => x.Wishlists)
-                .HasForeignKey(x => x.ProductId)
+            builder.HasOne(x => x.Review)
+                .WithMany(x => x.Likes)
+                .HasForeignKey(x => x.ReviewId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne<ApplicationUser>()
@@ -28,14 +28,10 @@ namespace MusicStore.Infrastructure.Data.Configurations
 
             builder.HasIndex(x => new
             {
-                x.UserId,
-                x.ProductId
+                x.ReviewId,
+                x.UserId
             })
             .IsUnique();
-
-            builder.HasIndex(x => x.UserId);
-
-            builder.HasIndex(x => x.ProductId);
         }
     }
 }
