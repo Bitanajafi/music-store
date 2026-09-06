@@ -1,0 +1,652 @@
+﻿@model IEnumerable<MusicStore.Application.DTOs.Review.AdminReviewListDto>
+
+@using MusicStore.Domain.Enum
+@using MusicStore.Domain.Enums
+
+@{
+    ViewData["Title"] = "مدیریت دیدگاه‌ها";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/AdminCss/Review.css"
+          asp-append-version="true" />
+}
+
+<div class="container-fluid reviews-dashboard py-3">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="reviews-page-title">
+                مدیریت دیدگاه‌ها
+            </h2>
+
+            <div class="text-muted-custom small mt-1">
+                مدیریت، بررسی و پاسخ به دیدگاه‌های کاربران
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+    @if (TempData["ReviewError"] != null)
+    {
+        <div class="alert alert-danger border-0 rounded-3 shadow-sm mb-4">
+            @TempData["ReviewError"]
+        </div>
+    }
+
+    @if (TempData["ReviewSuccess"] != null)
+    {
+        <div class="alert alert-success border-0 rounded-3 shadow-sm mb-4">
+            @TempData["ReviewSuccess"]
+        </div>
+    }
+
+
+
+
+
+
+    <div class="premium-panel mb-4">
+
+        <div class="premium-panel-header">
+
+            <h5 class="premium-panel-title mb-0">
+                جستجو و فیلتر دیدگاه‌ها
+            </h5>
+
+        </div>
+
+
+        <div class="p-4">
+
+            <form asp-area="Admin"
+                  asp-controller="AdminReview"
+                  asp-action="Index"
+                  method="get">
+
+                <div class="row g-3">
+
+                    <div class="col-md-4">
+
+                        <label class="form-label custom-form-label">
+                            جستجو
+                        </label>
+
+                        <input type="text"
+                               name="Search"
+                               value="@Context.Request.Query["Search"]"
+                               class="form-control custom-input"
+                               placeholder="نام کاربر، ایمیل، محصول یا متن دیدگاه..." />
+
+                    </div>
+
+
+
+                    
+
+
+
+
+                    <div class="col-md-4">
+
+                        <label class="form-label custom-form-label">
+                            وضعیت
+                        </label>
+
+                        <select name="Status"
+                                class="form-select custom-input">
+
+                            <option value="">
+                                همه وضعیت‌ها
+                            </option>
+
+                            @foreach (var status in Enum.GetValues<ReviewStatus>())
+                            {
+                                <option value="@status"
+                                        selected="@(Context.Request.Query["Status"] == status.ToString())">
+                                    @status
+                                </option>
+                            }
+
+                        </select>
+
+                    </div>
+
+
+                   
+
+                    <div class="col-md-3">
+
+                        <label class="form-label custom-form-label">
+                            امتیاز
+                        </label>
+
+                        <select name="Rating"
+                                class="form-select custom-input">
+
+                            <option value="">
+                                همه امتیازها
+                            </option>
+
+                            @for (int i = 5; i >= 1; i--)
+                            {
+                                <option value="@i"
+                                        selected="@(Context.Request.Query["Rating"] == i.ToString())">
+                                    @i ستاره
+                                </option>
+                            }
+
+                        </select>
+
+                    </div>
+
+
+       
+
+                    <div class="col-md-3">
+
+                        <label class="form-label custom-form-label">
+                            از تاریخ
+                        </label>
+
+                        <input type="date"
+                               name="FromDate"
+                               value="@Context.Request.Query["FromDate"]"
+                               class="form-control custom-input" />
+
+                    </div>
+
+
+                 
+                    <div class="col-md-3">
+
+                        <label class="form-label custom-form-label">
+                            تا تاریخ
+                        </label>
+
+                        <input type="date"
+                               name="ToDate"
+                               value="@Context.Request.Query["ToDate"]"
+                               class="form-control custom-input" />
+
+                    </div>
+
+
+                  
+
+                    <div class="col-md-3">
+
+                        <label class="form-label custom-form-label">
+                            مرتب‌سازی
+                        </label>
+
+                        <select name="SortBy"
+                                class="form-select custom-input">
+
+                            @foreach (var sort in Enum.GetValues<ReviewSortBy>())
+                            {
+                                <option value="@sort"
+                                        selected="@(Context.Request.Query["SortBy"] == sort.ToString())">
+                                    @sort
+                                </option>
+                            }
+
+                        </select>
+
+                    </div>
+
+
+                   
+
+                    <div class="col-12 mt-3">
+
+                        <div class="review-filter-actions">
+
+                            <button type="submit"
+                                    class="btn btn-submit-gold">
+
+                                <i class="bi bi-search"></i>
+
+                                جستجو
+
+                            </button>
+
+
+                            <a asp-area="Admin"
+                               asp-controller="AdminReview"
+                               asp-action="Index"
+                               class="btn btn-cancel-style">
+
+                                <i class="bi bi-arrow-counterclockwise"></i>
+
+                                حذف فیلترها
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="premium-panel">
+
+        <div class="premium-panel-header">
+
+            <h5 class="premium-panel-title mb-0">
+                لیست دیدگاه‌ها
+            </h5>
+
+        </div>
+
+
+        <div class="p-0">
+
+            @if (!Model.Any())
+            {
+                <div class="review-empty-state">
+
+                    <i class="bi bi-chat-square-text"></i>
+
+                    <h5>
+                        دیدگاهی پیدا نشد
+                    </h5>
+
+                    <p>
+                        هیچ دیدگاهی مطابق فیلترهای انتخاب‌شده وجود ندارد.
+                    </p>
+
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive-custom">
+
+                    <table class="custom-premium-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    کاربر و دیدگاه
+                                </th>
+
+                                <th>
+                                    محصول
+                                </th>
+
+                                <th>
+                                    امتیاز
+                                </th>
+
+                                <th>
+                                    وضعیت
+                                </th>
+
+                                <th>
+                                    تعامل
+                                </th>
+
+                                <th>
+                                    تاریخ
+                                </th>
+
+                                <th class="text-center">
+                                    عملیات
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @foreach (var review in Model)
+                            {
+                                <tr>
+
+                                   
+
+                                    <td data-label="کاربر و دیدگاه">
+
+                                        <div>
+
+                                            <div class="review-user-name">
+                                                @review.UserFullName
+                                            </div>
+
+                                            <div class="review-comment">
+                                                @review.Comment
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    
+
+                                    <td data-label="محصول">
+
+                                        <span class="review-product-name">
+                                            @review.ProductName
+                                        </span>
+
+                                    </td>
+
+
+                              
+
+                                    <td data-label="امتیاز">
+
+                                        <div class="review-rating">
+
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                if (i <= review.Rating)
+                                                {
+                                                    <i class="bi bi-star-fill"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="bi bi-star"></i>
+                                                }
+                                            }
+
+                                        </div>
+
+                                        <span class="review-rating-text">
+                                            @review.Rating/5
+                                        </span>
+
+                                    </td>
+
+
+                                    
+
+                                    <td data-label="وضعیت">
+
+                                        @if (review.Status == ReviewStatus.Pending)
+                                        {
+                                            <span class="review-status-badge review-status-pending">
+                                                در انتظار بررسی
+                                            </span>
+                                        }
+                                        else if (review.Status == ReviewStatus.Approved)
+                                        {
+                                            <span class="review-status-badge review-status-approved">
+                                                تأیید شده
+                                            </span>
+                                        }
+                                        else if (review.Status == ReviewStatus.Rejected)
+                                        {
+                                            <span class="review-status-badge review-status-rejected">
+                                                رد شده
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                 
+                                    <td data-label="تعامل">
+
+                                        <div class="d-flex flex-column gap-2">
+
+                                            <span class="review-stat review-like-count">
+                                                <i class="bi bi-heart"></i>
+                                                @review.LikeCount لایک
+                                            </span>
+
+                                            <span class="review-stat review-reply-count">
+                                                <i class="bi bi-chat-left-text"></i>
+                                                @review.ReplyCount پاسخ
+                                            </span>
+
+                                        </div>
+
+                                    </td>
+
+
+                                   
+
+                                    <td data-label="تاریخ"
+                                        class="text-ltr">
+
+                                        @review.CreatedAt.ToLocalTime().ToString("yyyy/MM/dd")
+
+                                    </td>
+
+
+                                    
+
+
+                                    <td data-label="عملیات">
+
+                                        <div class="review-actions">
+
+
+                                            @if (review.Status != ReviewStatus.Approved)
+                                            {
+                                                <form asp-area="Admin"
+                                                      asp-controller="AdminReview"
+                                                      asp-action="UpdateStatus"
+                                                      method="post">
+
+                                                    @Html.AntiForgeryToken()
+
+                                                    <input type="hidden"
+                                                           name="ReviewId"
+                                                           value="@review.Id" />
+
+                                                    <input type="hidden"
+                                                           name="Status"
+                                                           value="@ReviewStatus.Approved" />
+
+                                                    <button type="submit"
+                                                            class="btn btn-review-approve">
+
+                                                        <i class="bi bi-check-lg"></i>
+
+                                                        تأیید
+
+                                                    </button>
+
+                                                </form>
+                                            }
+
+
+                                            @if (review.Status != ReviewStatus.Rejected)
+                                            {
+                                                <form asp-area="Admin"
+                                                      asp-controller="AdminReview"
+                                                      asp-action="UpdateStatus"
+                                                      method="post">
+
+                                                    @Html.AntiForgeryToken()
+
+                                                    <input type="hidden"
+                                                           name="ReviewId"
+                                                           value="@review.Id" />
+
+                                                    <input type="hidden"
+                                                           name="Status"
+                                                           value="@ReviewStatus.Rejected" />
+
+                                                    <button type="submit"
+                                                            class="btn btn-review-reject">
+
+                                                        <i class="bi bi-x-lg"></i>
+
+                                                        رد
+
+                                                    </button>
+
+                                                </form>
+                                            }
+
+
+                                            @if (review.Status == ReviewStatus.Approved)
+                                            {
+                                                <button type="button"
+                                                        class="btn btn-review-reply"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#replyModal-@review.Id">
+
+                                                    <i class="bi bi-reply"></i>
+
+                                                    پاسخ
+
+                                                </button>
+                                            }
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+
+
+
+                              
+                                @if (review.Status == ReviewStatus.Approved)
+                                {
+                                    <div class="modal fade review-modal"
+                                         id="replyModal-@review.Id"
+                                         tabindex="-1"
+                                         aria-hidden="true">
+
+                                        <div class="modal-dialog modal-dialog-centered">
+
+                                            <div class="modal-content">
+
+
+                                                <div class="modal-header">
+
+                                                    <h5 class="modal-title">
+                                                        پاسخ به دیدگاه
+                                                    </h5>
+
+                                                    <button type="button"
+                                                            class="btn-close"
+                                                            data-bs-dismiss="modal"
+                                                            aria-label="Close">
+                                                    </button>
+
+                                                </div>
+
+
+                                                <form asp-area="Admin"
+                                                      asp-controller="AdminReview"
+                                                      asp-action="CreateReply"
+                                                      method="post">
+
+                                                    @Html.AntiForgeryToken()
+
+
+                                                    <div class="modal-body">
+
+                                                        <input type="hidden"
+                                                               name="ReviewId"
+                                                               value="@review.Id" />
+
+
+                                                        <div class="mb-3">
+
+                                                            <label class="form-label custom-form-label">
+                                                                دیدگاه کاربر
+                                                            </label>
+
+                                                            <div class="review-original-comment">
+                                                                @review.Comment
+                                                            </div>
+
+                                                        </div>
+
+
+                                                        <div>
+
+                                                            <label class="form-label custom-form-label">
+                                                                پاسخ شما
+                                                            </label>
+
+                                                            <textarea name="Comment"
+                                                          class="form-control custom-input"
+                                                          rows="5"
+                                                          minlength="3"
+                                                          maxlength="2000"
+                                                          required
+                                                          placeholder="متن پاسخ خود را وارد کنید..."></textarea>
+
+                                                        </div>
+
+                                                    </div>
+
+
+                                                    <div class="modal-footer">
+
+                                                        <button type="button"
+                                                                class="btn btn-cancel-style"
+                                                                data-bs-dismiss="modal">
+
+                                                            انصراف
+
+                                                        </button>
+
+
+                                                        <button type="submit"
+                                                                class="btn btn-submit-gold">
+
+                                                            <i class="bi bi-send"></i>
+
+                                                            ارسال پاسخ
+
+                                                        </button>
+
+                                                    </div>
+
+                                                </form>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                }
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

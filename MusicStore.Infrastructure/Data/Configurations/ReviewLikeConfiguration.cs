@@ -31,7 +31,8 @@ namespace MusicStore.Infrastructure.Data.Configurations
                 x.ReviewId,
                 x.UserId
             })
-            .IsUnique();
+            .IsUnique()
+            .HasFilter("[IsDeleted] = 0");
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿@model MusicStore.Application.DTOs.Product.ProductDetailsDto
+﻿
+@model MyStoreCore.Models.Product.ProductDetailsPageViewModel
 
 <link href="~/css/product.css" rel="stylesheet" />
 <link href="~/css/layout.css" rel="stylesheet" />
@@ -6,6 +7,7 @@
 <section class="product-details-page py-5">
 
     <div class="container">
+
 
         <div class="product-main-card p-4 p-lg-5 mb-5">
 
@@ -17,20 +19,19 @@
 
                         <div class="product-image-card p-4">
 
-
-                            @if (Model.Images != null && Model.Images.Any())
+                            @if (Model.Product.Images != null &&
+                                                        Model.Product.Images.Any())
                             {
-
                                 <div class="row g-3">
 
-                                    @foreach (var image in Model.Images)
+                                    @foreach (var image in Model.Product.Images)
                                     {
                                         <div class="col-6">
 
                                             <div class="product-gallery-item">
 
                                                 <img src="@image"
-                                                     alt="@Model.Name"
+                                                     alt="@Model.Product.Name"
                                                      class="img-fluid rounded-4 product-gallery-img" />
 
                                             </div>
@@ -39,11 +40,9 @@
                                     }
 
                                 </div>
-
                             }
                             else
                             {
-
                                 <div class="no-image-box d-flex flex-column align-items-center justify-content-center">
 
                                     <i class="bi bi-image text-muted fs-1 mb-2"></i>
@@ -53,9 +52,7 @@
                                     </span>
 
                                 </div>
-
                             }
-
 
                         </div>
 
@@ -64,29 +61,23 @@
                 </div>
 
 
-
-
                 <div class="col-lg-6">
 
                     <div class="product-info-wrapper pe-lg-3">
 
-
                         <div class="d-flex align-items-center justify-content-between mb-3">
-
 
                             <span class="product-brand-badge px-3 py-1 rounded-pill">
 
                                 <i class="bi bi-award me-1"></i>
 
-                               Brand:  @Model.BrandName
+                                Brand: @Model.Product.BrandName
 
                             </span>
 
 
-
-                            @if (Model.StockQuantity > 0)
+                            @if (Model.Product.StockQuantity > 0)
                             {
-
                                 <span class="badge badge-stock-in px-3 py-2 rounded-pill">
 
                                     <i class="bi bi-check-circle-fill me-1"></i>
@@ -94,11 +85,9 @@
                                     موجود در انبار
 
                                 </span>
-
                             }
                             else
                             {
-
                                 <span class="badge badge-stock-out px-3 py-2 rounded-pill">
 
                                     <i class="bi bi-x-circle-fill me-1"></i>
@@ -106,29 +95,21 @@
                                     ناموجود
 
                                 </span>
-
                             }
-
 
                         </div>
 
 
-
-
                         <h1 class="product-title text-white fw-bold my-3">
 
-                            @Model.Name
+                            @Model.Product.Name
 
                         </h1>
 
 
-
-
                         <div class="product-meta-grid d-flex flex-wrap gap-4 py-3 my-3 border-top border-bottom border-secondary border-opacity-25">
 
-
                             <div class="meta-item d-flex align-items-center gap-2">
-
 
                                 <div>
 
@@ -138,15 +119,13 @@
 
                                     <span class="text-white fw-medium fs-7">
 
-                                        @Model.CategoryName
+                                        @Model.Product.CategoryName
 
                                     </span>
 
                                 </div>
 
                             </div>
-
-
 
 
                             <div class="meta-item d-flex align-items-center gap-2">
@@ -157,87 +136,66 @@
                                         کد کالا
                                     </span>
 
+                                    <span class="text-white fw-medium fs-7"
+                                          dir="ltr">
 
-                                    <span class="text-white fw-medium fs-7" dir="ltr">
-
-                                        @Model.SKU
+                                        @Model.Product.SKU
 
                                     </span>
-
 
                                 </div>
 
                             </div>
 
-
                         </div>
-
-
-
 
 
                         <div class="price-action-box p-4 rounded-4 my-4">
 
-
                             <div class="d-flex align-items-baseline gap-2 mb-3">
-
 
                                 <span class="text-gold fs-7">
                                     قیمت نهایی:
                                 </span>
 
-
                                 <span class="product-price-amount display-6 fw-bold text-gold">
 
-                                    @Model.Price.ToString("N0")
+                                    @Model.Product.Price.ToString("N0")
 
                                 </span>
-
 
                                 <span class="text-gold fs-7">
                                     تومان
                                 </span>
 
-
                             </div>
 
 
-
-
-
-                            @if (Model.StockQuantity > 0)
+                            @if (Model.Product.StockQuantity > 0)
                             {
-
                                 <form asp-controller="Cart"
                                       asp-action="AddToCart"
                                       method="post">
 
+                                    @Html.AntiForgeryToken()
 
                                     <input type="hidden"
                                            name="productId"
-                                           value="@Model.Id" />
-
-
+                                           value="@Model.Product.Id" />
 
                                     <button type="submit"
                                             class="btn btn-buy-gold w-100 py-3 rounded-3 d-flex align-items-center justify-content-center gap-2 text-dark fw-bold">
 
-
                                         <i class="bi bi-bag-plus-fill fs-5"></i>
-
 
                                         افزودن به سبد خرید
 
-
                                     </button>
 
-
                                 </form>
-
                             }
                             else
                             {
-
                                 <button class="btn btn-secondary w-100 py-3 rounded-3"
                                         disabled>
 
@@ -246,19 +204,12 @@
                                     امکان سفارش وجود ندارد
 
                                 </button>
-
                             }
-
-
 
                         </div>
 
 
-
-
-
                         <div class="product-trust-features d-flex justify-content-around text-center mt-4">
-
 
                             <div class="trust-item text-gold">
 
@@ -271,8 +222,7 @@
                             </div>
 
 
-
-                            <div class="trust-item  text-gold">
+                            <div class="trust-item text-gold">
 
                                 <i class="bi bi-truck text-gold d-block fs-4 mb-1"></i>
 
@@ -281,7 +231,6 @@
                                 </span>
 
                             </div>
-
 
 
                             <div class="trust-item text-gold">
@@ -294,22 +243,28 @@
 
                             </div>
 
-
                         </div>
-
 
                     </div>
 
                 </div>
-
 
             </div>
 
         </div>
 
 
-        <div class="product-description-card p-4 p-lg-5">
 
+
+
+
+
+
+
+
+
+
+        <div class="product-description-card p-4 p-lg-5">
 
             <h4 class="description-title text-white fw-bold mb-4 pb-3 border-bottom border-gold-subtle">
 
@@ -320,35 +275,641 @@
             </h4>
 
 
-
             <div class="description-content text-light-subtle lh-lg">
 
-
-                @if (!string.IsNullOrWhiteSpace(Model.Description))
+                @if (!string.IsNullOrWhiteSpace(Model.Product.Description))
                 {
-
                     <p>
-                        @Model.Description
+                        @Model.Product.Description
                     </p>
-
                 }
                 else
                 {
-
                     <p class="text-muted">
                         توضیحاتی برای این محصول ثبت نشده است.
                     </p>
-
                 }
 
-
             </div>
-
 
         </div>
 
 
 
+
+
+
+
+
+
+
+
+
+        @if (TempData["ReviewSuccess"] != null)
+        {
+            <div class="alert alert-success mt-5 rounded-4"
+                 role="alert">
+
+                <i class="bi bi-check-circle-fill me-2"></i>
+
+                @TempData["ReviewSuccess"]
+
+            </div>
+        }
+
+
+        @if (TempData["ReviewError"] != null)
+        {
+            <div class="alert alert-danger mt-5 rounded-4"
+                 role="alert">
+
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+
+                @TempData["ReviewError"]
+
+            </div>
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div class="product-reviews-card p-4 p-lg-5 mt-5">
+
+            <div class="d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom border-gold-subtle">
+
+                <h4 class="description-title text-white fw-bold mb-0">
+
+                    <i class="bi bi-chat-square-text text-gold me-2"></i>
+
+                    نظرات کاربران
+
+                </h4>
+
+                <span class="text-gold">
+
+                    @Model.Reviews.Count نظر
+
+                </span>
+
+            </div>
+
+
+            @if (Model.Reviews != null && Model.Reviews.Any())
+            {
+                <div class="reviews-list">
+
+                    @foreach (var review in Model.Reviews)
+                    {
+                        <div class="review-item p-4 mb-4 rounded-4">
+
+                            <div class="d-flex align-items-start justify-content-between mb-3">
+
+                                <div class="d-flex align-items-center gap-3">
+
+                                    <div class="review-user-avatar">
+
+                                        <i class="bi bi-person-fill"></i>
+
+                                    </div>
+
+                                    <div>
+
+                                        <h6 class="text-white fw-bold mb-1">
+
+                                            @review.UserFullName
+
+                                        </h6>
+
+                                        <small class="text-light">
+
+                                            @review.CreatedAt
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="review-rating">
+
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        if (i <= review.Rating)
+                                        {
+                                            <i class="bi bi-star-fill text-gold"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="bi bi-star text-gold"></i>
+                                        }
+                                    }
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="review-content text-light-subtle lh-lg mb-3">
+
+                                <p class="mb-0">
+
+                                    @review.Comment
+
+                                </p>
+
+                            </div>
+
+
+     
+
+
+                            <div class="review-actions d-flex align-items-center gap-3">
+
+                                @if (User.Identity?.IsAuthenticated == true)
+                                {
+                                    <form class="review-like-form"
+                                          asp-controller="Review"
+                                          asp-action="@(review.IsLikedByCurrentUser ? "Unlike" : "Like")"
+                                          method="post">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="ReviewId"
+                                               value="@review.Id" />
+
+                                        <button type="submit"
+                                                class="btn btn-sm @(review.IsLikedByCurrentUser ? "btn-outline-danger" : "btn-outline-secondary")">
+
+                                            <i class="bi @(review.IsLikedByCurrentUser ? "bi-heart-fill" : "bi-heart") me-1"></i>
+
+                                            <span class="review-like-count">
+                                                @review.LikeCount
+                                            </span>
+
+                                        </button>
+
+                                    </form>
+                                }
+                                else
+                                {
+                                    <a asp-controller="Account"
+                                       asp-action="Login"
+                                       asp-route-returnUrl="@Context.Request.Path"
+                                       class="btn btn-sm btn-outline-secondary">
+
+                                        <i class="bi bi-heart me-1"></i>
+
+                                        <span>
+                                            @review.LikeCount
+                                        </span>
+
+                                    </a>
+                                }
+
+                            </div>
+
+
+
+
+
+                            @if (review.Replies != null && review.Replies.Any())
+                            {
+                                <div class="review-replies mt-4 pt-3 border-top border-secondary border-opacity-25">
+
+                                    <div class="d-flex align-items-center gap-2 mb-3">
+
+                                        <i class="bi bi-reply-fill text-gold"></i>
+
+                                        <span class="text-gold fw-bold">
+
+                                            پاسخ مدیریت
+
+                                        </span>
+
+                                    </div>
+
+
+                                    @foreach (var reply in review.Replies)
+                                    {
+                                        <div class="admin-reply p-3 rounded-3 mb-2">
+
+                                            <p class="text-light-subtle mb-2">
+
+                                                @reply.Comment
+
+                                            </p>
+
+                                            <small class="text-light">
+
+                                                @reply.CreatedAt
+
+                                            </small>
+
+                                        </div>
+                                    }
+
+                                </div>
+                            }
+
+                        </div>
+                    }
+
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+
+                    <i class="bi bi-chat-square-text text-muted fs-1 mb-3"></i>
+
+                    <p class="text-muted mb-0">
+
+                        هنوز نظری برای این محصول ثبت نشده است.
+
+                    </p>
+
+                </div>
+            }
+
+        </div>
+
+
+
+
+
+
+
+
+
+        <div class="product-review-form-card p-4 p-lg-5 mt-5">
+
+            <h4 class="description-title text-white fw-bold mb-4 pb-3 border-bottom border-gold-subtle">
+
+                <i class="bi bi-pencil-square text-gold me-2"></i>
+
+                ثبت دیدگاه
+
+            </h4>
+
+
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <p class="text-light-subtle mb-4">
+
+                    نظر خود را درباره این محصول با ما به اشتراک بگذارید.
+
+                </p>
+
+
+                <form id="review-create-form"
+                      asp-controller="Review"
+                      asp-action="Create"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden"
+                           name="ProductId"
+                           value="@Model.Product.Id" />
+
+
+
+
+
+
+                    <div class="mb-4">
+
+                        <label class="form-label text-white fw-bold">
+
+                            امتیاز شما
+
+                        </label>
+
+                        <div class="d-flex gap-2 mt-2">
+
+                            @for (int rating = 1; rating <= 5; rating++)
+                            {
+                                <input type="radio"
+                                       class="btn-check"
+                                       name="Rating"
+                                       id="rating-@rating"
+                                       value="@rating"
+                                       autocomplete="off"
+                                       @(rating == 5 ? "checked" : "") />
+
+                                <label class="btn btn-outline-warning"
+                                       for="rating-@rating">
+
+                                    @rating
+
+                                    <i class="bi bi-star-fill"></i>
+
+                                </label>
+                            }
+
+                        </div>
+
+                    </div>
+
+
+
+
+
+
+
+                    <div class="mb-4">
+
+                        <label for="reviewComment"
+                               class="form-label text-white fw-bold">
+
+                            متن دیدگاه
+
+                        </label>
+
+                        <textarea id="reviewComment"
+                              name="Comment"
+                              class="form-control"
+                              rows="6"
+                              minlength="3"
+                              maxlength="2000"
+                              required
+                              placeholder="نظر خود را درباره این محصول بنویسید..."></textarea>
+
+                        <div class="form-text text-light">
+
+                            متن دیدگاه باید بین ۳ تا ۲۰۰۰ کاراکتر باشد.
+
+                        </div>
+
+                    </div>
+
+
+                    <button type="submit"
+                            class="btn btn-buy-gold px-5 py-3 rounded-3 text-dark fw-bold">
+
+                        <i class="bi bi-send-fill me-2"></i>
+
+                        ثبت دیدگاه
+
+                    </button>
+
+                </form>
+            }
+            else
+            {
+                <div class="text-center py-4">
+
+                    <i class="bi bi-person-lock text-gold fs-1 mb-3"></i>
+
+                    <p class="text-light-subtle mb-3">
+
+                        برای ثبت دیدگاه ابتدا وارد حساب کاربری خود شوید.
+
+                    </p>
+
+                    <a asp-area=""
+                       asp-controller="Account"
+                       asp-action="Login"
+                       asp-route-returnUrl="@Context.Request.Path"
+                       class="btn btn-outline-warning px-4 py-2 rounded-3">
+
+                        <i class="bi bi-box-arrow-in-right me-2"></i>
+
+                        ورود به حساب
+
+                    </a>
+
+                </div>
+            }
+
+        </div>
+
     </div>
 
 </section>
+
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const likeForms = document.querySelectorAll(".review-like-form");
+
+        likeForms.forEach(function (form) {
+
+            form.addEventListener("submit", async function (event) {
+
+                event.preventDefault();
+
+                const button = form.querySelector("button");
+                const icon = form.querySelector("i");
+                const countElement = form.querySelector(".review-like-count");
+
+                if (!button || !icon || !countElement) {
+                    return;
+                }
+
+                if (button.disabled) {
+                    return;
+                }
+
+                button.disabled = true;
+
+                try {
+
+                    const formData = new FormData(form);
+
+                    const response = await fetch(form.action, {
+                        method: "POST",
+                        body: formData,
+                        headers: {
+                            "X-Requested-With": "XMLHttpRequest"
+                        }
+                    });
+
+                    const result = await response.json();
+
+                    if (!response.ok || !result.success) {
+                        throw new Error(
+                            result.message || "عملیات انجام نشد."
+                        );
+                    }
+
+                    const currentCount =
+                        parseInt(countElement.textContent.trim()) || 0;
+
+                    const isUnlike =
+                        form.action.toLowerCase().includes("/unlike");
+
+                    if (isUnlike) {
+
+                        countElement.textContent =
+                            Math.max(0, currentCount - 1);
+
+                        form.action =
+                            form.action.replace(
+                                "/Unlike",
+                                "/Like"
+                            );
+
+                        button.classList.remove(
+                            "btn-outline-danger"
+                        );
+
+                        button.classList.add(
+                            "btn-outline-secondary"
+                        );
+
+                        icon.classList.remove(
+                            "bi-heart-fill"
+                        );
+
+                        icon.classList.add(
+                            "bi-heart"
+                        );
+
+                    }
+                    else {
+
+                        countElement.textContent =
+                            currentCount + 1;
+
+                        form.action =
+                            form.action.replace(
+                                "/Like",
+                                "/Unlike"
+                            );
+
+                        button.classList.remove(
+                            "btn-outline-secondary"
+                        );
+
+                        button.classList.add(
+                            "btn-outline-danger"
+                        );
+
+                        icon.classList.remove(
+                            "bi-heart"
+                        );
+
+                        icon.classList.add(
+                            "bi-heart-fill"
+                        );
+                    }
+
+                }
+                catch (error) {
+
+                    console.error(
+                        "Review like error:",
+                        error
+                    );
+
+                    alert(
+                        error.message ||
+                        "در انجام عملیات مشکلی پیش آمد."
+                    );
+
+                }
+                finally {
+
+                    button.disabled = false;
+                }
+            });
+        });
+    });
+
+
+
+
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const reviewForm =
+            document.getElementById("review-create-form");
+
+        if (!reviewForm) {
+            return;
+        }
+
+        reviewForm.addEventListener("submit", async function (event) {
+
+            event.preventDefault();
+
+            const submitButton =
+                reviewForm.querySelector('button[type="submit"]');
+
+            if (!submitButton || submitButton.disabled) {
+                return;
+            }
+
+            submitButton.disabled = true;
+
+            try {
+
+                const formData =
+                    new FormData(reviewForm);
+
+                const response = await fetch(
+                    reviewForm.action,
+                    {
+                        method: "POST",
+                        body: formData,
+                        headers: {
+                            "X-Requested-With": "XMLHttpRequest"
+                        }
+                    }
+                );
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    throw new Error(
+                        result.message ||
+                        "ثبت دیدگاه انجام نشد."
+                    );
+                }
+
+                alert(
+                    result.message ||
+                    "دیدگاه شما با موفقیت ثبت شد."
+                );
+
+                reviewForm.reset();
+
+            }
+            catch (error) {
+
+                console.error(
+                    "Review create error:",
+                    error
+                );
+
+                alert(
+                    error.message ||
+                    "در ثبت دیدگاه مشکلی پیش آمد."
+                );
+
+            }
+            finally {
+
+                submitButton.disabled = false;
+            }
+        });
+    });
+</script>
+

@@ -13,6 +13,8 @@ using MusicStore.Infrastructure.Identity;
 using MusicStore.Infrastructure.Repository;
 using MusicStore.Infrastructure.seed;
 using MusicStore.Infrastructure.Services;
+using MusicStore.Application.Interfaces;
+using MusicStore.Infrastructure.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -81,6 +83,7 @@ builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<IPaymentGateway, FakePaymentGateway>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IStockService, StockService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
 
 builder.Services.AddAutoMapper(cfg =>
 {
