@@ -97,6 +97,17 @@
 
                     @if (User.Identity != null && User.Identity.IsAuthenticated)
                     {
+                        <a asp-controller="Wishlist"
+                           asp-action="Index"
+                           class="action-icon"
+                           title="علاقه‌مندی‌های من">
+                            <i class="bi bi-heart"></i>
+                        </a>
+                    }
+
+
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
                         if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
                         {
                             <a class="action-icon"

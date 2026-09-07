@@ -2,7 +2,9 @@
 using MusicStore.Application.DTOs.Coupon;
 using MusicStore.Application.DTOs.Order;
 using MusicStore.Application.DTOs.OrderItem;
+using MusicStore.Application.DTOs.Product;
 using MusicStore.Application.DTOs.Stock;
+using MusicStore.Application.DTOs.Wishlist;
 using MusicStore.Domain.Entities;
 
 namespace MusicStore.Application.Mapping
@@ -60,6 +62,42 @@ namespace MusicStore.Application.Mapping
                     dest => dest.CreatedByName,
                     opt => opt.Ignore()
                 );
+
+
+     
+            CreateMap<Product, ProductDto>()
+                .ForMember(
+                    dest => dest.MainImageUrl,
+                    opt => opt.MapFrom(
+                        src => src.Images
+                            .FirstOrDefault(x => x.IsMain) != null
+                                ? src.Images.First(x => x.IsMain).ImageUrl
+                                : null
+                    )
+                )
+                .ForMember(
+                    dest => dest.ImageCount,
+                    opt => opt.MapFrom(src => src.Images.Count)
+                )
+                .ForMember(
+                    dest => dest.CategoryName,
+                    opt => opt.MapFrom(src => src.Category != null
+                        ? src.Category.Name
+                        : "")
+                )
+                .ForMember(
+                    dest => dest.BrandName,
+                    opt => opt.MapFrom(src => src.Brand != null
+                        ? src.Brand.Name
+                        : "")
+                );
+            
+                CreateMap<Wishlist, WishlistDto>();
+            
+
+           
+
+            CreateMap<Wishlist, WishlistDto>();
         }
     }
 }

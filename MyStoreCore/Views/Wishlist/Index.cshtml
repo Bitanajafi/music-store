@@ -1,0 +1,197 @@
+﻿
+@model List<MusicStore.Application.DTOs.Wishlist.WishlistDto>
+
+@{
+    ViewData["Title"] = "علاقه‌مندی‌های من";
+}
+
+<link href="~/css/layout.css" rel="stylesheet" />
+<link href="~/css/wishlist.css" rel="stylesheet" />
+
+<div class="wishlist-page py-4 py-md-5">
+    <div class="container">
+
+        <div class="wishlist-header mb-4 d-flex align-items-center justify-content-between flex-wrap gap-3">
+            <div>
+                <h2 class="wishlist-title fw-bold mb-1">
+                    <i class="bi bi-heart-fill me-2"></i>
+                    علاقه‌مندی‌های من
+                </h2>
+
+                <p class="wishlist-subtitle m-0">
+                    محصولاتی که برای خرید بعدی ذخیره کرده‌اید
+                </p>
+            </div>
+
+            <div class="wishlist-count">
+                تعداد علاقه‌مندی‌ها: @(Model?.Count ?? 0)
+            </div>
+        
+
+        </div>
+
+        @if (Model == null || !Model.Any())
+        {
+            <div class="wishlist-empty text-center">
+
+                <div class="wishlist-empty-icon">
+                    <i class="bi bi-heart"></i>
+                </div>
+
+                <h4>
+                    هنوز محصولی به علاقه‌مندی‌ها اضافه نکرده‌اید
+                </h4>
+
+                <p>
+                    محصولاتی که دوست دارید را با زدن قلب ذخیره کنید.
+                </p>
+
+                <a asp-controller="Product"
+                   asp-action="Index"
+                   class="wishlist-shop-btn">
+                    <i class="bi bi-shop me-2"></i>
+                    مشاهده محصولات
+                </a>
+
+            </div>
+        }
+        else
+        {
+            <div class="row g-4">
+
+                @foreach (var item in Model)
+                {
+                    <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+
+                        <div class="wishlist-card">
+
+                            <div class="wishlist-image">
+
+                                @if (!string.IsNullOrWhiteSpace(item.Product.MainImageUrl))
+                                {
+                                    <img src="@item.Product.MainImageUrl"
+                                         alt="@item.Product.Name" />
+                                }
+                                else
+                                {
+                                    <div class="wishlist-no-image">
+                                        <i class="bi bi-music-note-beamed"></i>
+                                    </div>
+                                }
+
+                                <button type="button"
+                                        class="wishlist-remove-btn"
+                                        data-product-id="@item.ProductId"
+                                        title="حذف از علاقه‌مندی‌ها">
+                                    <i class="bi bi-heart-fill"></i>
+                                </button>
+
+                            </div>
+
+                            <div class="wishlist-card-body">
+
+                                <h5 class="wishlist-product-name">
+                                    @item.Product.Name
+                                </h5>
+
+                                <div class="wishlist-product-meta">
+                                    <span>
+                                        @item.Product.BrandName
+                                    </span>
+
+                                    <span>
+                                        @item.Product.CategoryName
+                                    </span>
+                                </div>
+
+                                <div class="wishlist-price">
+                                    @item.Product.Price.ToString("N0")
+                                    <small>تومان</small>
+                                </div>
+
+                                <a asp-controller="Product"
+                                   asp-action="Details"
+                                   asp-route-id="@item.ProductId"
+                                   class="wishlist-details-btn">
+                                    <i class="bi bi-eye me-1"></i>
+                                    مشاهده محصول
+                                </a>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                }
+             
+            </div>
+            <div class="wishlist-footer">
+                <a asp-controller="Product"
+                   asp-action="Index"
+                   class="wishlist-back-shop-btn">
+                    <i class="bi bi-shop"></i>
+                    برگشت به فروشگاه
+                </a>
+            </div>
+        }
+
+    </div>
+</div>
+
+@Html.AntiForgeryToken()
+
+<script>
+    document.querySelectorAll(".wishlist-remove-btn").forEach(button => {
+        button.addEventListener("click", async function () {
+
+            const productId = this.dataset.productId;
+
+            const tokenElement = document.querySelector(
+                'input[name="__RequestVerificationToken"]'
+            );
+
+            try {
+                const response = await fetch("/Wishlist/Remove", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                        ...(tokenElement
+                            ? {
+                                "RequestVerificationToken":
+                                    tokenElement.value
+                            }
+                            : {})
+                    },
+                    body: new URLSearchParams({
+                        productId: productId,
+                        ...(tokenElement
+                            ? {
+                                __RequestVerificationToken:
+                                    tokenElement.value
+                            }
+                            : {})
+                    })
+                });
+
+                if (response.status === 401) {
+                    window.location.href = "/Account/Login";
+                    return;
+                }
+
+                const result = await response.json();
+
+                if (result.success) {
+                    window.location.reload();
+                }
+                else {
+                    alert(result.message);
+                }
+
+            } catch (error) {
+                alert("خطایی در ارتباط با سرور رخ داد.");
+            }
+        });
+    });
+</script>
+
