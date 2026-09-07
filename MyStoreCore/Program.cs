@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MusicStore.Application.Interfaces;
+using MusicStore.Application.Interfaces;
 using MusicStore.Application.Interfaces.Generic;
 using MusicStore.Application.Interfaces.Services;
+using MusicStore.Application.Interfaces.Wishlist;
 using MusicStore.Application.Mapping;
 using MusicStore.Application.Mapping;
 using MusicStore.Application.Services;
@@ -13,7 +15,6 @@ using MusicStore.Infrastructure.Identity;
 using MusicStore.Infrastructure.Repository;
 using MusicStore.Infrastructure.seed;
 using MusicStore.Infrastructure.Services;
-using MusicStore.Application.Interfaces;
 using MusicStore.Infrastructure.Services;
 
 
@@ -84,6 +85,8 @@ builder.Services.AddScoped<IPaymentGateway, FakePaymentGateway>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IStockService, StockService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
+builder.Services.AddScoped<IWishlistService, WishlistService>();
+
 
 builder.Services.AddAutoMapper(cfg =>
 {

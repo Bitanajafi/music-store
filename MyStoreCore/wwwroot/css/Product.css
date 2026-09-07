@@ -359,3 +359,67 @@
         max-height: 300px;
     }
 }
+
+
+
+
+
+
+
+
+
+.wishlist-btn {
+    border: none !important;
+    outline: none !important;
+    background: none !important;
+    box-shadow: none !important;
+    padding: 0;
+    margin: 0;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.wishlist-heart {
+    font-size: 38px;
+    line-height: 1;
+    color: white;
+    transition: transform 0.2s ease;
+}
+
+.wishlist-btn:hover .wishlist-heart {
+    transform: scale(1.12);
+}
+
+.wishlist-btn.active .wishlist-heart {
+    font-size: 0;
+}
+
+    .wishlist-btn.active .wishlist-heart::after {
+        content: "♥";
+        font-size: 38px;
+        color: white;
+        display: inline-block;
+        animation: wishlistHeart 0.2s ease;
+    }
+
+@keyframes wishlistHeart {
+    0% {
+        transform: scale(0.7);
+    }
+
+    70% {
+        transform: scale(1.15);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+
+
+

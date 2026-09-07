@@ -37,5 +37,6 @@ namespace MusicStore.Application.DTOs.Product
         public string? MainImageUrl { get; set; }
 
         public int ImageCount { get; set; }
+        public bool IsInWishlist { get; set; }
     }
 }

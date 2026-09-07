@@ -8,6 +8,8 @@
     var groupedProducts = Model?.GroupBy(p => p.CategoryName ?? "سایر محصولات").ToList();
 }
 
+@Html.AntiForgeryToken()
+
 <div class="products-page-wrapper py-5">
     <div class="container">
 
@@ -84,6 +86,15 @@
                                         </div>
 
                                         <div class="card-actions">
+
+
+
+                                            <button type="button" class="wishlist-btn" data-product-id="@product.Id" title="افزودن به علاقه‌مندی‌ها"> 
+                                                <span class="wishlist-heart">♡</span> 
+                                             </button>
+
+
+
                                             <a asp-controller="Product"
                                                asp-action="Details"
                                                asp-route-id="@product.Id"
@@ -92,21 +103,34 @@
                                                 <span>مشاهده</span>
                                             </a>
 
+
                                             @if (product.IsActive && product.StockQuantity > 0)
                                             {
                                                 <form asp-controller="Cart"
                                                       asp-action="AddToCart"
                                                       method="post"
                                                       class="flex-grow-1">
-                                                    <input type="hidden" name="ProductId" value="@product.Id" />
-                                                    <input type="hidden" name="Quantity" value="1" />
-                                                    <button type="submit" class="btn-action btn-cart w-100">
+
+                                                    <input type="hidden"
+                                                           name="ProductId"
+                                                           value="@product.Id" />
+
+                                                    <input type="hidden"
+                                                           name="Quantity"
+                                                           value="1" />
+
+                                                    <button type="submit"
+                                                            class="btn-action btn-cart w-100">
                                                         <i class="bi bi-bag-plus"></i>
                                                         <span>خرید</span>
                                                     </button>
+
                                                 </form>
                                             }
+
                                         </div>
+                                        
+
                                     </div>
 
                                 </div>
@@ -121,3 +145,100 @@
     </div>
 </div>
 
+
+
+
+
+
+
+<script>
+    document.querySelectorAll(".wishlist-btn").forEach(button => {
+        button.addEventListener("click", async function () {
+            const productId = this.dataset.productId;
+
+            const tokenElement = document.querySelector(
+                'input[name="__RequestVerificationToken"]'
+            );
+
+            const isActive = this.classList.contains("active");
+            const action = isActive ? "Remove" : "Add";
+
+            try {
+                const response = await fetch(`/Wishlist/${action}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                        ...(tokenElement
+                            ? {
+                                "RequestVerificationToken":
+                                    tokenElement.value
+                            }
+                            : {})
+                    },
+                    body: new URLSearchParams({
+                        productId: productId,
+                        ...(tokenElement
+                            ? {
+                                __RequestVerificationToken:
+                                    tokenElement.value
+                            }
+                            : {})
+                    })
+                });
+
+                if (response.status === 401) {
+                    window.location.href = "/Account/Login";
+                    return;
+                }
+
+                const result = await response.json();
+
+                if (result.success) {
+                    this.classList.toggle("active");
+
+                    const heart =
+                        this.querySelector(".wishlist-heart");
+
+                    heart.textContent =
+                        this.classList.contains("active")
+                            ? "♥"
+                            : "♡";
+
+                    this.title =
+                        this.classList.contains("active")
+                            ? "حذف از علاقه‌مندی‌ها"
+                            : "افزودن به علاقه‌مندی‌ها";
+                } else {
+                    alert(result.message);
+                }
+            } catch (error) {
+                alert("خطایی در ارتباط با سرور رخ داد.");
+            }
+        });
+    });
+
+    document.querySelectorAll(".wishlist-btn").forEach(async button => {
+        const productId = button.dataset.productId;
+
+        try {
+            const response = await fetch(
+                `/Wishlist/IsInWishlist?productId=${productId}`
+            );
+
+            if (response.status === 401) {
+                return;
+            }
+
+            const result = await response.json();
+
+            if (result.success && result.data === true) {
+                button.classList.add("active");
+
+                button.querySelector(".wishlist-heart").textContent = "♥";
+
+                button.title = "حذف از علاقه‌مندی‌ها";
+            }
+        } catch (error) {
+        }
+    });
+</script>
