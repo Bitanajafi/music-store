@@ -630,11 +630,16 @@
                             }
                         },
                         scales: {
+                       
                             y: {
                                 beginAtZero: true,
+                                min: 0,
                                 grid: { color: '#f1f5f9' },
-                                ticks: { callback: (val) => faNum.format(val) }
+                                ticks: {
+                                    callback: (val) => faNum.format(val)
+                                }
                             },
+
                             x: { grid: { display: false } }
                         }
                     }
