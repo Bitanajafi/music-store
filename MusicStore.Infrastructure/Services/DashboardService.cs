@@ -128,11 +128,30 @@ namespace MusicStore.Infrastructure.Services
                 var monthSales =
                     monthPaidOrders.Sum(x => x.TotalPrice);
 
-                var todayDiscount =
-                    todayPaidOrders.Sum(x => x.DiscountAmount);
+             
+                  var todayProductDiscount =
+                    todayPaidOrders
+                        .SelectMany(x => x.OrderItems)
+                        .Where(x => x.Product != null)
+                        .Sum(x =>
+                            (x.Product!.Price - x.UnitPrice) * x.Quantity);
+                  
+                                var monthProductDiscount =
+                                    monthPaidOrders
+                                        .SelectMany(x => x.OrderItems)
+                                        .Where(x => x.Product != null)
+                                        .Sum(x =>
+                                            (x.Product!.Price - x.UnitPrice) * x.Quantity);
+                  
+                                var todayDiscount =
+                                    todayPaidOrders.Sum(x => x.DiscountAmount)
+                                    + todayProductDiscount;
+                  
+                                var monthDiscount =
+                                    monthPaidOrders.Sum(x => x.DiscountAmount)
+                                    + monthProductDiscount;
+                  
 
-                var monthDiscount =
-                    monthPaidOrders.Sum(x => x.DiscountAmount);
 
                 var todayProfit =
                     CalculateProfit(todayPaidOrders);

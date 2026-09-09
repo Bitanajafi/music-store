@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using MusicStore.Application.Common.Results;
 using MusicStore.Application.DTOs.Order;
@@ -75,9 +76,14 @@ namespace MusicStore.Infrastructure.Services
                             .Fail("تعداد محصول نامعتبر است");
                     }
 
+                 
                     var product = await _unitOfWork
                         .Repository<Product>()
-                        .GetByIdAsync(item.ProductId);
+                        .GetByIdAsync(
+                            x => x.Id == item.ProductId,
+                            x => x.Discount);
+
+
 
                     if (product == null)
                     {
@@ -106,13 +112,42 @@ namespace MusicStore.Infrastructure.Services
                                 $"موجودی محصول {product.Name} کافی نیست");
                     }
 
+
+                   var finalPrice = product.Price;
+
+                    var now = DateTime.UtcNow;
+
+                    var discountIsActive =
+                        product.Discount != null &&
+                        product.Discount.IsActive &&
+                        product.Discount.StartDate <= now &&
+                        (product.Discount.EndDate == null ||
+                         product.Discount.EndDate >= now);
+
+                    if (discountIsActive)
+                    {
+                        finalPrice = product.Discount!.DiscountType ==
+                            DiscountType.Percentage
+                            ? product.Price -
+                              (product.Price * product.Discount.Value / 100m)
+                            : product.Price -
+                              product.Discount.Value;
+
+                        if (finalPrice < 0)
+                            finalPrice = 0;
+                    }
+
                     var orderItem = new OrderItem
                     {
                         ProductId = product.Id,
                         ProductName = product.Name,
-                        UnitPrice = product.Price,
+                        UnitPrice = finalPrice,
                         Quantity = item.Quantity
                     };
+
+
+
+
 
                     orderItems.Add(orderItem);
 
