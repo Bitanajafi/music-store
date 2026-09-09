@@ -38,5 +38,16 @@ namespace MusicStore.Application.DTOs.Product
 
         public int ImageCount { get; set; }
         public bool IsInWishlist { get; set; }
+
+
+
+        public bool HasDiscount { get; set; }
+
+        public decimal? DiscountValue { get; set; }
+
+        public MusicStore.Domain.Enum.DiscountType? DiscountType { get; set; }
+
+        public decimal? FinalPrice { get; set; }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using MusicStore.Application.DTOs.Cart;
 using MusicStore.Application.Interfaces;
 using MusicStore.Application.Interfaces.Generic;
@@ -52,6 +53,8 @@ namespace MusicStore.Infrastructure.Services
 
                     UnitPrice = item.UnitPrice,
 
+                    OriginalPrice = item.Product.Price,
+
                     ImageUrl = item.Product.Images
                         .FirstOrDefault(x => x.IsMain)
                         ?.ImageUrl
@@ -99,9 +102,13 @@ namespace MusicStore.Infrastructure.Services
 
 
 
-            var product = await _unitOfWork
-                .Repository<Product>()
-                .GetByIdAsync(dto.ProductId);
+              var product = await _unitOfWork
+             .Repository<Product>()
+             .GetByIdAsync(
+                 x => x.Id == dto.ProductId,
+                 x => x.Discount);
+
+
 
 
 
@@ -122,6 +129,26 @@ namespace MusicStore.Infrastructure.Services
             if (product.StockQuantity < dto.Quantity)
             {
                 return false;
+            }
+
+            var finalPrice = product.Price;
+
+            var now = DateTime.UtcNow;
+
+            var discountIsActive =
+                product.Discount != null &&
+                product.Discount.IsActive &&
+                product.Discount.StartDate <= now &&
+                (product.Discount.EndDate == null || product.Discount.EndDate >= now);
+
+            if (discountIsActive)
+            {
+                finalPrice = product.Discount!.DiscountType == MusicStore.Domain.Enum.DiscountType.Percentage
+                    ? product.Price - (product.Price * product.Discount.Value / 100m)
+                    : product.Price - product.Discount.Value;
+
+                if (finalPrice < 0)
+                    finalPrice = 0;
             }
 
 
@@ -146,7 +173,7 @@ namespace MusicStore.Infrastructure.Services
 
 
                 existingItem.Quantity = newQuantity;
-
+                existingItem.UnitPrice = finalPrice;
 
                 await _unitOfWork
                     .Repository<CartItem>()
@@ -164,7 +191,7 @@ namespace MusicStore.Infrastructure.Services
 
                     Quantity = dto.Quantity,
 
-                    UnitPrice = product.Price
+                    UnitPrice = finalPrice
                 };
 
 
@@ -187,73 +214,82 @@ namespace MusicStore.Infrastructure.Services
 
 
         public async Task<bool> UpdateQuantityAsync(
-            string userId,
-            int cartItemId,
-            int quantity)
-        {
-
-            if (quantity <= 0)
+        string userId,
+        int cartItemId,
+        int quantity)
             {
-                return false;
+                if (quantity <= 0)
+                {
+                    return false;
+                }
+        
+                var cartItem = await _unitOfWork
+                    .Repository<CartItem>()
+                    .GetFirstOrDefaultAsync(
+                        x => x.Id == cartItemId &&
+                             x.Cart.UserId == userId,
+                        query => query
+                            .Include(x => x.Cart));
+        
+                if (cartItem == null)
+                {
+                    return false;
+                }
+        
+                var product = await _unitOfWork
+                    .Repository<Product>()
+                    .GetByIdAsync(
+                        x => x.Id == cartItem.ProductId,
+                        x => x.Discount);
+        
+                if (product == null)
+                {
+                    return false;
+                }
+        
+                if (!product.IsActive)
+                {
+                    return false;
+                }
+        
+                if (product.StockQuantity < quantity)
+                {
+                    return false;
+                }
+        
+                var finalPrice = product.Price;
+        
+                var now = DateTime.UtcNow;
+        
+                var discountIsActive =
+                    product.Discount != null &&
+                    product.Discount.IsActive &&
+                    product.Discount.StartDate <= now &&
+                    (product.Discount.EndDate == null || product.Discount.EndDate >= now);
+        
+                if (discountIsActive)
+                {
+                    finalPrice = product.Discount!.DiscountType == MusicStore.Domain.Enum.DiscountType.Percentage
+                        ? product.Price - (product.Price * product.Discount.Value / 100m)
+                        : product.Price - product.Discount.Value;
+        
+                    if (finalPrice < 0)
+                    {
+                        finalPrice = 0;
+                    }
+                }
+        
+                cartItem.Quantity = quantity;
+                cartItem.UnitPrice = finalPrice;
+        
+                await _unitOfWork
+                    .Repository<CartItem>()
+                    .UpdateAsync(cartItem);
+        
+                await _unitOfWork.SaveAsync();
+        
+                return true;
             }
-
-
-
-            var cartItem = await _unitOfWork
-                .Repository<CartItem>()
-                .GetFirstOrDefaultAsync(
-                    x => x.Id == cartItemId &&
-                         x.Cart.UserId == userId,
-
-                    query => query
-                        .Include(x => x.Cart));
-
-
-
-            if (cartItem == null)
-            {
-                return false;
-            }
-
-
-
-
-            var product = await _unitOfWork
-                .Repository<Product>()
-                .GetByIdAsync(cartItem.ProductId);
-
-
-
-            if (product == null)
-            {
-                return false;
-            }
-
-
-
-            if (product.StockQuantity < quantity)
-            {
-                return false;
-            }
-
-
-
-            cartItem.Quantity = quantity;
-
-
-
-            await _unitOfWork
-                .Repository<CartItem>()
-                .UpdateAsync(cartItem);
-
-
-
-            await _unitOfWork.SaveAsync();
-
-
-
-            return true;
-        }
 
 
 

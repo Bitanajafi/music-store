@@ -21,5 +21,6 @@ namespace MusicStore.Application.DTOs.Cart
 
         public decimal TotalPrice =>
             UnitPrice * Quantity;
+        public decimal OriginalPrice { get; set; }
     }
 }

@@ -26,6 +26,7 @@ public class MusicStoreDbContext
     public DbSet<ShippingInfo> ShippingInfos => Set<ShippingInfo>();
     public DbSet<OrderHistory> OrderHistories => Set<OrderHistory>();
     public DbSet<Coupon> Coupons => Set<Coupon>();
+    public DbSet<ProductDiscount> ProductDiscounts => Set<ProductDiscount>();
     public DbSet<StockHistory> StockHistories => Set<StockHistory>();
 
     public DbSet<Review> Reviews => Set<Review>();

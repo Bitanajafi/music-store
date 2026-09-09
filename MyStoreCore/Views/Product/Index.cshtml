@@ -80,10 +80,43 @@
                                             : product.Description)
                                         </p>
 
-                                        <div class="price-box">
-                                            <span class="price-amount">@product.Price.ToString("N0")</span>
-                                            <span class="price-currency">تومان</span>
+                                        
+                                  
+                                          <div class="price-box luxury-music-price">
+                                            @if (product.HasDiscount && product.FinalPrice.HasValue)
+                                            {
+                                                <div class="discount-strip-wrapper">
+                                                    <div class="discount-save-tag">
+                                                        <i class="bi bi-tag-fill"></i>
+                                                        <span>
+                                                            سود شما: 
+                                                            @product.DiscountValue?.ToString("N0") 
+                                                            @(product.DiscountType?.ToString() == "Percentage" ? "٪" : "تومان")
+                                                        </span>
+                                                    </div>
+                                                    
+                                                    <div class="price-flow">
+                                                        <span class="old-price-strike">@product.Price.ToString("N0")</span>
+                                                        <div class="final-price-glow">
+                                                            <span class="amount">@product.FinalPrice.Value.ToString("N0")</span>
+                                                            <span class="currency">تومان</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="final-price-glow solo-price">
+                                                    <span class="amount">@product.Price.ToString("N0")</span>
+                                                    <span class="currency">تومان</span>
+                                                </div>
+                                            }
                                         </div>
+                                            
+
+                                       
+
+
 
                                         <div class="card-actions">
 

@@ -81,11 +81,32 @@
                                                     </div>
                                                 </div>
                                             </td>
-
+                                           
                                             <td class="text-center font-monospace">
-                                                <span class="text-white fw-semibold">@item.UnitPrice.ToString("N0")</span>
-                                                <small class="text-white-50 fs-8 d-block">تومان</small>
+
+                                                @if (item.OriginalPrice > item.UnitPrice)
+                                                {
+                                                    <div class="cart-old-price">
+                                                        @item.OriginalPrice.ToString("N0")
+                                                        <small>تومان</small>
+                                                    </div>
+
+                                                    <div class="cart-final-price">
+                                                        @item.UnitPrice.ToString("N0")
+                                                        <small>تومان</small>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="cart-final-price normal">
+                                                        @item.UnitPrice.ToString("N0")
+                                                        <small>تومان</small>
+                                                    </div>
+                                                }
+
                                             </td>
+                                          
+
 
                                             <td class="text-center">
                                                 <form asp-action="UpdateQuantity" method="post" class="cart-qty-form d-inline-block">

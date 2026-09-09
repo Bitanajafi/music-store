@@ -30,6 +30,8 @@ namespace MusicStore.Infrastructure.Repository
         {
             return await _dbSet.FindAsync(id);
         }
+
+
         public async Task<T?> GetByIdAsync(
         Expression<Func<T, bool>> predicate,
         params Expression<Func<T, object>>[] includes)
@@ -62,6 +64,8 @@ namespace MusicStore.Infrastructure.Repository
 
             return await query.ToListAsync();
         }
+
+
         public async Task<IEnumerable<T>> GetAllAsync(
         Expression<Func<T, bool>>? predicate,
         Func<IQueryable<T>, IQueryable<T>>? include = null)
@@ -84,16 +88,21 @@ namespace MusicStore.Infrastructure.Repository
             return await query.ToListAsync();
         }
 
+
         public async Task<IEnumerable<T>> FindAsync(
             Expression<Func<T, bool>> predicate)
         {
             return await _dbSet.Where(predicate).ToListAsync();
         }
 
+
+
+
         public async Task AddAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
         }
+
 
         public Task UpdateAsync(T entity)
         {
@@ -101,17 +110,20 @@ namespace MusicStore.Infrastructure.Repository
             return Task.CompletedTask;
         }
 
+
         public Task DeleteAsync(T entity)
         {
             _dbSet.Remove(entity);
             return Task.CompletedTask;
         }
 
+
         public async Task<bool> AnyAsync(
             Expression<Func<T, bool>> predicate)
         {
             return await _dbSet.AnyAsync(predicate);
         }
+
 
         public async Task<int> CountAsync(
             Expression<Func<T, bool>>? predicate = null)

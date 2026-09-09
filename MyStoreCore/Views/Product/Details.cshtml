@@ -152,23 +152,49 @@
 
                         <div class="price-action-box p-4 rounded-4 my-4">
 
-                            <div class="d-flex align-items-baseline gap-2 mb-3">
+                            <div class="price-box">
 
-                                <span class="text-gold fs-7">
-                                    قیمت نهایی:
-                                </span>
+                                @if (Model.Product.HasDiscount && Model.Product.FinalPrice.HasValue)
+                                {
+                                    <div class="discount-price-row">
 
-                                <span class="product-price-amount display-6 fw-bold text-gold">
+                                        <div class="discount-badge">
+                                            <span class="discount-percent">
+                                                @Model.Product.DiscountValue?.ToString("0")٪
+                                            </span>
 
-                                    @Model.Product.Price.ToString("N0")
+                                            <span class="discount-text">
+                                                تخفیف
+                                            </span>
+                                        </div>
 
-                                </span>
+                                        <div class="price-content">
 
-                                <span class="text-gold fs-7">
-                                    تومان
-                                </span>
+                                            <div class="old-price">
+                                                @Model.Product.Price.ToString("N0")
+                                                <span>تومان</span>
+                                            </div>
+
+                                            <div class="final-price">
+                                                @Model.Product.FinalPrice.Value.ToString("N0")
+                                                <span>تومان</span>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="final-price normal-price">
+                                        @Model.Product.Price.ToString("N0")
+                                        <span>تومان</span>
+                                    </div>
+                                }
 
                             </div>
+                           
+
 
 
                             @if (Model.Product.StockQuantity > 0)

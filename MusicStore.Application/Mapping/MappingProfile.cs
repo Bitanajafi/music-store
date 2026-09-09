@@ -3,6 +3,7 @@ using MusicStore.Application.DTOs.Coupon;
 using MusicStore.Application.DTOs.Order;
 using MusicStore.Application.DTOs.OrderItem;
 using MusicStore.Application.DTOs.Product;
+using MusicStore.Application.DTOs.ProductDiscount;
 using MusicStore.Application.DTOs.Stock;
 using MusicStore.Application.DTOs.Wishlist;
 using MusicStore.Domain.Entities;
@@ -95,9 +96,22 @@ namespace MusicStore.Application.Mapping
                 CreateMap<Wishlist, WishlistDto>();
             
 
-           
 
-            CreateMap<Wishlist, WishlistDto>();
+                CreateMap<ProductDiscount, ProductDiscountDto>()
+                    .ForMember(
+                        dest => dest.SKU,
+                        opt => opt.MapFrom(src => src.Product.SKU)
+                    )
+                    .ForMember(
+                        dest => dest.ProductName,
+                        opt => opt.MapFrom(src => src.Product.Name)
+                    );
+                
+                            CreateMap<CreateProductDiscountDto, ProductDiscount>();
+                
+                            CreateMap<UpdateProductDiscountDto, ProductDiscount>();
+                
+
         }
     }
 }

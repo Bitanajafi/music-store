@@ -86,6 +86,8 @@ builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IStockService, StockService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<IWishlistService, WishlistService>();
+builder.Services.AddScoped<IProductDiscountService, ProductDiscountService>();
+
 
 
 builder.Services.AddAutoMapper(cfg =>

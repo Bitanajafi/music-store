@@ -423,3 +423,86 @@
 
 
 
+
+
+
+
+
+
+
+
+/* ==========================================
+   Music Store Luxury Price & Discount Style
+   ========================================== */
+
+.luxury-music-price {
+    margin-top: auto;
+    margin-bottom: 15px;
+    direction: rtl;
+}
+
+.discount-strip-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+}
+
+.discount-save-tag {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(229, 193, 88, 0.1);
+    border-right: 2px solid #e5c158;
+    padding: 3px 8px;
+    border-radius: 0 6px 6px 0;
+    color: #e5c158;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+    .discount-save-tag i {
+        font-size: 0.7rem;
+    }
+
+.price-flow {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.old-price-strike {
+    font-size: 0.85rem;
+    color: #6c727f;
+    text-decoration: line-through;
+    text-decoration-color: rgba(220, 53, 69, 0.7);
+    text-decoration-thickness: 1.5px;
+    font-weight: 500;
+}
+
+.final-price-glow {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+    .final-price-glow .amount {
+        font-size: 1.35rem;
+        font-weight: 900;
+        color: #ffffff;
+        letter-spacing: -0.5px;
+        text-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
+    }
+
+    .final-price-glow .currency {
+        font-size: 0.75rem;
+        color: #8c92a4;
+        font-weight: 600;
+    }
+
+.solo-price {
+    justify-content: flex-end;
+    width: 100%;
+}

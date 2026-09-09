@@ -1,0 +1,352 @@
+﻿
+.product-discount-subtitle-tag {
+    display: block;
+    color: var(--gold);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.product-discount-main-title {
+    color: var(--sidebar);
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin: 0;
+    line-height: 1;
+}
+
+.btn-add-product-discount {
+    background-color: var(--sidebar);
+    color: #ffffff !important;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 12px 24px;
+    border-radius: 12px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(43, 37, 32, 0.15);
+}
+
+    .btn-add-product-discount:hover {
+        background-color: #1a1613;
+        transform: translateY(-2px);
+    }
+
+
+/* =========================
+   Table
+   ========================= */
+
+.legato-card-table {
+    background-color: #ffffff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.03);
+    border: 1px solid var(--border);
+}
+
+.legato-table {
+    border-collapse: collapse;
+}
+
+    .legato-table thead {
+        background-color: #e6dfd5;
+    }
+
+    .legato-table th {
+        padding: 16px;
+        color: #685d54;
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 1px;
+        border: none;
+        text-transform: uppercase;
+    }
+
+    .legato-table td {
+        padding: 16px;
+        border-bottom: 1px solid #f3efe9;
+        font-size: 0.88rem;
+        color: var(--text);
+    }
+
+    .legato-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .legato-table tbody tr:hover {
+        background-color: #faf7f3;
+    }
+
+
+/* =========================
+   Discount Type Badges
+   ========================= */
+
+.legato-badge-dark {
+    background-color: var(--sidebar);
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+    display: inline-block;
+}
+
+.legato-badge-sub {
+    background-color: transparent;
+    color: var(--text);
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 4px 8px;
+    display: inline-block;
+}
+
+
+/* =========================
+   Action Buttons
+   ========================= */
+
+.btn-legato-action {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background-color: #f7f4f0;
+    color: #8c827a;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+    .btn-legato-action:hover {
+        background-color: var(--sidebar);
+        color: #ffffff;
+    }
+
+.btn-action-delete:hover {
+    background-color: #dc3545;
+    color: #ffffff;
+}
+
+.btn-action-edit:hover {
+    background-color: var(--gold);
+    color: #ffffff;
+}
+
+
+/* =========================
+   Search & Filters
+   ========================= */
+
+.ProductDiscount-search-wrapper {
+    padding: 18px 20px;
+    border-bottom: 1px solid rgba(66, 56, 41, 0.08);
+    background: #ffffff;
+}
+
+.ProductDiscount-search-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.ProductDiscount-search-input-wrapper {
+    position: relative;
+    flex: 1;
+}
+
+    .ProductDiscount-search-input-wrapper i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #8c8275;
+        font-size: 1rem;
+        pointer-events: none;
+    }
+
+.ProductDiscount-search-input {
+    width: 100%;
+    height: 44px;
+    background: #fbfaf8;
+    border: 1px solid rgba(66, 56, 41, 0.12);
+    border-radius: 10px;
+    padding: 0 16px 0 42px;
+    color: #2b2319;
+    font-size: 0.88rem;
+    font-weight: 600;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+    .ProductDiscount-search-input::placeholder {
+        color: #9a9186;
+        font-weight: 500;
+    }
+
+    .ProductDiscount-search-input:focus {
+        background: #ffffff;
+        border-color: #a07855;
+        box-shadow: 0 0 0 4px rgba(160, 120, 85, 0.1);
+    }
+
+.ProductDiscount-search-input-wrapper:focus-within i {
+    color: #a07855;
+}
+
+
+/* =========================
+   Filter Selects
+   ========================= */
+
+.ProductDiscount-filter-select {
+    height: 44px;
+    min-width: 145px;
+    background-color: #fbfaf8;
+    border: 1px solid rgba(66, 56, 41, 0.12);
+    border-radius: 10px;
+    padding: 0 14px;
+    color: #2b2319;
+    font-size: 0.85rem;
+    font-weight: 600;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+    .ProductDiscount-filter-select:focus {
+        background-color: #ffffff;
+        border-color: #a07855;
+        box-shadow: 0 0 0 4px rgba(160, 120, 85, 0.1);
+    }
+
+
+/* =========================
+   Search Button
+   ========================= */
+
+.btn-ProductDiscount-search {
+    height: 44px;
+    padding: 0 22px;
+    background: #423829;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    white-space: nowrap;
+}
+
+    .btn-ProductDiscount-search:hover {
+        background: #a07855;
+        color: #ffffff;
+        transform: translateY(-1px);
+        box-shadow: 0 5px 15px rgba(160, 120, 85, 0.2);
+    }
+
+
+/* =========================
+   Clear Button
+   ========================= */
+
+.btn-ProductDiscount-clear {
+    height: 44px;
+    padding: 0 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #fbfaf8;
+    color: #70665a;
+    border: 1px solid rgba(66, 56, 41, 0.1);
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+    .btn-ProductDiscount-clear:hover {
+        background: #f4f1eb;
+        color: #423829;
+        border-color: rgba(66, 56, 41, 0.15);
+    }
+
+
+/* =========================
+   Empty State
+   ========================= */
+
+.product-discount-page .text-muted i {
+    color: #b0a69b;
+}
+
+
+/* =========================
+   Responsive
+   ========================= */
+
+@media (max-width: 991.98px) {
+
+    .ProductDiscount-search-form {
+        flex-wrap: wrap;
+    }
+
+    .ProductDiscount-search-input-wrapper {
+        flex: 1 1 100%;
+    }
+
+    .ProductDiscount-filter-select {
+        flex: 1;
+    }
+}
+
+@media (max-width: 767.98px) {
+
+    .product-discount-main-title {
+        font-size: 1.8rem;
+    }
+
+    .d-flex.justify-content-between.align-items-end.mb-4 {
+        flex-direction: column-reverse;
+        align-items: stretch !important;
+        gap: 20px;
+    }
+
+    .btn-add-product-discount {
+        text-align: center;
+    }
+
+    .ProductDiscount-search-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .ProductDiscount-search-input-wrapper,
+    .ProductDiscount-filter-select {
+        width: 100%;
+        flex: none;
+    }
+
+    .btn-ProductDiscount-search,
+    .btn-ProductDiscount-clear {
+        width: 100%;
+    }
+
+    .legato-table th,
+    .legato-table td {
+        white-space: nowrap;
+    }
+}
+
+

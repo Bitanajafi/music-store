@@ -1,0 +1,332 @@
+﻿
+@using System.Globalization
+
+
+@model IEnumerable<MusicStore.Application.DTOs.ProductDiscount.ProductDiscountDto>
+
+@{
+    ViewData["Title"] = "مدیریت تخفیف محصولات";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/AdminCss/ProductDiscount.css" asp-append-version="true" />
+}
+
+<div class="product-discount-page" dir="rtl">
+
+    <div class="d-flex justify-content-between align-items-end mb-4">
+
+        <a asp-area="Admin"
+           asp-controller="ProductDiscount"
+           asp-action="Create"
+           class="btn-add-product-discount">
+            Add New Discount +
+        </a>
+
+        <div class="text-end">
+            <span class="product-discount-subtitle-tag">MANAGEMENT</span>
+            <h2 class="product-discount-main-title">Product Discounts</h2>
+        </div>
+
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success border-0 rounded-3 mb-4 shadow-sm">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger border-0 rounded-3 mb-4 shadow-sm">
+            @TempData["Error"]
+        </div>
+    }
+
+    <div class="legato-card-table">
+
+        <div class="ProductDiscount-search-wrapper">
+
+            <form asp-area="Admin"
+                  asp-controller="ProductDiscount"
+                  asp-action="Index"
+                  method="get"
+                  class="ProductDiscount-search-form">
+
+                <div class="ProductDiscount-search-input-wrapper">
+
+                    <i class="bi bi-search"></i>
+
+                    <input type="text"
+                           name="search"
+                           value="@ViewBag.Search"
+                           class="ProductDiscount-search-input"
+                           placeholder="Search SKU or Product Name..." />
+
+                </div>
+
+                <select name="discountType"
+                        class="ProductDiscount-filter-select">
+
+                    <option value="">All Types</option>
+
+                    @if (ViewBag.DiscountType?.ToString() == "Percentage")
+                    {
+                        <option value="0" selected>Percentage</option>
+                    }
+                    else
+                    {
+                        <option value="0">Percentage</option>
+                    }
+
+                    @if (ViewBag.DiscountType?.ToString() == "FixedAmount")
+                    {
+                        <option value="1" selected>Fixed Amount</option>
+                    }
+                    else
+                    {
+                        <option value="1">Fixed Amount</option>
+                    }
+
+                </select>
+
+                <select name="isActive"
+                        class="ProductDiscount-filter-select">
+
+                    <option value="">All Status</option>
+
+                    @if (ViewBag.IsActive?.ToString() == "True")
+                    {
+                        <option value="true" selected>Active</option>
+                    }
+                    else
+                    {
+                        <option value="true">Active</option>
+                    }
+
+                    @if (ViewBag.IsActive?.ToString() == "False")
+                    {
+                        <option value="false" selected>Inactive</option>
+                    }
+                    else
+                    {
+                        <option value="false">Inactive</option>
+                    }
+
+                </select>
+
+                <button type="submit"
+                        class="btn-ProductDiscount-search">
+                    Search
+                </button>
+
+                @if (!string.IsNullOrWhiteSpace(ViewBag.Search as string)
+                                || ViewBag.DiscountType != null
+                                || ViewBag.IsActive != null)
+                {
+                    <a asp-area="Admin"
+                       asp-controller="ProductDiscount"
+                       asp-action="Index"
+                       class="btn-ProductDiscount-clear">
+                        Clear
+                    </a>
+                }
+
+            </form>
+
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5 text-muted">
+
+                <i class="bi bi-tags fs-1 d-block mb-3"></i>
+
+                <div>
+                    هیچ تخفیفی برای محصولات یافت نشد.
+                </div>
+
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+
+                <table class="table legato-table align-middle text-center mb-0">
+
+                    <thead>
+                        <tr>
+                            <th class="text-start pe-4">PRODUCT</th>
+                            <th>TYPE</th>
+                            <th>VALUE</th>
+                            <th>START DATE</th>
+                            <th>END DATE</th>
+                            <th>STATUS</th>
+                            <th class="text-start ps-4">ACTIONS</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var discount in Model)
+                        {
+                            <tr>
+
+                                <td class="text-start pe-4">
+
+                                    <div class="fw-bold text-dark">
+                                        <i class="bi bi-box-seam-fill me-2 text-muted"></i>
+                                        @discount.ProductName
+                                    </div>
+
+                                    <div class="small text-muted mt-1">
+                                        SKU: @discount.SKU
+                                    </div>
+
+                                </td>
+
+                                <td>
+
+                                    @if (discount.DiscountType ==
+                                                                MusicStore.Domain.Enum.DiscountType.Percentage)
+                                    {
+                                        <span class="legato-badge-dark">
+                                            PERCENTAGE
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="legato-badge-sub">
+                                            FIXED AMOUNT
+                                        </span>
+                                    }
+
+                                </td>
+
+                                <td class="fw-bold text-dark">
+
+                                    @if (discount.DiscountType ==
+                                                                MusicStore.Domain.Enum.DiscountType.Percentage)
+                                    {
+                                        <span>
+                                            @discount.Value.ToString("0.##")%
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span>
+                                            @discount.Value.ToString("N0")
+                                        </span>
+                                    }
+
+                                </td>
+
+                                <td class="small text-muted" dir="ltr">
+                                    @discount.StartDate.ToString("yyyy/MM/dd HH:mm", CultureInfo.InvariantCulture)
+
+
+                                </td>
+
+                                <td class="small text-muted" dir="ltr">
+
+                                    @if (discount.EndDate.HasValue)
+                                    {
+                                        @discount.EndDate.Value.ToString("yyyy/MM/dd HH:mm", CultureInfo.InvariantCulture)
+                                    }
+                                    else
+                                    {
+                                        <span>—</span>
+                                    }
+
+                                </td>
+
+                                <td>
+
+                                    @if (discount.IsActive)
+                                    {
+                                        <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill">
+                                            فعال
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger bg-opacity-10 text-danger px-3 py-2 rounded-pill">
+                                            غیرفعال
+                                        </span>
+                                    }
+
+                                </td>
+
+                                <td class="text-start ps-4">
+
+                                    <div class="d-flex align-items-center gap-1 justify-content-start">
+
+                                        <form asp-area="Admin"
+                                              asp-controller="ProductDiscount"
+                                              asp-action="Delete"
+                                              asp-route-id="@discount.Id"
+                                              method="post"
+                                              class="d-inline"
+                                              onsubmit="return confirm('آیا از حذف این تخفیف محصول مطمئن هستید؟');">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <button type="submit"
+                                                    class="btn-legato-action btn-action-delete"
+                                                    title="حذف">
+
+                                                <i class="bi bi-trash"></i>
+
+                                            </button>
+
+                                        </form>
+
+                                        <a asp-area="Admin"
+                                           asp-controller="ProductDiscount"
+                                           asp-action="Edit"
+                                           asp-route-id="@discount.Id"
+                                           class="btn-legato-action btn-action-edit"
+                                           title="ویرایش">
+
+                                            <i class="bi bi-pencil-square"></i>
+
+                                        </a>
+
+                                        <form asp-area="Admin"
+                                              asp-controller="ProductDiscount"
+                                              asp-action="ToggleActive"
+                                              asp-route-id="@discount.Id"
+                                              method="post"
+                                              class="d-inline">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <button type="submit"
+                                                    class="btn-legato-action btn-action-toggle"
+                                                    title="@(discount.IsActive ? "غیرفعال‌سازی" : "فعال‌سازی")">
+
+                                                <i class="bi @(discount.IsActive ? "bi-eye-slash" : "bi-eye")"></i>
+
+                                            </button>
+
+                                        </form>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+
+    </div>
+
+</div>
+

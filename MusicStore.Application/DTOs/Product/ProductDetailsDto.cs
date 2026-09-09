@@ -37,6 +37,15 @@ using System.Text;
 
             public List<ProductDto> RelatedProducts { get; set; } = new();
 
-        }
+
+        public bool HasDiscount { get; set; }
+
+        public decimal? DiscountValue { get; set; }
+
+        public MusicStore.Domain.Enum.DiscountType? DiscountType { get; set; }
+
+        public decimal? FinalPrice { get; set; }
+
+    }
     }
 
